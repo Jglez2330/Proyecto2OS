@@ -1,0 +1,3 @@
+/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir

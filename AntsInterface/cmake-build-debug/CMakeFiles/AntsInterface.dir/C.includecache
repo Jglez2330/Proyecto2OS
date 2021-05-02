@@ -15,4 +15,6 @@ SDL2/SDL_image.h
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/SDL2/SDL_image.h
 stdbool.h
 -
+SDL2/SDL_mixer.h
+/home/isaacpope/Documents/Proyecto2OS/AntsInterface/SDL2/SDL_mixer.h
 

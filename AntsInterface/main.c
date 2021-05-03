@@ -14,7 +14,7 @@ int main() {
         return 1;
     }
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_Music *backgroundsound = Mix_LoadMUS("../Resources/suanfuanzon.mp3");
+
 
     SDL_Window *win = SDL_CreateWindow("Ant Hill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                        WINDOW_WIDTH,WINDOW_HEIGHT, 0);
@@ -63,8 +63,8 @@ int main() {
     int antX_start = 450;
     int antY_start = 350;
 
-    blackAnt_r.w *= 0.2;
-    blackAnt_r.h *= 0.5;
+    blackAnt_r.w *= 0.05;
+    blackAnt_r.h *= 0.1;
 
     blackAnt_r.x = antX_start;
     blackAnt_r.y = antY_start;
@@ -97,9 +97,9 @@ int main() {
 
     printf("Initialization succesful!\n");
     bool quit = false;
-    Mix_PlayMusic(backgroundsound,-1);
 
-    SDL_Delay(7000);
+
+
     while (!quit)
     {
         if (blackAnt_r.x > 2000){
@@ -109,7 +109,7 @@ int main() {
         blackAnt_r.x +=100;
         SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
         SDL_RenderPresent(rend);
-        SDL_Delay(50);
+        SDL_Delay(500);
 
     }
 

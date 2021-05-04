@@ -21,7 +21,9 @@ int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, voi
     ceThreadTreadInfo->arg = arg;
     ceThreadTreadInfo->thread_context = (ucontext_t *) malloc(sizeof(ucontext_t));
     ceThreadTreadInfo->joining = 0;
+    ceThreadTreadInfo->attributes = attr;
     memset(ceThreadTreadInfo->thread_context, "\0", sizeof(ucontext_t));
+
 
     //Get program context
     if (getcontext(ceThreadTreadInfo->thread_context) == -1){

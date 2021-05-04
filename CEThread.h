@@ -7,7 +7,8 @@
 typedef unsigned long int CEThread_t;
 
 typedef struct {
-    int tid;
+    long priority;
+    long quantum;
 } CEThread_attr_t;
 
 enum State {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
@@ -18,6 +19,7 @@ typedef struct Thread_t{
     void* (*pFunction)(void*);
     void* arg;
     void* retval;
+    CEThread_attr_t* attributes;
     ucontext_t* thread_context;
 } CEThread_treadInfo;
 

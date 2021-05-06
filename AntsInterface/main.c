@@ -6,8 +6,21 @@
 
 #define WINDOW_WIDTH (1850)
 #define WINDOW_HEIGHT (1050)
-void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r,SDL_Rect horizontal_roads);
+#define x_start_road (400)
+#define y_start_road (100)
+#define gap_roads (55)
+#define w_horizontal_road (400)
+#define w_vertical_road (50)
+#define h_horizontal_road (100)
+#define antHill_x (30)
+#define antHill_y (350)
+#define distanceBetweenHills (1550)
+#define distanceBetweenRoads ( distanceBetweenHills - 700)
+void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r,SDL_Rect horizontal_roads,SDL_Rect vertical_roads);
 void initAudio();
+void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads);
+void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,int x_startPoint, int y_startPoint);
+void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads);
 void createSurfaces();
 int main() {
     // Se inicializa SDL
@@ -84,11 +97,11 @@ int main() {
     antHill2_r.w *= 0.8;
     antHill2_r.h *= 0.8;
 
-    antHill1_r.x = 100;
-    antHill1_r.y = 350;
+    antHill1_r.x = antHill_x;
+    antHill1_r.y = antHill_y;
 
-    antHill2_r.x = 1500;
-    antHill2_r.y = 350;
+    antHill2_r.x = antHill1_r.x + distanceBetweenHills;
+    antHill2_r.y = antHill1_r.y;
 
     blackAnt_r.w *= 0.03;
     blackAnt_r.h *= 0.06;
@@ -100,27 +113,14 @@ int main() {
 
 
     SDL_Rect horizontal_roads;
-    horizontal_roads.x = 400;
-    horizontal_roads.y = 100;
-    horizontal_roads.w = 50;
-    horizontal_roads.h = 800;
+    SDL_Rect verticals_roads;
 
     SDL_SetRenderDrawColor( rend, 255, 255, 255, 255 );
 
 
-    for (int i=0;i !=4;i++){
-        if(i==0 || i == 1){
-            SDL_RenderFillRect( rend, &horizontal_roads );
-            horizontal_roads.x +=55;
-        }
-        if(i==2){horizontal_roads.x += 850;}
-        if(i==2 || i == 3){
-            SDL_RenderFillRect( rend, &horizontal_roads );
-            horizontal_roads.x +=55;
-        }
+    drawRoads(rend,horizontal_roads,verticals_roads);
 
 
-    }
 
 
     if(!background_t){
@@ -141,7 +141,7 @@ int main() {
         if (blackAnt_r.x > 2000){
             //quit = true;
         }
-        drawBackground(rend,background_t,anthill_t,antHill1_r,antHill2_r,horizontal_roads);
+        drawBackground(rend,background_t,anthill_t,antHill1_r,antHill2_r,horizontal_roads, verticals_roads);
 
         blackAnt_r.x +=100;
         SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
@@ -156,33 +156,76 @@ int main() {
 
     return 0;
 }
+void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads){
+
+    horizontal_roads.w = distanceBetweenRoads / 2 ;
+    horizontal_roads.h = 50;
+
+
+    vertical_roads.w = 50;
+    vertical_roads.h = 800;
+
+    drawHorizontalRoads(rend,horizontal_roads,x_start_road,y_start_road );
+
+    int  x_startPoint = x_start_road + distanceBetweenRoads / 2 + (2 * w_vertical_road) + (2 * gap_roads);
+
+
+    drawHorizontalRoads(rend,horizontal_roads,x_startPoint,y_start_road);
+
+
+    drawVerticalRoads(rend,vertical_roads);
+
+}
+void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads){
+    vertical_roads.x = x_start_road;
+    vertical_roads.y = y_start_road;
+    for (int i=0;i !=4;i++){
+        if(i==0 || i == 1){
+            SDL_RenderFillRect( rend, &vertical_roads );
+            vertical_roads.x +=gap_roads;
+        }
+        if(i==2){vertical_roads.x += distanceBetweenRoads;}
+        if(i==2 || i == 3){
+            SDL_RenderFillRect( rend, &vertical_roads );
+            vertical_roads.x +=gap_roads;
+        }
+    }
+}
+void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, int x_startPoint, int y_startPoint){
+    horizontal_roads.x = x_startPoint;
+    horizontal_roads.y = y_startPoint;
+    for (int i=0;i!=6;i++){
+        if(i==0 || i == 1){
+            SDL_RenderFillRect( rend, &horizontal_roads );
+            horizontal_roads.y +=gap_roads;
+
+        }
+        if(i==2){horizontal_roads.y += 250;}
+        if(i==2 || i == 3){
+            SDL_RenderFillRect( rend, &horizontal_roads );
+            horizontal_roads.y +=gap_roads;
+
+        }
+        if(i==4){horizontal_roads.y += 250;}
+        if(i==4 || i == 5){
+            SDL_RenderFillRect( rend, &horizontal_roads );
+            horizontal_roads.y +=gap_roads;
+
+        }
+    }
+}
 void initAudio(){
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
-void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r, SDL_Rect horizontal_roads){
+void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r, SDL_Rect horizontal_roads,SDL_Rect vertical_roads){
     SDL_RenderClear(rend);
 
 
     SDL_RenderCopy(rend, background_t, NULL, NULL);
     SDL_RenderCopy(rend, anthill_t, NULL, &antHill1_r);
     SDL_RenderCopy(rend, anthill_t, NULL, &antHill2_r);
-    horizontal_roads.x = 400;
-    horizontal_roads.y = 100;
-    horizontal_roads.w = 50;
-    horizontal_roads.h = 800;
-    for (int i=0;i !=4;i++){
-        if(i==0 || i == 1){
-            SDL_RenderFillRect( rend, &horizontal_roads );
-            horizontal_roads.x +=55;
-        }
-        if(i==2){horizontal_roads.x += 850;}
-        if(i==2 || i == 3){
-            SDL_RenderFillRect( rend, &horizontal_roads );
-            horizontal_roads.x +=55;
-        }
 
-
-    }
+    drawRoads(rend,horizontal_roads,vertical_roads);
 
 
 

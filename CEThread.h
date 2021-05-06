@@ -9,6 +9,7 @@ typedef unsigned long int CEThread_t;
 typedef struct {
     long priority;
     long quantum;
+    void (*alarm_timer_handler)(int);
 } CEThread_attr_t;
 
 enum State {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
@@ -26,4 +27,5 @@ typedef struct Thread_t{
 int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, void* arg);
 
 void CEThread_start(void* (*start_routine)(void*), void* args);
+CEThread_attr_t* CEThread_default_attr();
 #endif //PROYECTO2OS_CETHREAD_H

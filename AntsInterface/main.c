@@ -14,11 +14,11 @@
 #define h_horizontal_road (100)
 #define antHill_x (30)
 #define antHill_y (350)
-#define distanceBetweenHills (1550)
+#define distanceBetweenHills (1800)
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
 void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r,SDL_Rect horizontal_roads,SDL_Rect vertical_roads);
 void initAudio();
-void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads);
+void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads, int x_startPoint, int y_startPoint);
 void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,int x_startPoint, int y_startPoint);
 void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads);
 void createSurfaces();
@@ -158,46 +158,44 @@ int main() {
 }
 void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads){
 
-    horizontal_roads.w = distanceBetweenRoads / 2 ;
+    horizontal_roads.w = distanceBetweenRoads / 2 - gap_roads/2;
     horizontal_roads.h = 50;
 
 
     vertical_roads.w = 50;
     vertical_roads.h = 800;
 
-    drawHorizontalRoads(rend,horizontal_roads,x_start_road,y_start_road );
+    drawHorizontalRoads(rend,horizontal_roads, x_start_road,y_start_road );
 
-    int  x_startPoint = x_start_road + distanceBetweenRoads / 2 + (2 * w_vertical_road) + (2 * gap_roads);
+
+
+    int  x_startPoint = x_start_road + distanceBetweenRoads / 2  + gap_roads/2;
 
 
     drawHorizontalRoads(rend,horizontal_roads,x_startPoint,y_start_road);
 
 
-    drawVerticalRoads(rend,vertical_roads);
+    drawVerticalRoads(rend,vertical_roads, x_start_road, y_start_road);
+    drawVerticalRoads(rend,vertical_roads, x_start_road + distanceBetweenRoads + w_vertical_road * 2 , y_start_road);
 
 }
-void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads){
-    vertical_roads.x = x_start_road;
-    vertical_roads.y = y_start_road;
+void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads,int x_startPoint, int y_startPoint){
+    vertical_roads.x = x_startPoint;
+    vertical_roads.y = y_startPoint;
     for (int i=0;i !=4;i++){
         if(i==0 || i == 1){
-            SDL_RenderFillRect( rend, &vertical_roads );
-            vertical_roads.x +=gap_roads;
-        }
-        if(i==2){vertical_roads.x += distanceBetweenRoads;}
-        if(i==2 || i == 3){
             SDL_RenderFillRect( rend, &vertical_roads );
             vertical_roads.x +=gap_roads;
         }
     }
 }
 void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, int x_startPoint, int y_startPoint){
-    horizontal_roads.x = x_startPoint;
+    horizontal_roads.x = x_startPoint +  2 * w_vertical_road;
     horizontal_roads.y = y_startPoint;
     for (int i=0;i!=6;i++){
         if(i==0 || i == 1){
             SDL_RenderFillRect( rend, &horizontal_roads );
-            horizontal_roads.y +=gap_roads;
+            horizontal_roads.y += gap_roads;
 
         }
         if(i==2){horizontal_roads.y += 250;}

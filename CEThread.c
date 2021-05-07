@@ -1,7 +1,7 @@
 //
 // Created by jglez2330 on 2/5/21.
 //
-
+#define _XOPEN_SOURCE 700
 #include "CEThread.h"
 
 
@@ -9,6 +9,8 @@ queue_t* thread_list = NULL;
 queue_t* thread_list_zombie = NULL;
 int globalTID = 0;
 int current_channel = 0;
+
+void free_thread(CEThread_treadInfo *pThread);
 
 typedef struct {
     queue_t* (*funcion_calendarizador)(queue_t*, queue_t*);
@@ -18,20 +20,20 @@ typedef struct {
     queue_t* zombie_ants_b;
 }scheduler_t;
 int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, void* arg){
-    sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     if (attr == NULL){
         attr = CEThread_default_attr();
     }
     if (globalTID++ == 0){
         struct sigaction act;
         //TODO: inicializar la lista de listos
-        CEThread_treadInfo* main_thread_info = (CEThread_treadInfo*)malloc(sizeof(CEThread_t));
+        CEThread_treadInfo* main_thread_info = (CEThread_treadInfo*)malloc(sizeof(CEThread_treadInfo));
         main_thread_info->tid = globalTID;
         main_thread_info->thread_context = (ucontext_t*) malloc(sizeof(ucontext_t));
-        memset(main_thread_info->thread_context, '\0', sizeof(ucontext_t));
         main_thread_info->arg = NULL;
         main_thread_info->state = RUNNING;
         main_thread_info->joining = 0;
+        main_thread_info->attributes = attr;
+        memset(main_thread_info->thread_context, '\0', sizeof(ucontext_t));
 
         if (getcontext(main_thread_info->thread_context) == -1){
             printf("Unable to get program context for main thread");
@@ -68,6 +70,7 @@ int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, voi
         queueAddFrontItem(thread_list, current_thread_running);
         globalTID++;
     }
+    sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     //Creates the thread information and fills it
     CEThread_treadInfo* ceThreadTreadInfo = malloc(sizeof(CEThread_treadInfo));
     *thread = globalTID;
@@ -107,7 +110,7 @@ int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, voi
 void CEThread_start(void* (*start_routine)(void*), void* args){
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     void* r = (*start_routine)(args);
-    gtthread_exit(r);
+    CEThread_exit(r);
 }
 
 CEThread_attr_t* CEThread_default_attr(){
@@ -146,7 +149,7 @@ void default_algo (int sig){
 
 }
 
-void gtthread_exit(void *pVoid) {
+void CEThread_exit(void *pVoid) {
 
 
     /* block alarm signal */
@@ -158,7 +161,7 @@ void gtthread_exit(void *pVoid) {
         exit((int) pVoid);
     }
 
-    /* if the main thread call gtthread_exit */
+    /* if the main thread call CEThread_exit */
     if (current_thread_running->tid == 1)
     {
         while (!queueIsempty(thread_list))
@@ -170,9 +173,12 @@ void gtthread_exit(void *pVoid) {
         sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
         exit((long) pVoid);
     }
+    if (current_thread_running->detach == 1){
+        //TODO: Free resources
+    }
 
     CEThread_treadInfo * prev = (CEThread_treadInfo *) queueRemoveFrontItem(thread_list);;
-    current_thread_running = (CEThread_treadInfo *) queueRemoveFrontItem(thread_list);
+    current_thread_running = (CEThread_treadInfo *) queue_Getfront(thread_list);
     current_thread_running->state = RUNNING;
 
     /* free up memory allocated for exit thread */
@@ -198,15 +204,27 @@ int CEThread_join(CEThread_t thread, void** return_value){
         return -1;
     }
     CEThread_treadInfo* threadTreadInfo;
+    if ((threadTreadInfo = get_thread(thread, thread_list_zombie)) != NULL){
+
+        free_thread(threadTreadInfo);
+        //TODO: Delete thread
+        return 0;
+    }
     if ((threadTreadInfo = get_thread(thread, thread_list)) == NULL){
-        printf("Thread doesn't exist");
+        printf("Thread %lu doesn't exist \n", thread);
         return -1;
     }
+
 
     if (threadTreadInfo->joining == current_thread_running->tid){
         printf("Thread already joining");
         return -1;
     }
+    if (threadTreadInfo->detach == 1){
+        printf("Thread is detached and cannot be joined");
+        return -1;
+    }
+    current_thread_running->joining = threadTreadInfo->tid;
     while (threadTreadInfo->state != TERMINATED) {
         sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
         default_algo(SIGVTALRM);
@@ -218,10 +236,15 @@ int CEThread_join(CEThread_t thread, void** return_value){
 
     return 0;
 }
+
+void free_thread(CEThread_treadInfo *pThread) {
+    return;
+}
+
 CEThread_treadInfo* get_thread (CEThread_t thread, queue_t* thread_list_local){
     CEThread_treadInfo* result = NULL;
     queue_node_t* item = thread_list_local->front;
-    while (item->next != NULL){
+    while (item != NULL){
         if (((CEThread_treadInfo*) item->item)->tid == thread){
             result = (CEThread_treadInfo*) item->item;
             break;
@@ -230,3 +253,12 @@ CEThread_treadInfo* get_thread (CEThread_t thread, queue_t* thread_list_local){
     }
     return result;
 }
+int CEThread_yield(){
+    sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
+    if (queueIsempty(thread_list)){
+        return 0;
+    }
+    default_algo(SIGVTALRM);
+    sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
+    return 0;
+};

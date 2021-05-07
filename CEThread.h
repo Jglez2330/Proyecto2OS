@@ -29,6 +29,7 @@ typedef struct Thread_t{
     CEThread_t tid;
     CEThread_t joining;
     int state;
+    int detach;
     void* (*pFunction)(void*);
     void* arg;
     void* retval;
@@ -46,7 +47,7 @@ void default_algo (int sig);
 
 
 
-void gtthread_exit(void *pVoid);
+void CEThread_exit(void *pVoid);
 
 
 int CEThread_create(CEThread_t* thread, CEThread_attr_t *attr, void* rutine, void* arg);
@@ -56,5 +57,5 @@ CEThread_attr_t* CEThread_default_attr();
 void swap_context_algorithm(int sig);
 int CEThread_join(CEThread_t thread, void** return_value);
 CEThread_treadInfo* get_thread(CEThread_t thread, queue_t* thread_list_local);
-
+int CEThread_yield();
 #endif //PROYECTO2OS_CETHREAD_H

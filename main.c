@@ -36,7 +36,9 @@ int main() {
     CEThread_join(t3, NULL);
     CEThread_join(t4, NULL);
     CEThread_join(t5, NULL);
-    return 1;
+
+    printf("Resultado %i\n", *id1 + *id2 + *id3 + *id4 + *id5);
+    return 0;
 }
 
 void* canal1(void* structCanal){
@@ -46,11 +48,13 @@ void* canal1(void* structCanal){
 }
 void* increaseCounter(void* idStruct){
     int* threadNumber = idStruct;
+    int result = 0;
     for (int i = 0; i < 1000000; i++) {
         printf("El hilo numero %d tiene el control \n", *threadNumber);
         printf("Iteracion numero %i\n", i);
+        result ++;
     }
-    *threadNumber = 0;
+    *threadNumber = result;
 
     return NULL;
 }

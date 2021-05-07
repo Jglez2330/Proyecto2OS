@@ -16,7 +16,7 @@ queue_t* receiveThreads(scheduler_t * scheduler){
     {
         case 0:
             printf("\nRR");
-            queueResult = roundRobin(scheduler);
+//            queueResult = roundRobin(scheduler);
 
 
             // statements
@@ -42,7 +42,7 @@ queue_t* receiveThreads(scheduler_t * scheduler){
     this->back->next = NULL;*/
     return queueResult;
 }
-
+/*
 queue_t* roundRobin (scheduler_t * scheduler){
 
     printf("\n SIZEEE%i",queueSize(scheduler->ant_list_ready_a));
@@ -84,4 +84,4 @@ queue_t* prioridad (scheduler_t * scheduler) {
 
 
 
-}
+}*/

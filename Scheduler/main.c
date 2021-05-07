@@ -92,6 +92,35 @@ int main() {
     printf("\n Tamaño  ant list ready B  %i",queueSize(schedulerMain->ant_list_ready_b));
     printf("\n Tamaño  ant zombie B  %i",queueSize(schedulerMain->zombie_ants_b));
 
+    // ------------------
+
+    CEThread_treadInfo* pos0 = malloc(sizeof(CEThread_treadInfo));
+
+    pos0->state = 0;
+    CEThread_treadInfo* pos1 = malloc(sizeof(CEThread_treadInfo));
+
+    pos1->state = 1;
+    CEThread_treadInfo* pos2 = malloc(sizeof(CEThread_treadInfo));
+
+    pos2->state = 2;
+
+    queueAddFrontItem(schedulerMain->zombie_ants_b,pos0);
+    queueAddFrontItem(schedulerMain->zombie_ants_b,pos1);
+    queueAddFrontItem(schedulerMain->zombie_ants_b,pos2);
+    int num = 0;
+    printf("\n NUEVA PARTE %i",schedulerMain->zombie_ants_b->N);
+    struct Thread_t * zombiItem = (struct Thread_t *) queue_GetPosition(schedulerMain->zombie_ants_b,3);
+    printf("Posicion %i",zombiItem->state);
+
+/*
+    while(num<4){
+        struct Thread_t * zombiItem = (struct Thread_t *) queue_GetPosition(schedulerMain->zombie_ants_b,num);
+        printf("Posicion %i",zombiItem->state);
+
+
+        num++;
+    }*/
+
 
 
 

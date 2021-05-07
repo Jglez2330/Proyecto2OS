@@ -12,9 +12,10 @@
 #define w_horizontal_road (400)
 #define w_vertical_road (50)
 #define h_horizontal_road (100)
+#define h_vertical_road (800)
 #define antHill_x (30)
 #define antHill_y (350)
-#define distanceBetweenHills (1800)
+#define distanceBetweenHills (1550)
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
 void drawBackground(SDL_Renderer *rend,SDL_Texture *background_t, SDL_Texture *anthill_t,SDL_Rect antHill1_r,SDL_Rect antHill2_r,SDL_Rect horizontal_roads,SDL_Rect vertical_roads);
 void initAudio();
@@ -22,7 +23,8 @@ void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads, int x_startP
 void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,int x_startPoint, int y_startPoint);
 void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads);
 void createSurfaces();
-int main() {
+void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) ;
+        int main() {
     // Se inicializa SDL
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_AUDIO) != 0) {
         printf("error initializing SDL:%s\n", SDL_GetError());
@@ -32,7 +34,7 @@ int main() {
     initAudio();
 
     SDL_Window *win = SDL_CreateWindow("Ant Hill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                       WINDOW_WIDTH,WINDOW_HEIGHT, 0);
+                                       WINDOW_WIDTH,WINDOW_HEIGHT,SDL_WINDOW_RESIZABLE);
 
     if (!win) {
         printf("Error creating window: %s\n", SDL_GetError());
@@ -111,7 +113,9 @@ int main() {
     SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
 
 
-
+    int sizeOfCanal = 4;
+    int cellSize =  w_horizontal_road/sizeOfCanal;
+    drawLines(rend,sizeOfCanal, x_start_road,y_start_road);
     SDL_Rect horizontal_roads;
     SDL_Rect verticals_roads;
 
@@ -138,16 +142,17 @@ int main() {
     //SDL_Delay(10000);
     while (!quit)
     {
-        if (blackAnt_r.x > 2000){
-            //quit = true;
-        }
+//        if (blackAnt_r.x > 2000){
+//            //quit = true;
+//        }
         drawBackground(rend,background_t,anthill_t,antHill1_r,antHill2_r,horizontal_roads, verticals_roads);
 
         blackAnt_r.x +=100;
         SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
 
+        drawLines(rend,sizeOfCanal,x_start_road,y_start_road);
         SDL_RenderPresent(rend);
-        SDL_Delay(500);
+        SDL_Delay(900);
 
     }
 
@@ -156,14 +161,43 @@ int main() {
 
     return 0;
 }
-void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads){
 
+void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
+    SDL_SetRenderDrawColor( rend, 0, 0, 0, 255 );
+    int x1 = x_start +  2 * w_vertical_road ;
+
+    int y1 = y_start;
+    int y2 = y_start + h_horizontal_road;
+    int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road/3.5;
+
+
+    for (int i=0;i!=3;i++){
+        for (int i  = 0 ; i < largoCanal;i++){
+
+            SDL_RenderDrawLine( rend, x1,  y1,  x1,  y2 );
+            x1 += w_horizontal_road/largoCanal;
+        }
+        y1 += 2 * gap_roads +  gabInHorizontal;
+        y2 = y1 + h_horizontal_road;
+        x1 = x_start +  2 * w_vertical_road ;
+    }
+
+
+
+
+
+
+
+
+}
+void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads){
+    SDL_SetRenderDrawColor( rend, 255, 255, 255, 255 );
     horizontal_roads.w = distanceBetweenRoads / 2 - gap_roads/2;
     horizontal_roads.h = 50;
 
 
     vertical_roads.w = 50;
-    vertical_roads.h = 800;
+    vertical_roads.h = h_vertical_road;
 
     drawHorizontalRoads(rend,horizontal_roads, x_start_road,y_start_road );
 
@@ -192,19 +226,20 @@ void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads,int x_startPo
 void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, int x_startPoint, int y_startPoint){
     horizontal_roads.x = x_startPoint +  2 * w_vertical_road;
     horizontal_roads.y = y_startPoint;
+    int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road/3.5;
     for (int i=0;i!=6;i++){
         if(i==0 || i == 1){
             SDL_RenderFillRect( rend, &horizontal_roads );
             horizontal_roads.y += gap_roads;
 
         }
-        if(i==2){horizontal_roads.y += 250;}
+        if(i==2){horizontal_roads.y += gabInHorizontal;}
         if(i==2 || i == 3){
             SDL_RenderFillRect( rend, &horizontal_roads );
             horizontal_roads.y +=gap_roads;
 
         }
-        if(i==4){horizontal_roads.y += 250;}
+        if(i==4){horizontal_roads.y += gabInHorizontal;}
         if(i==4 || i == 5){
             SDL_RenderFillRect( rend, &horizontal_roads );
             horizontal_roads.y +=gap_roads;

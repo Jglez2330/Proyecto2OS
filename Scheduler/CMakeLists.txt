@@ -3,4 +3,4 @@ project(Scheduler C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Scheduler main.c ThreadsQueue.h ThreadsQueue.c)
+add_executable(Scheduler main.c ThreadsQueue.h ThreadsQueue.c Scheduler.c Scheduler.h)

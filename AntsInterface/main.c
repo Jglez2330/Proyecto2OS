@@ -22,6 +22,7 @@ void initAudio();
 void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads, int x_startPoint, int y_startPoint);
 void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,int x_startPoint, int y_startPoint);
 void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads,  SDL_Rect vertical_roads);
+void drawCells(SDL_Renderer *rend, int sizeOfCanal);
 void createSurfaces();
 void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) ;
         int main() {
@@ -116,6 +117,8 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) ;
     int sizeOfCanal = 4;
     int cellSize =  w_horizontal_road/sizeOfCanal;
     drawLines(rend,sizeOfCanal, x_start_road,y_start_road);
+    int  x_startPoint = x_start_road + distanceBetweenRoads / 2  + gap_roads/2;
+    drawLines(rend,sizeOfCanal, x_startPoint,y_start_road);
     SDL_Rect horizontal_roads;
     SDL_Rect verticals_roads;
 
@@ -150,7 +153,7 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) ;
         blackAnt_r.x +=100;
         SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
 
-        drawLines(rend,sizeOfCanal,x_start_road,y_start_road);
+        drawCells(rend,sizeOfCanal);
         SDL_RenderPresent(rend);
         SDL_Delay(900);
 
@@ -161,6 +164,13 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) ;
 
     return 0;
 }
+
+
+void drawCells(SDL_Renderer *rend, int sizeOfCanal){
+    drawLines(rend,sizeOfCanal,x_start_road,y_start_road);
+    int  x_startPoint = x_start_road + distanceBetweenRoads / 2  + gap_roads/2;
+    drawLines(rend,sizeOfCanal, x_startPoint,y_start_road);
+        }
 
 void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
     SDL_SetRenderDrawColor( rend, 0, 0, 0, 255 );

@@ -27,146 +27,82 @@ int main() {
     schedulerMain->ant_list_ready_b = malloc(sizeof (queue_t));
     schedulerMain->zombie_ants_a = malloc(sizeof (queue_t));
     schedulerMain->zombie_ants_b = malloc(sizeof (queue_t));*/
-    //schedulerMain->funcion_calendarizador = receiveThreads;
+    schedulerMain->funcion_calendarizador = receiveThreads;
     schedulerMain->ant_list_ready_a = NULL;
     schedulerMain->ant_list_ready_b = NULL;
     schedulerMain->zombie_ants_a = NULL;
     schedulerMain->zombie_ants_b =NULL;
 
-/*
-    queueInit(schedulerMain->ant_list_ready_a);
-    queueInit(schedulerMain->ant_list_ready_b);
-    queueInit(schedulerMain->zombie_ants_a);
-    queueInit(schedulerMain->zombie_ants_b);
 
 
-    printf("Hello, World!\n");
-    // ----------------THREADS de A-------
-
-    CEThread_treadInfo* t1A = malloc(sizeof(CEThread_treadInfo));
-
-    t1A->state = 3;
-
-    queueAddFrontItem(schedulerMain->ant_list_ready_a,t1A);
-
-
-    CEThread_treadInfo* t2A = malloc(sizeof(CEThread_treadInfo));
-
-    t2A->state = 1;
-
-    queueAddFrontItem(schedulerMain->ant_list_ready_a,t2A);
-
-    // ----------------THREADS de B-------
-    CEThread_treadInfo* t1B = malloc(sizeof(CEThread_treadInfo));
-
-    t1B->state = 3;
-
-    queueAddFrontItem(schedulerMain->ant_list_ready_b,t1B);
-
-
-    CEThread_treadInfo* t2B = malloc(sizeof(CEThread_treadInfo));
-
-    t2B->state = 1;
-
-    queueAddFrontItem(schedulerMain->ant_list_ready_b,t2B);
-
-    // ----------------FIN de THREADS-------
-
-
-
-    //struct Thread_t * queueItem =(struct Thread_t*) queue_Getfront(schedulerMain->ant_list_ready_a);
-
-
-
-    //queue_cycle(schedulerMain->ant_list_ready_a);
-    //queue_cycle(schedulerMain->ant_list_ready_b);
-
-
-    //struct Thread_t * queueItem2 =(struct Thread_t*) queue_Getfront(schedulerMain->ant_list_ready_a);
-
-
-    //printf("\n HELLO %i",queueItem2->state);
-
-    queue_t * result = schedulerMain->funcion_calendarizador(schedulerMain);
-
-    printf("\n Tamaño  final  %i",queueSize(result));
-
-    printf("\n Tamaño  ant list ready A  %i",queueSize(schedulerMain->ant_list_ready_a));
-    printf("\n Tamaño  ant zombie A  %i",queueSize(schedulerMain->zombie_ants_a));
-
-    printf("\n Tamaño  ant list ready B  %i",queueSize(schedulerMain->ant_list_ready_b));
-    printf("\n Tamaño  ant zombie B  %i",queueSize(schedulerMain->zombie_ants_b));
-
-    // ------------------
-*/
-    /*CEThread_treadInfo* pos0 = malloc(sizeof(CEThread_treadInfo));
-
-    pos0->state = 0;
-    CEThread_treadInfo* pos1 = malloc(sizeof(CEThread_treadInfo));
-
-    pos1->state = 1;
-    CEThread_treadInfo* pos2 = malloc(sizeof(CEThread_treadInfo));
-
-    pos2->state = 2;
-
-    queueAddFrontItem(schedulerMain->zombie_ants_b,pos0);
-    queueAddFrontItem(schedulerMain->zombie_ants_b,pos1);
-    queueAddFrontItem(schedulerMain->zombie_ants_b,pos2);
-
-
-
-    printList_t(schedulerMain->zombie_ants_a);*/
-
-
-
-
-/*
-    while(num<4){
-        struct Thread_t * zombiItem = (struct Thread_t *) queue_GetPosition(schedulerMain->zombie_ants_b,num);
-        printf("Posicion %i",zombiItem->state);
-
-
-        num++;
-    }*/
+    unsigned long int tid0 =888;
+    unsigned long int tid1 =1242;
+    unsigned long int tid2 =283;
+    unsigned long int tid3 =34343;
 
     CEThread_treadInfo* pos0 = malloc(sizeof(CEThread_treadInfo));
-
     pos0->state = 0;
     pos0->priority= 0;
+    pos0->tid = tid0;
     CEThread_treadInfo* pos1 = malloc(sizeof(CEThread_treadInfo));
 
     pos1->state = 1;
     pos1->priority= 1;
+    pos1->tid = tid1;
+
 
     CEThread_treadInfo* pos2 = malloc(sizeof(CEThread_treadInfo));
 
     pos2->state = 2;
     pos2->priority= 2;
+    pos2->tid = tid2;
+
 
     CEThread_treadInfo* pos3 = malloc(sizeof(CEThread_treadInfo));
 
     pos3->state = 3;
     pos3->priority= 33;
+    pos3->tid = tid3;
 
 
-    push_t(&schedulerMain->zombie_ants_a,pos0);
-    push_t(&schedulerMain->zombie_ants_a,pos1);
-    push_t(&schedulerMain->zombie_ants_a,pos2);
-    push_t(&schedulerMain->zombie_ants_a,pos3);
 
-    printList_t(schedulerMain->zombie_ants_a);
-    bubbleSort_t(schedulerMain->zombie_ants_a);
-    printList_t(schedulerMain->zombie_ants_a);
+    push_t(&schedulerMain->ant_list_ready_a,pos0);
+    push_t(&schedulerMain->ant_list_ready_a,pos1);
+    push_t(&schedulerMain->ant_list_ready_a,pos2);
+    push_t(&schedulerMain->ant_list_ready_a,pos3);
 
-    //append(&schedulerMain->zombie_ants_a,pos3);
+    printList_t(schedulerMain->ant_list_ready_a);
+    printf("\n--BUBBLE SORT--");
+    bubbleSort_t(schedulerMain->ant_list_ready_a);
+    printList_t(schedulerMain->ant_list_ready_a);
 
-    printList_t(schedulerMain->zombie_ants_a);
-    //deleteNodePosition(&schedulerMain->zombie_ants_a,3);   //TODO ASIGNAR UN PID A LOS THREAD
-    deleteNodeValue(&schedulerMain->zombie_ants_a,pos3);
-    printList_t(schedulerMain->zombie_ants_a);
-   // CEThread_treadInfo* result= getNode_t(schedulerMain->zombie_ants_a,  1);
-   // printf("\nValor %i",result->priority);
 
+    printList_t(schedulerMain->ant_list_ready_a);
+    printf("\nEliminar por TID %li", tid1);
+    deleteNodeTID_t(&schedulerMain->ant_list_ready_a,tid1);
+
+
+
+    printList_t(schedulerMain->ant_list_ready_a);
+
+
+   printf("\n Cycle");
+   listCycle_t(&schedulerMain->ant_list_ready_a);
+   printList_t(schedulerMain->ant_list_ready_a);
+
+   printf("\n Get Front");
+     CEThread_treadInfo* result= getFront_t(schedulerMain->ant_list_ready_a);
+     printf("\nTID FRONT %li",result->tid);
+
+
+     printf("\n \nNUEVA PARTE");
+
+
+    listNode_t* resultCalendarizador =schedulerMain->funcion_calendarizador(schedulerMain);
+
+    printList_t(schedulerMain->ant_list_ready_a);
+
+    printList_t(resultCalendarizador);
 
     return 0;
 }

@@ -6,7 +6,6 @@
 #define SCHEDULER_SCHEDULER_H
 
 #include <sys/ucontext.h>
-#include "ThreadsQueue.h"
 #include "LinkedList.h"
 
 /*
@@ -19,7 +18,7 @@ typedef struct scheduler_t {
 }scheduler_t;*/
 
 typedef struct scheduler_t {
-    //listNode_t * (*funcion_calendarizador)(struct scheduler_t*);
+    listNode_t* (*funcion_calendarizador)(struct scheduler_t*);
     listNode_t* ant_list_ready_a;
     listNode_t* ant_list_ready_b;
     listNode_t* zombie_ants_a;
@@ -39,8 +38,8 @@ typedef struct Thread_t{
     //ucontext_t* thread_context;
 } CEThread_treadInfo;*/
 
-queue_t* receiveThreads(scheduler_t* scheduler);
-queue_t* roundRobin (scheduler_t * scheduler);
+listNode_t* receiveThreads(scheduler_t* scheduler);
+listNode_t* roundRobin (scheduler_t * scheduler);
 
 
 #endif //SCHEDULER_SCHEDULER_H

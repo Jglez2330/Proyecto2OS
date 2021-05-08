@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
-#include "ThreadsQueue.h"
 #include "Scheduler.h"
-
+#include "LinkedList.h"
 
 
 
@@ -28,7 +27,7 @@ int main() {
     schedulerMain->ant_list_ready_b = malloc(sizeof (queue_t));
     schedulerMain->zombie_ants_a = malloc(sizeof (queue_t));
     schedulerMain->zombie_ants_b = malloc(sizeof (queue_t));*/
-
+    //schedulerMain->funcion_calendarizador = receiveThreads;
     schedulerMain->ant_list_ready_a = NULL;
     schedulerMain->ant_list_ready_b = NULL;
     schedulerMain->zombie_ants_a = NULL;
@@ -144,14 +143,29 @@ int main() {
     pos2->state = 2;
     pos2->priority= 2;
 
+    CEThread_treadInfo* pos3 = malloc(sizeof(CEThread_treadInfo));
 
-    insertAtTheBegin(&schedulerMain->zombie_ants_a,pos0);
-    insertAtTheBegin(&schedulerMain->zombie_ants_a,pos2);
-    insertAtTheBegin(&schedulerMain->zombie_ants_a,pos1);
+    pos3->state = 3;
+    pos3->priority= 33;
 
-    printList(schedulerMain->zombie_ants_a);
-    bubbleSort(schedulerMain->zombie_ants_a);
-    printList(schedulerMain->zombie_ants_a);
+
+    push_t(&schedulerMain->zombie_ants_a,pos0);
+    push_t(&schedulerMain->zombie_ants_a,pos1);
+    push_t(&schedulerMain->zombie_ants_a,pos2);
+    push_t(&schedulerMain->zombie_ants_a,pos3);
+
+    printList_t(schedulerMain->zombie_ants_a);
+    bubbleSort_t(schedulerMain->zombie_ants_a);
+    printList_t(schedulerMain->zombie_ants_a);
+
+    //append(&schedulerMain->zombie_ants_a,pos3);
+
+    printList_t(schedulerMain->zombie_ants_a);
+    //deleteNodePosition(&schedulerMain->zombie_ants_a,3);   //TODO ASIGNAR UN PID A LOS THREAD
+    deleteNodeValue(&schedulerMain->zombie_ants_a,pos3);
+    printList_t(schedulerMain->zombie_ants_a);
+   // CEThread_treadInfo* result= getNode_t(schedulerMain->zombie_ants_a,  1);
+   // printf("\nValor %i",result->priority);
 
 
     return 0;

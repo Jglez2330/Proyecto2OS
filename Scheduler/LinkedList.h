@@ -24,16 +24,14 @@ typedef struct listNode_t{
     struct listNode_t *next;
 }listNode_t;
 
-/* Function to insert a node at the beginning of a linked list */
-void insertAtTheBegin(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo);
-
-/* Function to bubble sort the given linked list */
-void bubbleSort(struct listNode_t *start);
-
-/* Function to swap data of two nodes a and b*/
+void push_t(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo);
+void append(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo);
+void deleteNodePosition(struct listNode_t **head_ref, int position);
+void deleteNodeValue(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo);
+void bubbleSort_t(struct listNode_t *start);
+void deleteList(struct listNode_t** head_ref);
 void swap(struct listNode_t *a, struct listNode_t *b);
-
-/* Function to print nodes in a given linked list */
-void printList(struct listNode_t *start);
+CEThread_treadInfo* getNode_t(struct listNode_t* head, int index);
+void printList_t(struct listNode_t *start);
 
 #endif //SCHEDULER_LINKEDLIST_H

@@ -15,6 +15,13 @@
 
 typedef unsigned long int CEThread_t;
 
+typedef struct {
+    queue_t* blocked_list;
+    CEThread_t owner_thread;
+}CEThread_mutex_t;
+typedef struct {
+    int tid;
+}CEThread_mutex_attr_t;
 
 
 typedef struct {
@@ -25,7 +32,7 @@ typedef struct {
 } CEThread_attr_t;
 
 enum State {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
-typedef struct Thread_t{
+typedef struct{
     CEThread_t tid;
     CEThread_t joining;
     int state;
@@ -40,7 +47,6 @@ typedef struct Thread_t{
 
 static struct itimerval thread_timer;
 sigset_t alarm_timeout_thread;
-sigset_t alarm_main_thread;
 static CEThread_treadInfo * current_thread_running;
 
 void default_algo (int sig);
@@ -58,4 +64,8 @@ void swap_context_algorithm(int sig);
 int CEThread_join(CEThread_t thread, void** return_value);
 CEThread_treadInfo* get_thread(CEThread_t thread, queue_t* thread_list_local);
 int CEThread_yield();
+int CEThread_detach(CEThread_t thread);
+void CEThread_mutex_init(CEThread_mutex_t* mutex, CEThread_mutex_attr_t* attr);
+void CEThread_mutex_lock(CEThread_mutex_t* mutex);
+void CEThread_mutex_unlock(CEThread_mutex_t* mutex);
 #endif //PROYECTO2OS_CETHREAD_H

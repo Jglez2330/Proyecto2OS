@@ -34,6 +34,8 @@ struct Ant{
     SDL_Rect size;
     int speed;
     char side;
+    int x_dest;
+    int y_dest;
 };
 
 struct AntSprites{

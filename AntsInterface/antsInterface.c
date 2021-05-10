@@ -3,8 +3,6 @@
 #include "SDL2/SDL_image.h"
 
 
-
-
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 
     //Cargar imagenes
@@ -40,7 +38,7 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     }
 }
 
-void spawnAnt(int fila, int columna, enum antType type, char side){
+void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6]){
     if(antCounter < maxAnts) {
         switch(type){
             case black:
@@ -62,6 +60,8 @@ void spawnAnt(int fila, int columna, enum antType type, char side){
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
+        ants[antCounter].x_dest = filas[fila][columna]->x;
+        ants[antCounter].y_dest = filas[fila][columna]->y;
 
 
         ants[antCounter].type = type;
@@ -103,14 +103,41 @@ void updateNPC(SDL_Renderer *rend) {
                 break;
         }
         if(ants[counter].side == 'r'){
-            if(ants[counter].size.x <= x_start_road) ants[counter].size.x += 10;
+            if(ants[counter].size.x <= x_start_road){
+                ants[counter].size.x += 10;
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                return;
+            }
         }
         if(ants[counter].side == 'l'){
-            if(ants[counter].size.x <= x_start_road) ants[counter].size.x += 10;
+
+
+            if(ants[counter].size.x <= x_start_road) {
+                ants[counter].size.x += 10;
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                return;
+            }
+            int disty = ants[counter].size.y - ants[counter].y_dest;
+            if(disty > 0){
+                if(abs(disty) < 10) ants[counter].size.y -= 1;
+                else ants[counter].size.y -= 10;
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                return;
+            }
+            if(disty < 0){
+                if(abs(disty) < 10) ants[counter].size.y += 1;
+                else ants[counter].size.y += 10;
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                return;
+            }
+
+            
+
+            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
         }
 
 
         //Render to screen
-        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
     }
 }

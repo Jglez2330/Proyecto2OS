@@ -184,22 +184,19 @@ int main() {
         if (blackAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = black;
-            spawnAnt(antX_start,antY_start,type,'r');
+            spawnAnt(5,5,type,'l',filas);
             blackAntRequested = 0;
         }
 
         if (redAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = red;
-            spawnAnt(antX_start,antY_start,type,'r');
+            spawnAnt(2,3,type,'l', filas);
             redAntRequested = 0;
         }
         updateNPC(rend);
         SDL_RenderPresent(rend);
-        SDL_Delay(900);
-
-
-
+        SDL_Delay(100);
     }
 
 }

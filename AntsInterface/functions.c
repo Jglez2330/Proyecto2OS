@@ -1,23 +1,12 @@
 
 
-#include "variables.c"
-
-typedef struct {
-
-    char antName[21];
-    int x;
-    int y;
-} Ant[MAX];
-
-
-
-int l_path1_x[3] = {antHill_x,x_start_road};
-int l_path1_y[3] = {antHill_y, antHill_y};
 
 
 
 
-void drawAnts(SDL_Renderer *rend, Ant *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t){
+
+
+void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t){
     for (int i = 0; i < 6; ++i){
         for (int j = 0; j < sizeOfCanal; ++j) {
             blackAnt_r.x = filas[i][j]->x;
@@ -49,13 +38,13 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
     }
 }
 
-void initialize_AntPos(int x_start, int y_start, Ant *f1,Ant *f2,Ant *f3,Ant *f4,Ant *f5,Ant *f6) {
+void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f3,Matrix *f4,Matrix *f5,Matrix *f6) {
 
     int x1 = x_start + 2 * w_vertical_road;
     int y1 = y_start;
     int sizeOfCell = w_horizontal_road / sizeOfCanal;
 
-    Ant *array[6] = {f1,f2,f3,f4,f5,f6};
+    Matrix *array[6] = {f1,f2,f3,f4,f5,f6};
     int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
 
     for (int i = 0; i != 6; i++) {

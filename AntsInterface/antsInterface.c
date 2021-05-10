@@ -1,27 +1,9 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "variables.c"
-enum antType {black = 0, red = 1};
-enum spritesEnum {blackRight1=0 , redRight1=0};
 
 
-struct Ant{
-    enum antType type;
-    enum spritesEnum currentSprite;
-    SDL_Rect size;
-    int speed;
-    char side;
-};
 
-struct AntSprites{
-    SDL_Texture *blackRight1; //0
-    SDL_Texture *redRight1; //0
-} antSprites;
-
-const int maxAnts = 10;
-struct Ant ants[10];
-int antCounter = 0;
 
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 

@@ -5,9 +5,9 @@
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_timer.h"
 #include <unistd.h>
+#include "variables.c"
 #include "antsInterface.c"
 #include "functions.c"
-
 
 
 
@@ -21,7 +21,7 @@ int main() {
 
     initAudio();
 
-    SDL_Window *win = SDL_CreateWindow("Ant Hill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    SDL_Window *win = SDL_CreateWindow("Matrix Hill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
 
     if (!win) {
@@ -35,7 +35,7 @@ int main() {
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
     if (!rend) {
-        printf("Error creating rendrer: %s\n", SDL_GetError());
+        printf("Error creating render: %s\n", SDL_GetError());
         SDL_DestroyWindow(win);
         SDL_Quit();
         return 1;
@@ -120,17 +120,17 @@ int main() {
 
 
     int n = sizeOfCanal;
-    Ant *f1 = malloc(n * sizeof(Ant));
-    Ant *f2 = malloc(n * sizeof(Ant));
-    Ant *f3 = malloc(n * sizeof(Ant));
-    Ant *f4 = malloc(n * sizeof(Ant));
-    Ant *f5 = malloc(n * sizeof(Ant));
-    Ant *f6 = malloc(n * sizeof(Ant));
+    Matrix *f1 = malloc(n * sizeof(Matrix));
+    Matrix *f2 = malloc(n * sizeof(Matrix));
+    Matrix *f3 = malloc(n * sizeof(Matrix));
+    Matrix *f4 = malloc(n * sizeof(Matrix));
+    Matrix *f5 = malloc(n * sizeof(Matrix));
+    Matrix *f6 = malloc(n * sizeof(Matrix));
 
 
     initialize_AntPos(x_start_road, y_start_road, &*f1,&*f2,&*f3,&*f4,&*f5,&*f6);
 
-    Ant *filas[6] = {f1,f2,f3,f4,f5,f6};
+    Matrix *filas[6] = {f1,f2,f3,f4,f5,f6};
 
 
 
@@ -182,14 +182,14 @@ int main() {
                        mini_roads);
         drawCells(rend);
         if (blackAntRequested){
-            printf("Spawn Ant\n");
+            printf("Spawn Matrix\n");
             enum antType type = black;
             spawnAnt(antX_start,antY_start,type,'r');
             blackAntRequested = 0;
         }
 
         if (redAntRequested){
-            printf("Spawn Ant\n");
+            printf("Spawn Matrix\n");
             enum antType type = red;
             spawnAnt(antX_start,antY_start,type,'r');
             redAntRequested = 0;

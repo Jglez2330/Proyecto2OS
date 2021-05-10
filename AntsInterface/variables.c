@@ -13,3 +13,34 @@
 #define sizeOfCanal (8)
 #define distanceBetweenHills (1550)
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
+
+typedef struct {
+
+    char antName[21];
+    int x;
+    int y;
+} Matrix[MAX];
+
+
+
+
+enum antType {black = 0, red = 1};
+enum spritesEnum {blackRight1=0 , redRight1=0};
+
+
+struct Ant{
+    enum antType type;
+    enum spritesEnum currentSprite;
+    SDL_Rect size;
+    int speed;
+    char side;
+};
+
+struct AntSprites{
+    SDL_Texture *blackRight1; //0
+    SDL_Texture *redRight1; //0
+} antSprites;
+
+const int maxAnts = 10;
+struct Ant ants[10];
+int antCounter = 0;

@@ -72,6 +72,9 @@ int main() {
 void* increaseCounter(void* idStruct){
     int* threadNumber = idStruct;
     int result = 0;
+    while (1){
+        printf("El hilo numero %d tiene el control \n", *threadNumber);
+    };
     for (int i = 0; i < 100; i++) {
         CEThread_mutex_lock(&mutex);
         printf("El hilo numero %d tiene el control \n", *threadNumber);

@@ -1,7 +1,7 @@
 //
 // Created by jglez2330 on 2/5/21.
 //
-#define QUANTUM 10
+#define QUANTUM 100000
 
 #include "CEThread.h"
 
@@ -316,6 +316,17 @@ void CEThread_mutex_unlock(CEThread_mutex_t *mutex) {
         mutex->owner_thread = 0;
     }
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
+}
+
+int CEThread_mutex_destroy(CEThread_mutex_t* mutex){
+    if (mutex->owner_thread != 0){
+        printf("Lock has not been unlocked");
+        return -1;
+    } else{
+
+    }
+
+    return 0;
 }
 
 void unblock_threads_from_list(queue_t *list) {

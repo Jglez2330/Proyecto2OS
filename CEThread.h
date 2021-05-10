@@ -68,4 +68,5 @@ int CEThread_detach(CEThread_t thread);
 void CEThread_mutex_init(CEThread_mutex_t* mutex, CEThread_mutex_attr_t* attr);
 void CEThread_mutex_lock(CEThread_mutex_t* mutex);
 void CEThread_mutex_unlock(CEThread_mutex_t* mutex);
+int CEThread_mutex_destroy(CEThread_mutex_t* mutex);
 #endif //PROYECTO2OS_CETHREAD_H

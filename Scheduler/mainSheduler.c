@@ -1,3 +1,7 @@
+//
+// Created by leahycarlos21 on 10/5/21.
+//
+
 #include <stdio.h>
 #include <malloc.h>
 #include "Scheduler.h"
@@ -22,11 +26,11 @@ typedef struct scheduler_t {
 int main() {
 
     scheduler_t * schedulerMain = malloc(sizeof (scheduler_t));
-   /* schedulerMain->funcion_calendarizador = receiveThreads;
-    schedulerMain->ant_list_ready_a = malloc(sizeof (queue_t));
-    schedulerMain->ant_list_ready_b = malloc(sizeof (queue_t));
-    schedulerMain->zombie_ants_a = malloc(sizeof (queue_t));
-    schedulerMain->zombie_ants_b = malloc(sizeof (queue_t));*/
+    /* schedulerMain->funcion_calendarizador = receiveThreads;
+     schedulerMain->ant_list_ready_a = malloc(sizeof (queue_t));
+     schedulerMain->ant_list_ready_b = malloc(sizeof (queue_t));
+     schedulerMain->zombie_ants_a = malloc(sizeof (queue_t));
+     schedulerMain->zombie_ants_b = malloc(sizeof (queue_t));*/
     schedulerMain->funcion_calendarizador = receiveThreads;
     schedulerMain->ant_list_ready_a = NULL;
     schedulerMain->ant_list_ready_b = NULL;
@@ -97,16 +101,16 @@ int main() {
     printList_t(schedulerMain->ant_list_ready_a);
 
 
-   printf("\n Cycle");
-   listCycle_t(&schedulerMain->ant_list_ready_a);
-   printList_t(schedulerMain->ant_list_ready_a);
+    printf("\n Cycle");
+    listCycle_t(&schedulerMain->ant_list_ready_a);
+    printList_t(schedulerMain->ant_list_ready_a);
 
-   printf("\n Get Front");
-     CEThread_treadInfo* result= getFront_t(schedulerMain->ant_list_ready_a);
-     printf("\nTID FRONT %li",result->tid);
+    printf("\n Get Front");
+    CEThread_treadInfo* result= getFront_t(schedulerMain->ant_list_ready_a);
+    printf("\nTID FRONT %li",result->tid);
 
 
-     printf("\n \n--------NUEVA PARTE--------\n");
+    printf("\n \n--------NUEVA PARTE--------\n");
 
     schedulerMain->funcion_calendarizador(schedulerMain);
     printList_t(schedulerMain->ant_list_ready_a);

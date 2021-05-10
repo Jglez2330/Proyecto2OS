@@ -106,15 +106,14 @@ void printList_t(struct listNode_t *start)
 
     while (temp!=NULL)
     {
-        printf("| Prioridad %d - TID %li | ", temp->threadInfo->priority, temp->threadInfo->tid);
+        printf("| Prioridad %d - TID %li  - Time SJF %i| ", temp->threadInfo->priority, temp->threadInfo->tid, temp->threadInfo->var_SJF);
         temp = temp->next;
     }
     printf("\n");
 
 }
 
-/* Bubble sort the given linked list */
-void bubbleSort_t(struct listNode_t *start)
+void bubbleSort_t(struct listNode_t *start,int typeSort)
 {
     int swapped, i;
     struct listNode_t *ptr1;
@@ -128,7 +127,9 @@ void bubbleSort_t(struct listNode_t *start)
 
         while (ptr1->next != lptr)
         {
-            if (ptr1->threadInfo->priority > ptr1->next->threadInfo->priority)
+            if (((ptr1->threadInfo->priority > ptr1->next->threadInfo->priority) && (PRIORITY == typeSort)) ||
+                    ((ptr1->threadInfo->var_SJF > ptr1->next->threadInfo->var_SJF) && (SJF == typeSort))
+            )
             {
                 swap(ptr1, ptr1->next);
                 swapped = 1;
@@ -160,8 +161,7 @@ int getCount_t(struct listNode_t* head)
 }
 void listCycle_t(struct listNode_t** head){
     CEThread_treadInfo* listItem= getNode_t(*head ,  0);
-    //deleteNodeTID_t(&head,listItem->tid);
-    //deleteNodePosition(&head, 0);
+
     append(head,listItem);
     deleteNodePosition(head,0);
 }

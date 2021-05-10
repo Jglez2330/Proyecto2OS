@@ -14,6 +14,8 @@ typedef struct Thread_t{
     //CEThread_t joining;
     int state;
     int priority;
+    int var_SJF;
+    int flag_SJF;
     void* (*pFunction)(void*);
     void* arg;
     void* retval;
@@ -26,11 +28,14 @@ typedef struct listNode_t{
     int  size;
 }listNode_t;
 
+
+enum State {SJF = 0, PRIORITY = 1};
+
 void push_t(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo);
 void append(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo);
 void deleteNodePosition(struct listNode_t **head_ref, int position);
 void deleteNodeTID_t(struct listNode_t** head_ref, CEThread_t key);
-void bubbleSort_t(struct listNode_t *start);
+void bubbleSort_t(struct listNode_t *start,int typeSort);
 void deleteList(struct listNode_t** head_ref);
 void swap(struct listNode_t *a, struct listNode_t *b);
 CEThread_treadInfo* getNode_t(struct listNode_t* head, int index);

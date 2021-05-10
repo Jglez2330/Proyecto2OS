@@ -25,7 +25,7 @@ typedef struct scheduler_t {
     listNode_t* zombie_ants_b;
 }scheduler_t;
 
-enum State {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
+enum TYPESORT {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
 /*
 typedef struct Thread_t{
     ///CEThread_t tid;
@@ -40,6 +40,8 @@ typedef struct Thread_t{
 
 listNode_t* receiveThreads(scheduler_t* scheduler);
 listNode_t* roundRobin (scheduler_t * scheduler);
+listNode_t* priority (scheduler_t * scheduler);
+listNode_t* shortJobFirst (scheduler_t * scheduler);
 
 
 #endif //SCHEDULER_SCHEDULER_H

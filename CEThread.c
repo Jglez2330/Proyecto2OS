@@ -17,7 +17,8 @@ void unblock_threads_from_list(queue_t *list);
 
 typedef struct {
     queue_t *(*funcion_calendarizador)(queue_t *, queue_t *);
-
+    queue_t * all_threads_a;
+    queue_t * all_threads_b;
     queue_t *ant_list_ready_a;
     queue_t *ant_list_ready_b;
     queue_t *zombie_ants_a;
@@ -132,6 +133,9 @@ void default_algo(int sig) {
     /* block the signal */
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     current_channel++;
+    if (current_channel == 0){
+        //TODO: Run main thread
+    }
     current_channel = current_channel % 4;
 
     /* if no thread in the ready queue, resume execution */

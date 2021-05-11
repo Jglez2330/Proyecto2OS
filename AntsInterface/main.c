@@ -151,6 +151,7 @@ int main() {
     int close_requested = 0;
     int redAntRequested = 0;
     int blackAntRequested = 0;
+    int queenAntRequested = 0;
 
     int sendHomeRequested = 0;
     initializeNPC(rend,win);
@@ -173,6 +174,10 @@ int main() {
 
                             redAntRequested  = 1;
                             break;
+                        case SDL_SCANCODE_Q:
+
+                            queenAntRequested  = 1;
+                            break;
                         case SDL_SCANCODE_S:
 
                             sendHomeRequested  = 1;
@@ -193,10 +198,16 @@ int main() {
             sendHomeRequested = 0;
         }
         if (blackAntRequested){
-            printf("Spawn Matrix\n");
+
             enum antType type = black;
-            spawnAnt(5,9,type,'r',filas);
+            spawnAnt(1,1,type,'r',filas);
             blackAntRequested = 0;
+        }
+        if (queenAntRequested){
+
+            enum antType type = queen;
+            spawnAnt(2,3,type,'l',filas);
+            queenAntRequested = 0;
         }
 
 

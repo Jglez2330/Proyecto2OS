@@ -8,11 +8,14 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     //Cargar imagenes
     SDL_Surface *surface_BlackAntR = IMG_Load("../Resources/blackAntR.png");
     SDL_Surface *surface_RedAntR = IMG_Load("../Resources/redAntR.png");
+    SDL_Surface *surface_QueenAntR = IMG_Load("../Resources/queenAntR.png");
     SDL_Surface *surface_BlackAntL = IMG_Load("../Resources/blackAntL.png");
     SDL_Surface *surface_RedAntL = IMG_Load("../Resources/redAntL.png");
+    SDL_Surface *surface_QueenAntL = IMG_Load("../Resources/queenAntR.png");
+
     //Manejo de error al cargar
     if (
-            !surface_BlackAntR || !surface_RedAntR || !surface_BlackAntL || !surface_RedAntL
+            !surface_BlackAntR || !surface_RedAntR || !surface_BlackAntL || !surface_RedAntL || !surface_QueenAntR || !surface_QueenAntL
     ) {
         printf("Error creating surface\n");
         SDL_DestroyRenderer(rend);
@@ -30,10 +33,14 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     SDL_FreeSurface(surface_RedAntR);
     antSprites.redLeft1 = SDL_CreateTextureFromSurface(rend, surface_RedAntL);
     SDL_FreeSurface(surface_RedAntL);
+    antSprites.queenRight1 = SDL_CreateTextureFromSurface(rend, surface_QueenAntR);
+    SDL_FreeSurface(surface_QueenAntR);
+    antSprites.queenLeft1 = SDL_CreateTextureFromSurface(rend, surface_QueenAntL);
+    SDL_FreeSurface(surface_QueenAntL);
 
     //Manejo de errores al crear las texturas
     if(
-            !antSprites.blackRight1 || !antSprites.blackLeft1 || !antSprites.redRight1 || !antSprites.redLeft1
+            !antSprites.blackRight1 || !antSprites.blackLeft1 || !antSprites.redRight1 || !antSprites.redLeft1 || !antSprites.queenRight1 || !antSprites.queenLeft1
             ){
         printf("Error creating texture: %s\n",SDL_GetError());
         SDL_DestroyRenderer(rend);
@@ -79,6 +86,23 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
 
                     SDL_QueryTexture(antSprites.redRight1, NULL, NULL, &(ants[antCounter].size.w), &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = redRight1;
+                    ants[antCounter].size.x = x_start_road - 100;
+                    ants[antCounter].size.y = antHill_y + 50;
+                }
+                break;
+            case queen:
+                ants[antCounter].speed = 1;
+                if(side == 'r' ){
+
+                    SDL_QueryTexture(antSprites.queenLeft1, NULL, NULL, &(ants[antCounter].size.w), &(ants[antCounter].size.h));
+                    ants[antCounter].currentSprite = queenLeft1;
+                    ants[antCounter].size.x = antHill_x + distanceBetweenHills - 20;
+                    ants[antCounter].size.y = antHill_y + 100;
+                }
+                if(side == 'l'){
+
+                    SDL_QueryTexture(antSprites.queenRight1, NULL, NULL, &(ants[antCounter].size.w), &(ants[antCounter].size.h));
+                    ants[antCounter].currentSprite = queenRight1;
                     ants[antCounter].size.x = x_start_road - 100;
                     ants[antCounter].size.y = antHill_y + 50;
                 }
@@ -135,6 +159,19 @@ void updateNPC(SDL_Renderer *rend) {
                         break;
                     case redLeft1:
                         sprite = antSprites.redLeft1;
+                        break;
+                }
+                break;
+            case queen:
+                //Movimiento
+
+                //Animacion
+                switch (ants[counter].currentSprite) {
+                    case queenRight1:
+                        sprite = antSprites.queenRight1;
+                        break;
+                    case queenLeft1:
+                        sprite = antSprites.queenLeft1;
                         break;
                 }
                 break;

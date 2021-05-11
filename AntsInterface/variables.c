@@ -1,4 +1,4 @@
-# define MAX 10
+# define MAX 2
 #define WINDOW_WIDTH (1850)
 #define WINDOW_HEIGHT (1050)
 #define x_start_road (400)
@@ -10,10 +10,12 @@
 #define h_vertical_road (800)
 #define antHill_x (30)
 #define antHill_y (400)
-#define sizeOfCanal (8)
+#define sizeOfCanal (MAX)
 #define regularSpeed (10)
 #define distanceBetweenHills (1550)
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
+
+
 
 typedef struct {
     char antName[21];
@@ -24,8 +26,8 @@ typedef struct {
 
 
 
-enum antType {black = 0, red = 1};
-enum spritesEnum {blackRight1=0 , redRight1=1, blackLeft1 = 2, redLeft1 = 3};
+enum antType {black = 0, red = 1,queen = 2};
+enum spritesEnum {blackRight1=0 , redRight1=1, blackLeft1 = 2, redLeft1 = 3, queenRight1 = 4, queenLeft1 = 5};
 
 
 struct Ant{
@@ -46,8 +48,10 @@ struct AntSprites{
     SDL_Texture *blackLeft1; //0
     SDL_Texture *redRight1; //0
     SDL_Texture *redLeft1; //0
+    SDL_Texture *queenRight1; //0
+    SDL_Texture *queenLeft1; //0
 } antSprites;
 
-const int maxAnts = 10;
-struct Ant ants[10];
+const int maxAnts = MAX;
+struct Ant ants[MAX];
 int antCounter = 0;

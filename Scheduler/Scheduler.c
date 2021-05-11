@@ -76,6 +76,11 @@ listNode_t* roundRobin (scheduler_t * scheduler){
         resultQueue = selectedReady;
 
     }
+    CEThread_treadInfo* next;
+    do {
+        listCycle_t(&selectedReady);
+        next = getFront_t(selectedReady);
+    } while (next->state > RUNNING);
 
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
@@ -86,6 +91,7 @@ listNode_t* roundRobin (scheduler_t * scheduler){
         scheduler->zombie_ants_b = selectedZombie;
 
     }
+
     return resultQueue;
 }
 
@@ -116,6 +122,11 @@ listNode_t* priority (scheduler_t * scheduler){
     } else{
         resultQueue = selectedReady;
     }
+    CEThread_treadInfo* next;
+    do {
+        listCycle_t(&selectedReady);
+        next = getFront_t(selectedReady);
+    } while (next->state > RUNNING);
 
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
@@ -127,10 +138,7 @@ listNode_t* priority (scheduler_t * scheduler){
 
     }
     return resultQueue;
-    do {
-        queue_cycle(thread_list);
-        next = (CEThread_treadInfo *) queue_Getfront(thread_list);
-    } while (next->state != READY);
+
 }
 
 listNode_t* shortJobFirst (scheduler_t * scheduler){
@@ -170,7 +178,11 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
     } else{
         resultQueue = selectedReady;
     }
-
+    CEThread_treadInfo* next;
+    do {
+        listCycle_t(&selectedReady);
+        next = getFront_t(selectedReady);
+    } while (next->state > RUNNING);
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;

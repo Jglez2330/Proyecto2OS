@@ -8,7 +8,7 @@
 
 void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t){
     for (int i = 0; i < 6; ++i){
-        for (int j = 0; j < sizeOfCanal; ++j) {
+        for (int j = 0; j < sizeOfCanal * 2; ++j) {
             blackAnt_r.x = filas[i][j]->x;
             blackAnt_r.y = filas[i][j]->y;
 
@@ -49,8 +49,14 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
     for (int i = 0; i != 6; i++) {
         if (i == 0 || i == 1) {
+            x1 = x_start + 2 * w_vertical_road;
             for (int j = 0; j < sizeOfCanal; j++) {
-
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCell;
+            }
+            x1 += 55;
+            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -59,10 +65,17 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
             y1 += gap_roads;
 
         }
-        if (i == 2) { y1 += gabInHorizontal; }
+
+        if (i == 2) { y1 += gabInHorizontal;}
         if (i == 2 || i == 3) {
             for (int j = 0; j < sizeOfCanal; j++) {
 
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCell;
+            }
+            x1 += 55;
+            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -79,6 +92,12 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
+            x1 += 55;
+            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCell;
+            }
             x1 = x_start + 2 * w_vertical_road;
             y1 += gap_roads;
 
@@ -91,6 +110,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
         if (i == 0 || i == 2 || i == 4) y1 += gap_roads;
 
     }
+
 }
 
 

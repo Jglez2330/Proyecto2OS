@@ -119,7 +119,7 @@ int main() {
 
 
 
-    int n = sizeOfCanal;
+    int n = sizeOfCanal * 2;
     Matrix *f1 = malloc(n * sizeof(Matrix));
     Matrix *f2 = malloc(n * sizeof(Matrix));
     Matrix *f3 = malloc(n * sizeof(Matrix));
@@ -182,22 +182,23 @@ int main() {
             }
 
         }
+        //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
 
         drawBackground(rend, background_t, anthill_t, antHill1_r, antHill2_r, horizontal_roads, verticals_roads,
                        mini_roads);
         drawCells(rend);
-        if (blackAntRequested){
-            printf("Spawn Matrix\n");
-            enum antType type = black;
-            spawnAnt(5,5,type,'l',filas);
-            blackAntRequested = 0;
-        }
         if (sendHomeRequested){
             printf("Send home\n");
-
             sendHome();
             sendHomeRequested = 0;
         }
+        if (blackAntRequested){
+            printf("Spawn Matrix\n");
+            enum antType type = black;
+            spawnAnt(5,9,type,'r',filas);
+            blackAntRequested = 0;
+        }
+
 
         if (redAntRequested){
             printf("Spawn Matrix\n");
@@ -206,6 +207,7 @@ int main() {
             redAntRequested = 0;
         }
         updateNPC(rend);
+        //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
         SDL_RenderPresent(rend);
         SDL_Delay(100);
     }

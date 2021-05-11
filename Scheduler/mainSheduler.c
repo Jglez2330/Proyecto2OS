@@ -45,7 +45,7 @@ int main() {
     unsigned long int tid3 =34343;
 
     CEThread_treadInfo* pos0 = malloc(sizeof(CEThread_treadInfo));
-    pos0->state = 1;
+    pos0->state = 2;
     pos0->priority= 6;
     pos0->tid = tid0;
     pos0->var_SJF = 4;

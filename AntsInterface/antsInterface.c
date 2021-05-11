@@ -140,38 +140,43 @@ void updateNPC(SDL_Renderer *rend) {
         }
         if(ants[counter].side == 'r'){
             if (ants[counter].sentHome){
+                int entrance = antHill_y + 100;
+                int disty = ants[counter].size.y - entrance;
+                printf("Disty: %i\n",disty);
+                if(disty == 0) {
 
+                    if (ants[counter].size.x > antHill_x - 100) {
+                        ants[counter].size.x -= 10;
+                        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                        continue;
+                    }
+                    if (ants[counter].size.x <= antHill_x - 25 ) continue;
+                }
                 if(ants[counter].size.x > x_start_road) {       //Movemos las hormigas hasta el camino vertical de la izquierda
 
                     int distx = ants[counter].size.x - x_start_road;
-                    if(abs(distx) < 10){
+                    if(abs(distx) <= 10){
                         ants[counter].size.x -= 1;
                     }
-                    if(abs(distx) >= 10){
+                    if(abs(distx) > 10){
                         ants[counter].size.x -= 10;
                     }
 
                     SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                     continue;
                 }
-                int entrance = antHill_y + 100;
-                int disty = ants[counter].size.y - entrance;
-                if(disty == 0) {
-                    printf("Esta abajo del hill\n");
-                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                    continue;
-                }
+
                 if(ants[counter].size.y < entrance) {
 
-                    if (abs(disty) < 10) ants[counter].size.y += 1;
+                    if (abs(disty) <= 10) ants[counter].size.y += 1;
                     if (abs(disty) > 10) ants[counter].size.y += 10;
 
                     SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                     continue;
                 }
                 if(ants[counter].size.y > entrance) {
-                    printf("Aca 2");
-                    if (abs(disty) < 10) ants[counter].size.y -= 1;
+
+                    if (abs(disty) <= 10) ants[counter].size.y -= 1;
                     if (abs(disty) > 10) ants[counter].size.y -= 10;
 
                     SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
@@ -232,6 +237,56 @@ void updateNPC(SDL_Renderer *rend) {
 
         }
         if(ants[counter].side == 'l'){
+            if (ants[counter].sentHome){
+                int entrance = antHill_y + 100;
+                int disty = ants[counter].size.y - entrance;
+                int secondRoadLeft = x_start_road + distanceBetweenRoads + w_vertical_road * 2;
+                if(disty == 0) { //Aca metemos a la hormiga en el hormiguero
+
+                    if (ants[counter].size.x < secondRoadLeft + 300) { //Metemos la hormiga en el hormiguero derecho
+                        ants[counter].size.x += 10;
+                        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                        continue;
+                    }
+                    if (ants[counter].size.x <= secondRoadLeft + 300) continue; //Si ya sobrepaso el hormiguero entonces desaparecer la hormiga
+                }
+                if(ants[counter].size.x < secondRoadLeft) {       //Movemos las hormigas hasta el camino vertical de la derecha
+
+                    int distx = x_start_road -  ants[counter].size.x;
+                    if(abs(distx) <= 10){
+                        ants[counter].size.x += 1;
+                    }
+                    if(abs(distx) > 10){
+                        ants[counter].size.x += 10;
+                    }
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+
+                if(ants[counter].size.y < entrance) {
+
+                    if (abs(disty) <= 10) ants[counter].size.y += 1;
+                    if (abs(disty) > 10) ants[counter].size.y += 10;
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+                if(ants[counter].size.y > entrance) {
+
+                    if (abs(disty) <= 10) ants[counter].size.y -= 1;
+                    if (abs(disty) > 10) ants[counter].size.y -= 10;
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+
+
+            }
+
+
+
+
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;

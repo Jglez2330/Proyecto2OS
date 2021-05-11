@@ -189,7 +189,7 @@ int main() {
         if (blackAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = black;
-            spawnAnt(5,5,type,'r',filas);
+            spawnAnt(5,5,type,'l',filas);
             blackAntRequested = 0;
         }
         if (sendHomeRequested){
@@ -202,7 +202,7 @@ int main() {
         if (redAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = red;
-            spawnAnt(2,3,type,'r', filas);
+            spawnAnt(2,3,type,'l', filas);
             redAntRequested = 0;
         }
         updateNPC(rend);

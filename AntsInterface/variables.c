@@ -11,6 +11,7 @@
 #define antHill_x (30)
 #define antHill_y (400)
 #define sizeOfCanal (8)
+#define regularSpeed (10)
 #define distanceBetweenHills (1550)
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
 

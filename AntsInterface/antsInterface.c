@@ -92,6 +92,8 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].x_dest = filas[fila][columna]->x;
         ants[antCounter].y_dest = filas[fila][columna]->y;
         ants[antCounter].type = type;
+        ants[antCounter].antId = antCounter;
+        ants[antCounter].sentHome = 0;
 
         antCounter++;
     }
@@ -137,6 +139,47 @@ void updateNPC(SDL_Renderer *rend) {
                 break;
         }
         if(ants[counter].side == 'r'){
+            if (ants[counter].sentHome){
+
+                if(ants[counter].size.x > x_start_road) {       //Movemos las hormigas hasta el camino vertical de la izquierda
+
+                    int distx = ants[counter].size.x - x_start_road;
+                    if(abs(distx) < 10){
+                        ants[counter].size.x -= 1;
+                    }
+                    if(abs(distx) >= 10){
+                        ants[counter].size.x -= 10;
+                    }
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+                int entrance = antHill_y + 100;
+                int disty = ants[counter].size.y - entrance;
+                if(disty == 0) {
+                    printf("Esta abajo del hill\n");
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+                if(ants[counter].size.y < entrance) {
+
+                    if (abs(disty) < 10) ants[counter].size.y += 1;
+                    if (abs(disty) > 10) ants[counter].size.y += 10;
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+                if(ants[counter].size.y > entrance) {
+                    printf("Aca 2");
+                    if (abs(disty) < 10) ants[counter].size.y -= 1;
+                    if (abs(disty) > 10) ants[counter].size.y -= 10;
+
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+
+
+            }
 
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
@@ -167,7 +210,7 @@ void updateNPC(SDL_Renderer *rend) {
                 if (distx == 0){
                     ants[counter].waiting = 1;
                 }
-                
+
                 if(distx > 0){
                     if(abs(distx) < 10) ants[counter].size.x -= 1;
                     if(abs(distx) > 10) ants[counter].size.x -= 10;
@@ -244,5 +287,10 @@ void updateNPC(SDL_Renderer *rend) {
 
         //Render to screen
 
+    }
+}
+void sendHome (){
+    for(int counter = 0; counter < antCounter; counter++) {
+        ants[counter].sentHome = 1;
     }
 }

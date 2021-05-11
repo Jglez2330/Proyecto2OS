@@ -152,7 +152,7 @@ int main() {
     int redAntRequested = 0;
     int blackAntRequested = 0;
 
-
+    int sendHomeRequested = 0;
     initializeNPC(rend,win);
     while (!close_requested) {
 
@@ -173,6 +173,10 @@ int main() {
 
                             redAntRequested  = 1;
                             break;
+                        case SDL_SCANCODE_S:
+
+                            sendHomeRequested  = 1;
+                            break;
                     }
                     break;
             }
@@ -187,6 +191,12 @@ int main() {
             enum antType type = black;
             spawnAnt(5,5,type,'r',filas);
             blackAntRequested = 0;
+        }
+        if (sendHomeRequested){
+            printf("Send home\n");
+
+            sendHome();
+            sendHomeRequested = 0;
         }
 
         if (redAntRequested){

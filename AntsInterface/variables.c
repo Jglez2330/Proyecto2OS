@@ -15,7 +15,6 @@
 #define distanceBetweenRoads ( distanceBetweenHills - 700)
 
 typedef struct {
-
     char antName[21];
     int x;
     int y;
@@ -37,6 +36,8 @@ struct Ant{
     int x_dest;
     int y_dest;
     int waiting;
+    int antId;
+    int sentHome;
 };
 
 struct AntSprites{

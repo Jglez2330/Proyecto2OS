@@ -36,6 +36,7 @@ struct Ant{
     char side;
     int x_dest;
     int y_dest;
+    int waiting;
 };
 
 struct AntSprites{

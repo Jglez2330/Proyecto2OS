@@ -110,28 +110,54 @@ void updateNPC(SDL_Renderer *rend) {
             }
         }
         if(ants[counter].side == 'l'){
+            if (ants[counter].waiting){
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                continue;
+            }
 
 
             if(ants[counter].size.x <= x_start_road) {
                 ants[counter].size.x += 10;
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                return;
+                continue;
             }
             int disty = ants[counter].size.y - ants[counter].y_dest;
             if(disty > 0){
                 if(abs(disty) < 10) ants[counter].size.y -= 1;
                 else ants[counter].size.y -= 10;
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                return;
+//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                return;
             }
             if(disty < 0){
                 if(abs(disty) < 10) ants[counter].size.y += 1;
                 else ants[counter].size.y += 10;
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                return;
+//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                return;
+            }
+            int distx = ants[counter].size.x - ants[counter].x_dest;
+//            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
+            if (disty == 0){
+                if (distx == 0){
+                    ants[counter].waiting = 1;
+                }
+                ants[counter].size.x += 10;
+                if(distx > 0){
+                    if(abs(distx) < 10) ants[counter].size.x -= 1;
+                    if(abs(distx) > 10) ants[counter].size.x -= 10;
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
+                if(distx < 0){
+                    if(abs(distx) < 10) ants[counter].size.x += 1;
+                    if(abs(distx) > 10) ants[counter].size.x += 10;
+                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+                    continue;
+                }
             }
 
-            
+
+
 
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
         }

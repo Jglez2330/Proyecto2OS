@@ -74,6 +74,7 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     } else{
         listCycle_t(&selectedReady);
         resultQueue = selectedReady;
+
     }
 
     if(SIDE_FLAG ==0){
@@ -126,6 +127,10 @@ listNode_t* priority (scheduler_t * scheduler){
 
     }
     return resultQueue;
+    do {
+        queue_cycle(thread_list);
+        next = (CEThread_treadInfo *) queue_Getfront(thread_list);
+    } while (next->state != READY);
 }
 
 listNode_t* shortJobFirst (scheduler_t * scheduler){

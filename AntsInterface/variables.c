@@ -25,7 +25,7 @@ typedef struct {
 
 
 enum antType {black = 0, red = 1};
-enum spritesEnum {blackRight1=0 , redRight1=0};
+enum spritesEnum {blackRight1=0 , redRight1=1, blackLeft1 = 2, redLeft1 = 3};
 
 
 struct Ant{
@@ -41,7 +41,9 @@ struct Ant{
 
 struct AntSprites{
     SDL_Texture *blackRight1; //0
+    SDL_Texture *blackLeft1; //0
     SDL_Texture *redRight1; //0
+    SDL_Texture *redLeft1; //0
 } antSprites;
 
 const int maxAnts = 10;

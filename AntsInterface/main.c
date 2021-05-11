@@ -44,7 +44,7 @@ int main() {
     //Cargamos las imagenes
     SDL_Surface *background_s = IMG_Load("../Resources/background.png");
     SDL_Surface *anthill_s = IMG_Load("../Resources/antHill.png");
-    SDL_Surface *blackAnt_s = IMG_Load("../Resources/blackAnt.png");
+    SDL_Surface *blackAnt_s = IMG_Load("../Resources/blackAntR.png");
 
 
     if (!anthill_s || !background_s) {
@@ -152,6 +152,7 @@ int main() {
     int redAntRequested = 0;
     int blackAntRequested = 0;
 
+
     initializeNPC(rend,win);
     while (!close_requested) {
 
@@ -184,14 +185,14 @@ int main() {
         if (blackAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = black;
-            spawnAnt(5,5,type,'l',filas);
+            spawnAnt(5,5,type,'r',filas);
             blackAntRequested = 0;
         }
 
         if (redAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = red;
-            spawnAnt(2,3,type,'l', filas);
+            spawnAnt(2,3,type,'r', filas);
             redAntRequested = 0;
         }
         updateNPC(rend);

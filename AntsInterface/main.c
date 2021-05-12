@@ -94,15 +94,19 @@ int main() {
     blackAnt_r.h *= 0.06;
 
 
-    int cellSize = w_horizontal_road / sizeOfCanal;
-    drawLines(rend, sizeOfCanal, x_start_road, y_start_road);
+    int cellSize = w_horizontal_road / sizeOfStack;
+    drawLines(rend, sizeOfStack, x_start_road, y_start_road);
     int x_startPoint = x_start_road + distanceBetweenRoads / 2 + gap_roads / 2;
-    drawLines(rend, sizeOfCanal, x_startPoint, y_start_road);
+    drawLines(rend, sizeOfStack, x_startPoint, y_start_road);
+    SDL_Rect canal_road;
     SDL_Rect horizontal_roads;
     SDL_Rect verticals_roads;
     SDL_Rect mini_roads;
+
     mini_roads.h = 50;
     mini_roads.w = 100;
+
+
 
     SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
 
@@ -119,7 +123,7 @@ int main() {
 
 
 
-    int n = sizeOfCanal * 2;
+    int n = sizeOfStack * 2 + sizeOfCanal;
     Matrix *f1 = malloc(n * sizeof(Matrix));
     Matrix *f2 = malloc(n * sizeof(Matrix));
     Matrix *f3 = malloc(n * sizeof(Matrix));
@@ -190,7 +194,7 @@ int main() {
         //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
 
         drawBackground(rend, background_t, anthill_t, antHill1_r, antHill2_r, horizontal_roads, verticals_roads,
-                       mini_roads);
+                       mini_roads, canal_road);
         drawCells(rend);
         if (sendHomeRequested){
             printf("Send home\n");
@@ -218,7 +222,7 @@ int main() {
             redAntRequested = 0;
         }
         updateNPC(rend);
-        //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
+        drawAnts(rend, filas, blackAnt_r, blackAnt_t);
         SDL_RenderPresent(rend);
         SDL_Delay(100);
     }

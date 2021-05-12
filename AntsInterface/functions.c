@@ -8,7 +8,7 @@
 
 void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t){
     for (int i = 0; i < 6; ++i){
-        for (int j = 0; j < sizeOfCanal * 2; ++j) {
+        for (int j = 0; j < sizeOfStack * 2 + sizeOfCanal; ++j) {
             blackAnt_r.x = filas[i][j]->x;
             blackAnt_r.y = filas[i][j]->y;
 
@@ -41,21 +41,30 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
 void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f3,Matrix *f4,Matrix *f5,Matrix *f6) {
     int x1 = x_start + 2 * w_vertical_road;
     int y1 = y_start;
-    int sizeOfCell = w_horizontal_road / sizeOfCanal;
+    int sizeOfCell = w_horizontal_road / sizeOfStack;
+    int sizeOfCanalCell = w_canal_road / sizeOfCanal;
 
     Matrix *array[6] = {f1,f2,f3,f4,f5,f6};
     int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
 
     for (int i = 0; i != 6; i++) {
         if (i == 0 || i == 1) {
+            int j;
             x1 = x_start + 2 * w_vertical_road;
-            for (int j = 0; j < sizeOfCanal; j++) {
+            for (j = 0; j < sizeOfStack; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
+
+            for (j;j < sizeOfStack + sizeOfCanal ; j ++){
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCanalCell;
+            }
+
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
+            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -67,14 +76,20 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
         if (i == 2) { y1 += gabInHorizontal;}
         if (i == 2 || i == 3) {
-            for (int j = 0; j < sizeOfCanal; j++) {
+            int j;
+            for (j = 0; j < sizeOfStack; j++) {
 
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
+            for (j;j < sizeOfStack + sizeOfCanal ; j ++){
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCanalCell;
+            }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
+            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -85,14 +100,20 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
         }
         if (i == 4) { y1 += gabInHorizontal; }
         if (i == 4 || i == 5) {
-            for (int j = 0; j < sizeOfCanal; j++) {
+            int j;
+            for (j = 0; j < sizeOfStack; j++) {
 
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
+            for (;j < sizeOfStack + sizeOfCanal ; j ++){
+                array[i][j]->x = x1;
+                array[i][j]->y = y1;
+                x1 += sizeOfCanalCell;
+            }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
+            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -112,6 +133,35 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
 }
 
+
+
+void drawCanal(SDL_Renderer *rend, SDL_Rect canal_roads){
+    SDL_SetRenderDrawColor(rend, 255, 100, 255, 255);
+
+    canal_roads.w = w_canal_road;
+    canal_roads.x = x_finalH_road;
+    canal_roads.y = y_start_road + 30;
+    canal_roads.h = 50;
+
+    int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
+    int y = y_start_road + 30;
+    for (int i = 0; i != 3; i++) {
+        if (i == 0 ) {
+            SDL_RenderFillRect(rend, &canal_roads);
+
+        }
+        if (i == 1) { canal_roads.y += 2 * gap_roads + gabInHorizontal; }
+        if (i == 1) {
+            SDL_RenderFillRect(rend, &canal_roads);
+        }
+        if (i == 2) { canal_roads.y += 2 * gap_roads + gabInHorizontal; }
+        if (i == 2) {
+            SDL_RenderFillRect(rend, &canal_roads);
+
+        }
+    }
+
+}
 
 
 void drawVerticalRoads(SDL_Renderer *rend, SDL_Rect vertical_roads, int x_startPoint, int y_startPoint) {
@@ -173,9 +223,9 @@ void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, SDL_Rect vertical_
 
 }
 void drawCells(SDL_Renderer *rend) {
-    drawLines(rend, sizeOfCanal, x_start_road, y_start_road);
+    drawLines(rend, sizeOfStack, x_start_road, y_start_road);
     int x_startPoint = horizontal_road3_x;
-    drawLines(rend, sizeOfCanal, x_startPoint, y_start_road);
+    drawLines(rend, sizeOfStack, x_startPoint, y_start_road);
 }
 void initAudio() {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
@@ -210,10 +260,11 @@ drawHills(SDL_Renderer *rend, SDL_Texture *anthill_t, SDL_Rect antHill1_r, SDL_R
     }
 }
 void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *anthill_t, SDL_Rect antHill1_r,
-                    SDL_Rect antHill2_r, SDL_Rect horizontal_roads, SDL_Rect vertical_roads, SDL_Rect mini_roads) {
+                    SDL_Rect antHill2_r, SDL_Rect horizontal_roads, SDL_Rect vertical_roads, SDL_Rect mini_roads, SDL_Rect canal_roads) {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, background_t, NULL, NULL);
     drawHills(rend, anthill_t, antHill1_r, antHill2_r, mini_roads);
     drawRoads(rend, horizontal_roads, vertical_roads);
+   drawCanal(rend, canal_roads);
 }
 

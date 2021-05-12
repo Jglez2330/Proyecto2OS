@@ -228,7 +228,7 @@ void updateNPC(SDL_Renderer *rend) {
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
             }
-            int secondVerticalRoad_x = x_start_road + distanceBetweenRoads + w_vertical_road * 2 + 20;
+            int secondVerticalRoad_x = vertical_road3_x + 30;
 
             if(ants[counter].size.x >= secondVerticalRoad_x) {
                 ants[counter].size.x -= regularSpeed * ants[counter].speed;

@@ -39,13 +39,12 @@ void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
 }
 
 void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f3,Matrix *f4,Matrix *f5,Matrix *f6) {
-
     int x1 = x_start + 2 * w_vertical_road;
     int y1 = y_start;
     int sizeOfCell = w_horizontal_road / sizeOfCanal;
 
     Matrix *array[6] = {f1,f2,f3,f4,f5,f6};
-
+    int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
 
     for (int i = 0; i != 6; i++) {
         if (i == 0 || i == 1) {
@@ -55,7 +54,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            x1 += 55;
+            x1 = horizontal_road3_x + 2 * w_vertical_road;
             for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
@@ -66,7 +65,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
         }
 
-        if (i == 2) { y1 = horizontal_road3_x;}
+        if (i == 2) { y1 += gabInHorizontal;}
         if (i == 2 || i == 3) {
             for (int j = 0; j < sizeOfCanal; j++) {
 
@@ -74,7 +73,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            x1 += 55;
+            x1 = horizontal_road3_x + 2 * w_vertical_road;
             for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
@@ -84,7 +83,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
             y1 += gap_roads;
 
         }
-        if (i == 4) { y1 = horizontal_road3_x; }
+        if (i == 4) { y1 += gabInHorizontal; }
         if (i == 4 || i == 5) {
             for (int j = 0; j < sizeOfCanal; j++) {
 
@@ -92,7 +91,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            x1 += 55;
+            x1 = horizontal_road3_x + 2 * w_vertical_road;
             for (int j = sizeOfCanal; j < sizeOfCanal*2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
@@ -106,7 +105,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
     for (int i = 0; i != 6; i++) {
 
 
-        if (i == 1 || i == 3 || i == 5) y1 = horizontal_road3_x;
+        if (i == 1 || i == 3 || i == 5) y1 += gabInHorizontal;
         if (i == 0 || i == 2 || i == 4) y1 += gap_roads;
 
     }

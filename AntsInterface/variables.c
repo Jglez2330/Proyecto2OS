@@ -1,10 +1,10 @@
-# define MAX 2
+# define MAX 5
 #define WINDOW_WIDTH (1850)
 #define WINDOW_HEIGHT (1050)
 #define x_start_road (400)
 #define y_start_road (100)
 #define gap_roads (55)
-#define w_horizontal_road (400)
+#define w_horizontal_road (300)
 #define w_vertical_road (50)
 #define h_horizontal_road (100)
 #define h_vertical_road (800)
@@ -13,7 +13,9 @@
 #define sizeOfCanal (MAX)
 #define regularSpeed (10)
 #define distanceBetweenHills (1550)
-#define distanceBetweenRoads ( distanceBetweenHills - 700)
+#define distanceBetweenRoads ( distanceBetweenHills - 1000)
+#define vertical_road3_x (antHill_x + distanceBetweenHills - 2 * w_vertical_road - 125)
+#define horizontal_road3_x (vertical_road3_x - 2 * w_vertical_road - w_horizontal_road)
 
 
 

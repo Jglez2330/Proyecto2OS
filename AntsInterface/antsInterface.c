@@ -278,7 +278,7 @@ void updateNPC(SDL_Renderer *rend) {
             if (ants[counter].sentHome){
                 int entrance = antHill_y + 100;
                 int disty = ants[counter].size.y - entrance;
-                int secondRoadLeft = x_start_road + distanceBetweenRoads + w_vertical_road * 2;
+                int secondRoadLeft = vertical_road3_x;
                 if(disty == 0) { //Aca metemos a la hormiga en el hormiguero
 
                     if (ants[counter].size.x < secondRoadLeft + 300) { //Metemos la hormiga en el hormiguero derecho

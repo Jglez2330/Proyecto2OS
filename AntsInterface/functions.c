@@ -45,7 +45,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
     int sizeOfCell = w_horizontal_road / sizeOfCanal;
 
     Matrix *array[6] = {f1,f2,f3,f4,f5,f6};
-    int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
+
 
     for (int i = 0; i != 6; i++) {
         if (i == 0 || i == 1) {
@@ -66,7 +66,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
         }
 
-        if (i == 2) { y1 += gabInHorizontal;}
+        if (i == 2) { y1 = horizontal_road3_x;}
         if (i == 2 || i == 3) {
             for (int j = 0; j < sizeOfCanal; j++) {
 
@@ -84,7 +84,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
             y1 += gap_roads;
 
         }
-        if (i == 4) { y1 += gabInHorizontal; }
+        if (i == 4) { y1 = horizontal_road3_x; }
         if (i == 4 || i == 5) {
             for (int j = 0; j < sizeOfCanal; j++) {
 
@@ -106,7 +106,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
     for (int i = 0; i != 6; i++) {
 
 
-        if (i == 1 || i == 3 || i == 5) y1 += gabInHorizontal;
+        if (i == 1 || i == 3 || i == 5) y1 = horizontal_road3_x;
         if (i == 0 || i == 2 || i == 4) y1 += gap_roads;
 
     }
@@ -152,7 +152,7 @@ void drawHorizontalRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, int x_st
 }
 void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, SDL_Rect vertical_roads) {
     SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
-    horizontal_roads.w = distanceBetweenRoads / 2 - gap_roads / 2;
+    horizontal_roads.w = w_horizontal_road;
     horizontal_roads.h = 50;
 
 
@@ -161,20 +161,21 @@ void drawRoads(SDL_Renderer *rend, SDL_Rect horizontal_roads, SDL_Rect vertical_
 
     drawHorizontalRoads(rend, horizontal_roads, x_start_road, y_start_road);
 
+    //printf("w_horizontal_road: %i", w_horizontal_road);
 
-    int x_startPoint = x_start_road + distanceBetweenRoads / 2 + gap_roads / 2;
+    int x_startPoint = horizontal_road3_x;
 
 
     drawHorizontalRoads(rend, horizontal_roads, x_startPoint, y_start_road);
 
 
     drawVerticalRoads(rend, vertical_roads, x_start_road, y_start_road);
-    drawVerticalRoads(rend, vertical_roads, x_start_road + distanceBetweenRoads + w_vertical_road * 2, y_start_road);
+    drawVerticalRoads(rend, vertical_roads, vertical_road3_x , y_start_road);
 
 }
 void drawCells(SDL_Renderer *rend) {
     drawLines(rend, sizeOfCanal, x_start_road, y_start_road);
-    int x_startPoint = x_start_road + distanceBetweenRoads / 2 + gap_roads / 2;
+    int x_startPoint = horizontal_road3_x;
     drawLines(rend, sizeOfCanal, x_startPoint, y_start_road);
 }
 void initAudio() {

@@ -159,6 +159,8 @@ int main() {
 
     int sendHomeRequested = 0;
     initializeNPC(rend,win);
+    int fila = 0;
+    char side = 'l';
     while (!close_requested) {
 
         SDL_Event event;
@@ -170,21 +172,100 @@ int main() {
                     break;
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.scancode) {
-                        case SDL_SCANCODE_B:
-
-                            blackAntRequested  = 1;
-                            break;
-                        case SDL_SCANCODE_R:
-
-                            redAntRequested  = 1;
-                            break;
-                        case SDL_SCANCODE_Q:
-
+                        case SDL_SCANCODE_W:
                             queenAntRequested  = 1;
+                            side = 'l';
+                            fila = 0;
                             break;
                         case SDL_SCANCODE_S:
 
-                            sendHomeRequested  = 1;
+                            queenAntRequested  = 1;
+                            fila = 2;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_X:
+
+                            queenAntRequested  = 1;
+                            fila = 4;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_E:
+                            fila = 0;
+                            redAntRequested  = 1;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_D:
+                            fila = 2;
+                            redAntRequested  = 1;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_C:
+                            fila = 4;
+                            blackAntRequested  = 1;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_R:
+                            fila = 0;
+                            redAntRequested  = 1;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_F:
+                            fila = 2;
+                            redAntRequested  = 1;
+                            side = 'l';
+                            break;
+                        case SDL_SCANCODE_V:
+                            fila = 4;
+                            blackAntRequested  = 1;
+                            side = 'l';
+                            break;
+                            //Aca empiezan las del lado derecho
+                        case SDL_SCANCODE_U:
+                            queenAntRequested  = 1;
+                            side = 'r';
+                            fila = 0;
+                            break;
+                        case SDL_SCANCODE_H:
+
+                            queenAntRequested  = 1;
+                            fila = 2;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_B:
+
+                            queenAntRequested  = 1;
+                            fila = 4;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_I:
+                            fila = 0;
+                            redAntRequested  = 1;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_J:
+                            fila = 2;
+                            redAntRequested  = 1;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_N:
+                            fila = 4;
+                            redAntRequested  = 1;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_O:
+                            fila = 0;
+                            blackAntRequested  = 1;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_K:
+                            fila = 2;
+                            blackAntRequested  = 1;
+                            side = 'r';
+                            break;
+                        case SDL_SCANCODE_M:
+                            fila = 4;
+                            blackAntRequested  = 1;
+                            side = 'r';
                             break;
                     }
                     break;
@@ -204,13 +285,13 @@ int main() {
         if (blackAntRequested){
 
             enum antType type = black;
-            spawnAnt(1,1,type,'r',filas);
+            spawnAnt(fila,1,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(2,3,type,'l',filas);
+            spawnAnt(fila,3,type,side,filas);
             queenAntRequested = 0;
         }
 
@@ -218,11 +299,11 @@ int main() {
         if (redAntRequested){
             printf("Spawn Matrix\n");
             enum antType type = red;
-            spawnAnt(4,3,type,'l', filas);
+            spawnAnt(fila,3,type,side,filas);
             redAntRequested = 0;
         }
         updateNPC(rend);
-        drawAnts(rend, filas, blackAnt_r, blackAnt_t);
+        //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
         SDL_RenderPresent(rend);
         SDL_Delay(100);
     }

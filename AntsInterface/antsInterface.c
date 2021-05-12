@@ -11,7 +11,7 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     SDL_Surface *surface_QueenAntR = IMG_Load("../Resources/queenAntR.png");
     SDL_Surface *surface_BlackAntL = IMG_Load("../Resources/blackAntL.png");
     SDL_Surface *surface_RedAntL = IMG_Load("../Resources/redAntL.png");
-    SDL_Surface *surface_QueenAntL = IMG_Load("../Resources/queenAntR.png");
+    SDL_Surface *surface_QueenAntL = IMG_Load("../Resources/queenAntL.png");
 
     //Manejo de error al cargar
     if (

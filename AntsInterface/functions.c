@@ -44,8 +44,13 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
     int sizeOfCell = w_horizontal_road / sizeOfStack;
     int sizeOfCanalCell = w_canal_road / sizeOfCanal;
 
+
     Matrix *array[6] = {f1,f2,f3,f4,f5,f6};
     int gabInHorizontal = h_vertical_road / 3 - h_horizontal_road / 3.5;
+
+    int c1_y = y_start + 25;
+    int c2_y = c1_y + 2 * gap_roads + gabInHorizontal;
+    int c3_y = c2_y + 2 * gap_roads + gabInHorizontal ;
 
     for (int i = 0; i != 6; i++) {
         if (i == 0 || i == 1) {
@@ -59,7 +64,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
             for (j;j < sizeOfStack + sizeOfCanal ; j ++){
                 array[i][j]->x = x1;
-                array[i][j]->y = y1;
+                array[i][j]->y = c1_y;
                 x1 += sizeOfCanalCell;
             }
 
@@ -85,7 +90,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
             }
             for (j;j < sizeOfStack + sizeOfCanal ; j ++){
                 array[i][j]->x = x1;
-                array[i][j]->y = y1;
+                array[i][j]->y = c2_y;
                 x1 += sizeOfCanalCell;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
@@ -109,7 +114,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
             }
             for (;j < sizeOfStack + sizeOfCanal ; j ++){
                 array[i][j]->x = x1;
-                array[i][j]->y = y1;
+                array[i][j]->y = c3_y;
                 x1 += sizeOfCanalCell;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;

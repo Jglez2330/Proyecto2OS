@@ -428,20 +428,11 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
     if (side == 'r') col = ants[counter].col_act;
     int finalX = filas[fila][col]->x;
     int finalY = filas[fila][col]->y;
-    printf("col_act %i \n",ants[counter].col_act);
-    printf("col_dest %i \n",ants[counter].col_dest);
     if(ants[counter].col_act == ants[counter].col_dest){
-        printf("Llego\n");
-        printf("col_act %i \n",ants[counter].col_act);
-        printf("col_dest %i \n",ants[counter].col_dest);
         ants[counter].waiting = 1;
         return;
     }
     else{
-        printf("finalX:%i\n",finalX);
-        printf("finalY:%i\n",finalY);
-        printf("ants[counter].size.x:%i\n",ants[counter].size.x);
-        printf("ants[counter].size.y:%i\n",ants[counter].size.y);
         if (ants[counter].size.x != finalX
             || ants[counter].size.y != finalY){
             if (ants[counter].size.x != finalX) moveInX(counter,finalX);
@@ -456,13 +447,12 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
 
             if (side == 'l')ants[counter].col_act += 1;
             if (side == 'r')ants[counter].col_act -= 1;
+            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
             return;
 
         }
         else{
-            printf("col_act %i \n",ants[counter].col_act);
-            printf("col_dest %i \n",ants[counter].col_act);
-            printf("No se que paso");
+            printf("Algo inesperado ocurrio");
         }
     }
 }

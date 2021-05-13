@@ -298,7 +298,7 @@ int main() {
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(fila,3,type,side,filas);
+            spawnAnt(fila,10,type,side,filas);
             queenAntRequested = 0;
         }
 

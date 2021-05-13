@@ -177,8 +177,9 @@ void updateNPC(SDL_Renderer *rend) {
                 break;
         }
         if(ants[counter].side == 'r'){
-            moveAntToRow(rend,sprite,counter,'r');
-
+            if (ants[counter].sentHome){
+                sendHome(rend,sprite,counter,'r');
+            }
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
@@ -222,62 +223,14 @@ void updateNPC(SDL_Renderer *rend) {
                     continue;
                 }
             }
-
-
-
-
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
 
         }
         if(ants[counter].side == 'l'){
-//            if (ants[counter].sentHome){
-//                int entrance = antHill_y + 100;
-//                int disty = ants[counter].size.y - entrance;
-//                int secondRoadLeft = vertical_road3_x;
-//                if(disty == 0) { //Aca metemos a la hormiga en el hormiguero
-//
-//                    if (ants[counter].size.x < secondRoadLeft + 300) { //Metemos la hormiga en el hormiguero derecho
-//                        ants[counter].size.x += regularSpeed * ants[counter].speed;
-//                        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                        continue;
-//                    }
-//                    if (ants[counter].size.x <= secondRoadLeft + 300) continue; //Si ya sobrepaso el hormiguero entonces desaparecer la hormiga
-//                }
-//                if(ants[counter].size.x < secondRoadLeft) {       //Movemos las hormigas hasta el camino vertical de la derecha
-//
-//                    int distx = x_start_road -  ants[counter].size.x;
-//                    if(abs(distx) <= 10){
-//                        ants[counter].size.x += 1;
-//                    }
-//                    if(abs(distx) > 10){
-//                        ants[counter].size.x += regularSpeed * ants[counter].speed;
-//                    }
-//
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//
-//                if(ants[counter].size.y < entrance) {
-//
-//                    if (abs(disty) <= 10) ants[counter].size.y += 1;
-//                    if (abs(disty) > 10) ants[counter].size.y += regularSpeed * ants[counter].speed;
-//
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//                if(ants[counter].size.y > entrance) {
-//
-//                    if (abs(disty) <= 10) ants[counter].size.y -= 1;
-//                    if (abs(disty) > 10) ants[counter].size.y -= regularSpeed * ants[counter].speed;
-//
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//
-//
-//            }
+            if (ants[counter].sentHome){
+                sendHome(rend,sprite,counter,'l');
+            }
 
-            moveAntToRow(rend,sprite,counter,'l');
 
 
             if (ants[counter].waiting){
@@ -295,8 +248,7 @@ void updateNPC(SDL_Renderer *rend) {
             if(disty > 0){
                 if(abs(disty) < 10) ants[counter].size.y -= 1;
                 else ants[counter].size.y -= regularSpeed * ants[counter].speed;
-//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                return;
+
             }
             if(disty < 0){
                 if(abs(disty) < 10) ants[counter].size.y += 1;
@@ -341,8 +293,3 @@ void moveAntToFinalAntHill(){
 
 }
 
-void sendHome (){
-    for(int counter = 0; counter < antCounter; counter++) {
-        ants[counter].sentHome = 1;
-    }
-}

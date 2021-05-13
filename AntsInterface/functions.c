@@ -272,8 +272,10 @@ void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *
     drawRoads(rend, horizontal_roads, vertical_roads);
    drawCanal(rend, canal_roads);
 }
-void moveAntToRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
-    if (ants[counter].sentHome){
+void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
+        int direction = 1;
+        if (side == 'l') direction = 1;
+        if (side == 'r') direction = -1;
         int entrance = antHill_y + 100;
         int disty = ants[counter].size.y - entrance;  //Distancia en y que le falta a la hormiga para entrar
 
@@ -282,8 +284,8 @@ void moveAntToRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side
             if(side == 'r') antHillpos = antHill_x - 100;
             if(side == 'l') antHillpos = vertical_road3_x + 300;
             if (ants[counter].size.x != antHillpos) {
-                if (side == 'l') ants[counter].size.x += regularSpeed * ants[counter].speed;
-                if (side == 'r') ants[counter].size.x -= regularSpeed * ants[counter].speed;
+                ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
+
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 return;
             }
@@ -295,12 +297,12 @@ void moveAntToRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side
 
         if(distx > 0) {       //Movemos las hormigas hasta el camino vertical de la izquierda
             if(abs(distx) <= 10){
-                if (side == 'l') ants[counter].size.x += 1;
-                if (side == 'r') ants[counter].size.x -= 1;
+                ants[counter].size.x += direction * 1;
+
             }
             if(abs(distx) > 10){
-                if (side == 'l')ants[counter].size.x += regularSpeed * ants[counter].speed;
-                if (side == 'r') ants[counter].size.x -= regularSpeed * ants[counter].speed;
+                ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
+
             }
 
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
@@ -330,7 +332,4 @@ void moveAntToRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
             return;
         }
-
-
-    }
 }

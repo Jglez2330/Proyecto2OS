@@ -280,7 +280,7 @@ int main() {
         drawCells(rend);
         if (sendHomeRequested){
             printf("Send home\n");
-            sendHome();
+//            sendHome();
             sendHomeRequested = 0;
         }
         if (blackAntRequested){

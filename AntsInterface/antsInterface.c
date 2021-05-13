@@ -180,11 +180,17 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
                 }
                 break;
         }
-        detectIfAntCross(counter,ants[counter].side);
+        bool passedAntCross = detectIfAntCross(counter,ants[counter].side);
+
+
+
         if(ants[counter].side == 'r'){
+//            printf("sendHome %i \n",ants[counter].sentHome);
             if (ants[counter].sentHome){
                 sendHome(rend,sprite,counter,'r');
+                continue;
             }
+//            printf("waiting %i \n",ants[counter].waiting);
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
@@ -198,6 +204,7 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
         if(ants[counter].side == 'l'){
             if (ants[counter].sentHome){
                 sendHome(rend,sprite,counter,'l');
+                continue;
             }
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);

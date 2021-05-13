@@ -273,6 +273,7 @@ void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *
    drawCanal(rend, canal_roads);
 }
 void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
+
         int direction = 1;
         if (side == 'l') direction = 1;
         if (side == 'r') direction = -1;
@@ -335,7 +336,7 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
 }
 
 bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
-
+    printf("inStack %i \n",ants[counter].inStack);
     if(ants[counter].inStack == 1) return true;
 
     int direction;
@@ -384,6 +385,7 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
     }
 }
 void moveInX(int counter, int finalX){
+    printf("Se va a mover en X \n");
     int distx = ants[counter].size.x - finalX;
     if(distx > 0){
 
@@ -401,6 +403,7 @@ void moveInX(int counter, int finalX){
     }
 }
 void moveInY(int counter, int finalY){
+    printf("Se va a mover en Y \n");
     int disty = ants[counter].size.y - finalY;
     if(disty > 0){
 
@@ -411,12 +414,13 @@ void moveInY(int counter, int finalY){
     }
     if(disty < 0){
 
-        if(abs(disty) < 10) ants[counter].size.y += 1;
+        if(abs(disty) <= 10) ants[counter].size.y += 1;
         if(abs(disty) > 10) ants[counter].size.y += regularSpeed * ants[counter].speed;
         return;
 
     }
     else{
+        printf("No se logro mover en Y \n");
         return;
     }
 }
@@ -433,8 +437,10 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
         return;
     }
     else{
+
         if (ants[counter].size.x != finalX
             || ants[counter].size.y != finalY){
+            printf("Tiene que moverse \n");
             if (ants[counter].size.x != finalX) moveInX(counter,finalX);
             if (ants[counter].size.y != finalY) moveInY(counter,finalY);
 
@@ -444,7 +450,7 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
         }
         if (ants[counter].size.x == finalX
             && ants[counter].size.y == finalY){
-
+            printf("No se tiene que moverse \n");
             if (side == 'l')ants[counter].col_act += 1;
             if (side == 'r')ants[counter].col_act -= 1;
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
@@ -456,20 +462,26 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
         }
     }
 }
-void detectIfAntCross( int counter, char side){
+bool detectIfAntCross( int counter, char side){
     int delCol;
     if (side == 'l'){
         delCol = STACKMAX + COLAMAX - 1;
         if (ants[counter].col_act > delCol) {
             ants[counter].sentHome = 1;
-
+            return true;
+        }
+        else{
+            return false;
         }
     }
     if (side == 'r'){
         delCol = STACKMAX - 1;
         if (ants[counter].col_act < delCol){
             ants[counter].sentHome = 1;
-
+            return true;
+        }
+        else{
+            return false;
         }
 
     }

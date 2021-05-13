@@ -224,47 +224,47 @@ int main() {
                         case SDL_SCANCODE_U:
                             queenAntRequested  = 1;
                             side = 'r';
-                            fila = 0;
+                            fila = 1;
                             break;
                         case SDL_SCANCODE_H:
 
                             queenAntRequested  = 1;
-                            fila = 2;
+                            fila = 3;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_B:
 
                             queenAntRequested  = 1;
-                            fila = 4;
+                            fila = 5;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_I:
-                            fila = 0;
+                            fila = 1;
                             redAntRequested  = 1;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_J:
-                            fila = 2;
+                            fila = 3;
                             redAntRequested  = 1;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_N:
-                            fila = 4;
+                            fila = 5;
                             redAntRequested  = 1;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_O:
-                            fila = 0;
+                            fila = 1;
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_K:
-                            fila = 2;
+                            fila = 3;
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
                         case SDL_SCANCODE_M:
-                            fila = 4;
+                            fila = 5;
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
@@ -292,7 +292,7 @@ int main() {
         if (blackAntRequested){
 
             enum antType type = black;
-            spawnAnt(fila,3,type,side,filas);
+            spawnAnt(fila,10,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
@@ -304,9 +304,8 @@ int main() {
 
 
         if (redAntRequested){
-            printf("Spawn Matrix\n");
             enum antType type = red;
-            spawnAnt(fila,3,type,side,filas);
+            spawnAnt(fila,1,type,side,filas);
             redAntRequested = 0;
         }
         updateNPC(rend, filas);

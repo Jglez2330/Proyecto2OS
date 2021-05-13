@@ -72,6 +72,10 @@ listNode_t* roundRobin (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
+
+    if (selectedReady == NULL){
+        return NULL;
+    }
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
 
     if(listItem->state == TERMINATED){
@@ -116,6 +120,10 @@ listNode_t* priority (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
+    if (selectedReady == NULL){
+        return NULL;
+    }
+
     bubbleSort_t(selectedReady,PRIORITY);
 
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
@@ -165,8 +173,9 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
-
-
+    if (selectedReady == NULL){
+        return NULL;
+    }
 
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
     if(listItem->flag_SJF != 1){
@@ -224,7 +233,9 @@ listNode_t* FCFS(scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
-
+    if (selectedReady == NULL){
+        return NULL;
+    }
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
 
     if(listItem->state == TERMINATED){
@@ -267,6 +278,9 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
     else{
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
+    }
+    if (selectedReady == NULL){
+        return NULL;
     }
 
     if(selectedReady->threadInfo->rms_Status == 0){

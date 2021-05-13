@@ -103,4 +103,15 @@ void queue_destroy(queue_t* this){
 
 
 
+queue_item queue_GetPosition(queue_t* this,int position){
+    queue_t* actual = this;
+    int num = 0;
 
+    while(actual!= NULL){
+        if(num == position)
+            return actual->back->item;
+        num++;
+        actual->back->next = actual->back ;
+    }
+
+}

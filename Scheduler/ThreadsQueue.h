@@ -46,6 +46,8 @@ queue_item queue_Getfront(queue_t* this);
 // ------------Empties the queue and performs any necessary memory cleanup
 void queue_destroy(queue_t* this);
 
+queue_item queue_GetPosition(queue_t* this,int position);
+
 
 
 #endif //SCHEDULER_THREADSQUEUE_H

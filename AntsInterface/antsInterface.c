@@ -184,104 +184,81 @@ void updateNPC(SDL_Renderer *rend) {
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
             }
-            int secondVerticalRoad_x = vertical_road3_x + 30;
-
-            if(ants[counter].size.x >= secondVerticalRoad_x) {
-                ants[counter].size.x -= regularSpeed * ants[counter].speed;
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                continue;
-            }
-            int disty = ants[counter].size.y - ants[counter].y_dest;
-            if(disty > 0){
-                if(abs(disty) < 10) ants[counter].size.y -= 1;
-                else ants[counter].size.y -= regularSpeed * ants[counter].speed;
-
-            }
-            if(disty < 0){
-                if(abs(disty) < 10) ants[counter].size.y += 1;
-                else ants[counter].size.y += regularSpeed * ants[counter].speed;
-
-            }
-            int distx = ants[counter].size.x - ants[counter].x_dest;
-
-
-            if (disty == 0){
-                if (distx == 0){
-                    ants[counter].waiting = 1;
-                }
-
-                if(distx > 0){
-                    if(abs(distx) < 10) ants[counter].size.x -= 1;
-                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
-                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                    continue;
-                }
-                if(distx < 0){
-                    if(abs(distx) < 10) ants[counter].size.x += 1;
-                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
-                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                    continue;
-                }
-            }
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+            positionInInitialRow(rend,sprite, counter, 'r');
+//            int secondVerticalRoad_x = vertical_road3_x + 30;
+//
+//            if(ants[counter].size.x >= secondVerticalRoad_x) {
+//                ants[counter].size.x -= regularSpeed * ants[counter].speed;
+//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                continue;
+//            }
+//            int disty = ants[counter].size.y - ants[counter].y_dest;
+//            if(disty > 0){
+//                if(abs(disty) < 10) ants[counter].size.y -= 1;
+//                else ants[counter].size.y -= regularSpeed * ants[counter].speed;
+//
+//            }
+//            if(disty < 0){
+//                if(abs(disty) < 10) ants[counter].size.y += 1;
+//                else ants[counter].size.y += regularSpeed * ants[counter].speed;
+//
+//            }
+//            int distx = ants[counter].size.x - ants[counter].x_dest;
+//
+//
+//            if (disty == 0){
+//                if (distx == 0){
+//                    ants[counter].waiting = 1;
+//                }
+//
+//                if(distx > 0){
+//                    if(abs(distx) < 10) ants[counter].size.x -= 1;
+//                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
+//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                    continue;
+//                }
+//                if(distx < 0){
+//                    if(abs(distx) < 10) ants[counter].size.x += 1;
+//                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
+//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                    continue;
+//                }
+//            }
+//            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
 
         }
         if(ants[counter].side == 'l'){
             if (ants[counter].sentHome){
                 sendHome(rend,sprite,counter,'l');
             }
-
-
-
             if (ants[counter].waiting){
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
             }
-
-
-            if(ants[counter].size.x <= x_start_road) {
-                ants[counter].size.x += regularSpeed * ants[counter].speed;
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                continue;
-            }
-            int disty = ants[counter].size.y - ants[counter].y_dest;
-            if(disty > 0){
-                if(abs(disty) < 10) ants[counter].size.y -= 1;
-                else ants[counter].size.y -= regularSpeed * ants[counter].speed;
-
-            }
-            if(disty < 0){
-                if(abs(disty) < 10) ants[counter].size.y += 1;
-                else ants[counter].size.y += regularSpeed * ants[counter].speed;
-//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                return;
-            }
             int distx = ants[counter].size.x - ants[counter].x_dest;
-//            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-
-            if (disty == 0){
-                if (distx == 0){
-                    ants[counter].waiting = 1;
-                }
-                ants[counter].size.x += regularSpeed * ants[counter].speed;
-                if(distx > 0){
-                    if(abs(distx) < 10) ants[counter].size.x -= 1;
-                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
-                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                    continue;
-                }
-                if(distx < 0){
-                    if(abs(distx) < 10) ants[counter].size.x += 1;
-                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
-                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                    continue;
-                }
+            if (positionInInitialRow(rend,sprite, counter, 'l')){
+//                if (distx == 0){
+//                    ants[counter].waiting = 1;
+//                }
+//                ants[counter].size.x += regularSpeed * ants[counter].speed;
+//                if(distx > 0){
+//                    if(abs(distx) < 10) ants[counter].size.x -= 1;
+//                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
+//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                    continue;
+//                }
+//                if(distx < 0){
+//                    if(abs(distx) < 10) ants[counter].size.x += 1;
+//                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
+//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+//                    continue;
+//                }
             }
 
 
 
 
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
         }
 
 

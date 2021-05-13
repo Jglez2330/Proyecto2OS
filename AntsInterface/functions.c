@@ -333,3 +333,39 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
             return;
         }
 }
+
+bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
+    int direction;
+    if (side == 'l') direction = 1;
+    if (side == 'r') direction = -1;
+
+    int x_position ;
+    if(side == 'l') x_position = x_start_road + w_vertical_road/2;
+    if(side == 'r') x_position = vertical_road3_x + w_vertical_road/2;
+
+    if(ants[counter].size.x != x_position) {
+        int diffx = abs(ants[counter].size.x - x_position);
+        if(diffx <= 10) ants[counter].size.x += direction * 1;
+        if(diffx > 10) ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
+
+        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+        return false;
+    }
+    int disty = ants[counter].size.y - ants[counter].y_dest;
+    if(disty > 0){
+        if(abs(disty) < 10) ants[counter].size.y -= 1;
+        else ants[counter].size.y -= regularSpeed * ants[counter].speed;
+
+    }
+    if(disty < 0){
+        if(abs(disty) < 10) ants[counter].size.y += 1;
+        else ants[counter].size.y += regularSpeed * ants[counter].speed;
+    }
+
+    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
+    if (disty == 0){
+        return true;
+//
+    }
+}

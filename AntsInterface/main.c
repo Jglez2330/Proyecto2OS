@@ -268,6 +268,10 @@ int main() {
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
+                        case SDL_SCANCODE_T:
+                            
+                            sendHomeRequested  = 1;
+                            break;
                     }
                     break;
             }
@@ -280,7 +284,9 @@ int main() {
         drawCells(rend);
         if (sendHomeRequested){
             printf("Send home\n");
-//            sendHome();
+            for(int counter = 0; counter < antCounter; counter++) {
+                ants[counter].sentHome = 1;
+            }
             sendHomeRequested = 0;
         }
         if (blackAntRequested){

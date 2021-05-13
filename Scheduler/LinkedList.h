@@ -16,6 +16,9 @@ typedef struct Thread_t{
     int priority;
     int var_SJF;
     int flag_SJF;
+    float rms_C;
+    float rms_P;
+    int rms_Status;
     void* (*pFunction)(void*);
     void* arg;
     void* retval;
@@ -29,7 +32,7 @@ typedef struct listNode_t{
 }listNode_t;
 
 
-enum State {SJF = 0, PRIORITY = 1};
+enum State {SJF = 0, PRIORITY = 1, PERIOD = 2};
 
 void push_t(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo);
 void append(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo);

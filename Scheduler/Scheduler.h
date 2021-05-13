@@ -7,6 +7,7 @@
 
 #include <sys/ucontext.h>
 #include "LinkedList.h"
+#include <math.h>
 
 /*
 typedef struct scheduler_t {
@@ -42,6 +43,9 @@ listNode_t* receiveThreads(scheduler_t* scheduler);
 listNode_t* roundRobin (scheduler_t * scheduler);
 listNode_t* priority (scheduler_t * scheduler);
 listNode_t* shortJobFirst (scheduler_t * scheduler);
+listNode_t* FCFS(scheduler_t * scheduler);
+listNode_t* tiempoReal(scheduler_t * scheduler);
+
 
 
 #endif //SCHEDULER_SCHEDULER_H

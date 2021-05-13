@@ -42,7 +42,7 @@ void deleteNodePosition(struct listNode_t **head_ref, int position)
     struct listNode_t* temp = *head_ref;
     if (position == 0){
         *head_ref = temp->next;
-        //free(temp);
+        free(temp);
         return;
     }
 
@@ -54,7 +54,7 @@ void deleteNodePosition(struct listNode_t **head_ref, int position)
 
     struct listNode_t *next = temp->next->next;
 
-    //free(temp->next);
+    free(temp->next);
 
     temp->next = next;
 }
@@ -106,7 +106,7 @@ void printList_t(struct listNode_t *start)
 
     while (temp!=NULL)
     {
-        printf("| Prioridad %d - TID %li  - Time SJF %i| ", temp->threadInfo->priority, temp->threadInfo->tid, temp->threadInfo->var_SJF);
+        printf("||| Prioridad %d - TID %li  - Time SJF %i - PERIOD %f||| ", temp->threadInfo->priority, temp->threadInfo->tid, temp->threadInfo->var_SJF, temp->threadInfo->rms_P);
         temp = temp->next;
     }
     printf("\n");
@@ -129,7 +129,7 @@ void bubbleSort_t(struct listNode_t *start,int typeSort)
         {
             if (((ptr1->threadInfo->priority > ptr1->next->threadInfo->priority) && (PRIORITY == typeSort)) ||
                     ((ptr1->threadInfo->var_SJF > ptr1->next->threadInfo->var_SJF) && (SJF == typeSort))
-            )
+                     ||((ptr1->threadInfo->rms_P > ptr1->next->threadInfo->rms_P) && (PERIOD == typeSort)))
             {
                 swap(ptr1, ptr1->next);
                 swapped = 1;

@@ -49,12 +49,18 @@ int main() {
     pos0->priority= 6;
     pos0->tid = tid0;
     pos0->var_SJF = 4;
+    pos0->rms_Status = 0;
+    pos0->rms_C = 1;
+    pos0->rms_P = 6;
     CEThread_treadInfo* pos1 = malloc(sizeof(CEThread_treadInfo));
 
     pos1->state = 1;
     pos1->priority= 10;
     pos1->tid = tid1;
-    pos1->var_SJF = 3;
+    pos1->var_SJF = 4;
+    pos1->rms_Status = 0;
+    pos1->rms_C = 2;
+    pos1->rms_P = 9;
 
 
     CEThread_treadInfo* pos2 = malloc(sizeof(CEThread_treadInfo));
@@ -62,15 +68,21 @@ int main() {
     pos2->state = 1;
     pos2->priority= 2;
     pos2->tid = tid2;
-    pos2->tid = 2;
+    pos1->var_SJF = 4;
+    pos2->rms_Status = 0;
+    pos2->rms_C = 6;
+    pos2->rms_P = 18;
 
 
     CEThread_treadInfo* pos3 = malloc(sizeof(CEThread_treadInfo));
 
     pos3->state = 1;
-    pos3->priority= 10;
+    pos3->priority= 4;
     pos3->tid = tid3;
     pos3->var_SJF = 1;
+    pos3->rms_Status = 0;
+    pos3->rms_C = 6;
+    pos3->rms_P = 18;
 
 
 
@@ -91,10 +103,10 @@ int main() {
 
 
 
-
+/*
     printList_t(schedulerMain->ant_list_ready_a);
     printf("\nEliminar por TID %li", tid1);
-    deleteNodeTID_t(&schedulerMain->ant_list_ready_a,tid1);
+    deleteNodeTID_t(&schedulerMain->ant_list_ready_a,tid1);*/
 
 
 
@@ -112,7 +124,7 @@ int main() {
 
     printf("\n \n--------NUEVA PARTE--------\n");
 
-    schedulerMain->funcion_calendarizador(schedulerMain);
+   /* schedulerMain->funcion_calendarizador(schedulerMain);
     printList_t(schedulerMain->ant_list_ready_a);
     schedulerMain->funcion_calendarizador(schedulerMain);
     printList_t(schedulerMain->ant_list_ready_a);
@@ -126,7 +138,7 @@ int main() {
     schedulerMain->ant_list_ready_a->threadInfo->state=TERMINATED;
 
     schedulerMain->funcion_calendarizador(schedulerMain);
-    printList_t(schedulerMain->ant_list_ready_a);
+    printList_t(schedulerMain->ant_list_ready_a);*/
 
 
 

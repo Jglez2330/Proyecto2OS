@@ -2,33 +2,19 @@
 // Created by jglez2330 on 2/5/21.
 //
 #define QUANTUM 100000
-
+#define Channels 4
 #include "CEThread.h"
 
 
-queue_t *thread_list = NULL;
-queue_t *thread_list_zombie = NULL;
 int globalTID = 0;
 int current_channel = 0;
-
+scheduler_t schedulers[Channels];
 void free_thread(CEThread_treadInfo *pThread);
 
-void unblock_threads_from_list(queue_t *list);
+CEThread_treadInfo *get_next_thread();
 
-typedef struct {
-    queue_t *(*funcion_calendarizador)(queue_t *, queue_t *);
-    queue_t * all_threads_a;
-    queue_t * all_threads_b;
-    queue_t *ant_list_ready_a;
-    queue_t *ant_list_ready_b;
-    queue_t *zombie_ants_a;
-    queue_t *zombie_ants_b;
-} scheduler_t;
+int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* scheduler, int channel) {
 
-int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, void *arg) {
-    if (attr == NULL) {
-        attr = CEThread_default_attr();
-    }
     if (globalTID++ == 0) {
         struct sigaction act;
         //TODO: inicializar la lista de listos
@@ -38,7 +24,6 @@ int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, voi
         main_thread_info->arg = NULL;
         main_thread_info->state = RUNNING;
         main_thread_info->joining = 0;
-        main_thread_info->attributes = attr;
         memset(main_thread_info->thread_context, '\0', sizeof(ucontext_t));
 
         if (getcontext(main_thread_info->thread_context) == -1) {
@@ -68,12 +53,20 @@ int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, voi
             printf("Unable to plant action to timer");
             exit(-1);
         }
-        thread_list = (queue_t *) malloc(sizeof(queue_t));
-        thread_list_zombie = (queue_t *) malloc(sizeof(queue_t));
-        queueInit(thread_list);
-        queueInit(thread_list_zombie);
 
-        queueAddFrontItem(thread_list, current_thread_running);
+        scheduler_t * scheduler_temp = malloc(sizeof(scheduler_t)*4);
+
+        for (int i = 0; i < Channels; ++i) {
+            scheduler_temp[i].ant_list_ready_a = NULL;
+            scheduler_temp[i].ant_list_ready_b = NULL;
+            scheduler_temp[i].zombie_ants_a = NULL;
+            scheduler_temp[i].zombie_ants_b = NULL;
+        }
+
+
+        append(&schedulers[0].ant_list_ready_a, main_thread_info);
+
+
         globalTID++;
     }
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
@@ -86,7 +79,7 @@ int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, voi
     ceThreadTreadInfo->arg = arg;
     ceThreadTreadInfo->thread_context = (ucontext_t *) malloc(sizeof(ucontext_t));
     ceThreadTreadInfo->joining = 0;
-    ceThreadTreadInfo->attributes = attr;
+    schedulers[channel] = *scheduler;
     memset(ceThreadTreadInfo->thread_context, '\0', sizeof(ucontext_t));
 
 
@@ -107,7 +100,8 @@ int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, voi
 
     //TODO: place thread into the ready list
 
-    queueAddBackItem(thread_list, ceThreadTreadInfo);
+    append(&schedulers[channel].ant_list_ready_a, ceThreadTreadInfo);
+    schedulers[channel].funcion_calendarizador = scheduler->funcion_calendarizador;
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     return 0;
 
@@ -116,7 +110,7 @@ int CEThread_create(CEThread_t *thread, CEThread_attr_t *attr, void *rutine, voi
 void CEThread_start(void *(*start_routine)(void *), void *args) {
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     void *r = (*start_routine)(args);
-    CEThread_exit(r);
+    CEThread_end(r);
 }
 
 CEThread_attr_t *CEThread_default_attr() {
@@ -133,27 +127,35 @@ void default_algo(int sig) {
     /* block the signal */
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     current_channel++;
+    current_channel = current_channel % 2;
+    CEThread_treadInfo *prev;
+    CEThread_treadInfo *next;
     if (current_channel == 0){
         //TODO: Run main thread
-    }
-    current_channel = current_channel % 4;
+        prev = current_thread_running;
+        if (current_thread_running->state == RUNNING) {
+            current_thread_running->state = READY;
 
+        }
+        next = getFront_t(schedulers[0].ant_list_ready_a);
+        next->state = RUNNING;
+        current_thread_running = next;
+        sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
+        swapcontext(prev->thread_context, current_thread_running->thread_context);
+        return;
+    }
     /* if no thread in the ready queue, resume execution */
-    if (queueIsempty(thread_list))
+    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    if (getFront_t(list_threads) == NULL)
         return;
 
     /* get the next runnable thread and use preemptive scheduling */
-    CEThread_treadInfo *prev = current_thread_running;
+    prev = current_thread_running;
     if (current_thread_running->state == RUNNING) {
         current_thread_running->state = READY;
     }
     //TODO: LLamar su fucnion de calendarizador
-    CEThread_treadInfo *next;
-    do {
-        queue_cycle(thread_list);
-        next = (CEThread_treadInfo *) queue_Getfront(thread_list);
-    } while (next->state != READY);
-
+    next = getFront_t(list_threads);
 
     next->state = RUNNING;
     current_thread_running = next;
@@ -164,19 +166,17 @@ void default_algo(int sig) {
 
 }
 
-void CEThread_exit(void *pVoid) {
-
-
+void CEThread_end(void *pVoid) {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-
-    if (queueIsempty(thread_list)) {
+    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    if (getFront_t(list_threads) == NULL) {
         sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
         exit((int) pVoid);
     }
 
-    /* if the main thread call CEThread_exit */
+    /* if the main thread call CEThread_end */
     if (current_thread_running->tid == 1) {
-        while (!queueIsempty(thread_list)) {
+        while (!(getFront_t(list_threads) == NULL)) {
             sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
             default_algo(SIGVTALRM);
             sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
@@ -189,14 +189,11 @@ void CEThread_exit(void *pVoid) {
         //TODO: Free resources
     }
 
-    CEThread_treadInfo *prev = (CEThread_treadInfo *) queueRemoveFrontItem(thread_list);
-    CEThread_treadInfo *next;
+    CEThread_treadInfo *prev = current_thread_running;
+    prev->state = TERMINATED;
 
-    do {
-        queue_cycle(thread_list);
-        next = (CEThread_treadInfo *) queue_Getfront(thread_list);
-    } while (next->state != READY);
-    current_thread_running = next;
+
+    current_thread_running = get_next_thread();
     current_thread_running->state = RUNNING;
 
     /* free up memory allocated for exit thread */
@@ -205,11 +202,8 @@ void CEThread_exit(void *pVoid) {
     prev->thread_context = NULL;
 
     /* mark the exit thread as DONE and add to zombie_queue */
-    prev->state = TERMINATED;
     prev->retval = pVoid;
     prev->joining = 0;
-    queueAddBackItem(thread_list_zombie, prev);
-
 
     /* unblock alarm signal and setcontext for next thread */
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
@@ -217,19 +211,37 @@ void CEThread_exit(void *pVoid) {
     return;
 }
 
+CEThread_treadInfo *get_next_thread() {
+    current_channel++;
+    current_channel = current_channel % 2;
+    CEThread_treadInfo *next = NULL;
+    if (current_channel == 0){
+        //TODO: Run main thread
+        next = getFront_t(schedulers[0].ant_list_ready_a);
+        return next;
+    }
+    /* if no thread in the ready queue, resume execution */
+    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    if (getFront_t(list_threads) == NULL)
+        return NULL;
+    next = getFront_t(list_threads);
+
+    return next;
+}
+
 int CEThread_join(CEThread_t thread, void **return_value) {
     if (thread == current_thread_running->tid) {
         printf("Unable to join to same thread");
         return -1;
     }
-    CEThread_treadInfo *threadTreadInfo;
-    if ((threadTreadInfo = get_thread(thread, thread_list_zombie)) != NULL) {
+    CEThread_treadInfo *threadTreadInfo ;
+    if ((threadTreadInfo = get_thread_zombie(thread)) != NULL) {
 
         free_thread(threadTreadInfo);
         //TODO: Delete thread
         return 0;
     }
-    if ((threadTreadInfo = get_thread(thread, thread_list)) == NULL) {
+    if ((threadTreadInfo = get_thread_ready(thread)) == NULL) {
         printf("Thread %lu doesn't exist \n", thread);
         return -1;
     }
@@ -259,23 +271,55 @@ int CEThread_join(CEThread_t thread, void **return_value) {
 void free_thread(CEThread_treadInfo *pThread) {
     return;
 }
-
-CEThread_treadInfo *get_thread(CEThread_t thread, queue_t *thread_list_local) {
-    CEThread_treadInfo *result = NULL;
-    queue_node_t *item = thread_list_local->front;
-    while (item != NULL) {
-        if (((CEThread_treadInfo *) item->item)->tid == thread) {
-            result = (CEThread_treadInfo *) item->item;
+CEThread_treadInfo * get_thread(CEThread_t thread, listNode_t* list){
+    CEThread_treadInfo* result = NULL;
+    for (int i = 0; i < getCount_t(list); i++) {
+        if (getNode_t(list,i)->tid == thread){
+            result = getNode_t(list,i);
             break;
         }
-        item = item->next;
+
+    }
+    return result;
+}
+CEThread_treadInfo * get_thread_zombie(CEThread_t thread){
+    CEThread_treadInfo *result = NULL;
+    listNode_t* list;
+    for (int i = 0; i < Channels; i++){
+        scheduler_t selected_channel = schedulers[i];
+
+        if ((result = get_thread(thread, selected_channel.zombie_ants_a)) != NULL){
+            break;
+        }
+        else if ((result = get_thread(thread, selected_channel.zombie_ants_b)) != NULL){
+            break;
+        }
+
+    }
+    return result;
+}
+CEThread_treadInfo * get_thread_ready(CEThread_t thread){
+    CEThread_treadInfo *result = NULL;
+    listNode_t* list;
+    for (int i = 0; i < Channels; i++){
+        scheduler_t selected_channel = schedulers[i];
+
+        if ((result = get_thread(thread, selected_channel.ant_list_ready_a)) != NULL){
+            break;
+        }
+        else if ((result = get_thread(thread, selected_channel.ant_list_ready_b)) != NULL){
+            break;
+        }
+
     }
     return result;
 }
 
 int CEThread_yield() {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    if (queueIsempty(thread_list)) {
+    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+
+    if (getFront_t(list_threads) == NULL) {
         return -1;
     }
     default_algo(SIGVTALRM);
@@ -285,7 +329,7 @@ int CEThread_yield() {
 
 int CEThread_detach(CEThread_t thread) {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    CEThread_treadInfo *ceThreadTreadInfo = get_thread(thread, thread_list);
+    CEThread_treadInfo *ceThreadTreadInfo = get_thread_ready(thread);
     ceThreadTreadInfo->detach = 1;
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     return 0;
@@ -293,8 +337,8 @@ int CEThread_detach(CEThread_t thread) {
 
 void CEThread_mutex_init(CEThread_mutex_t *mutex, CEThread_mutex_attr_t *attr) {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    mutex->blocked_list = malloc(sizeof(queue_t));
-    queueInit(mutex->blocked_list);
+    mutex->blocked_list = malloc(sizeof(listNode_t));
+    mutex->blocked_list = NULL;
     //TODO:Cahbge list
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
 };
@@ -302,7 +346,7 @@ void CEThread_mutex_init(CEThread_mutex_t *mutex, CEThread_mutex_attr_t *attr) {
 void CEThread_mutex_lock(CEThread_mutex_t *mutex) {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     if (mutex->owner_thread != current_thread_running->tid && mutex->owner_thread != 0) {
-        queueAddBackItem(mutex->blocked_list, current_thread_running);
+        append(&mutex->blocked_list, current_thread_running);
         current_thread_running->state = BLOCKED;
         CEThread_yield();
     } else {
@@ -333,10 +377,10 @@ int CEThread_mutex_destroy(CEThread_mutex_t* mutex){
     return 0;
 }
 
-void unblock_threads_from_list(queue_t *list) {
-    while (list->front != NULL) {
-        CEThread_treadInfo *r = (CEThread_treadInfo *) queueRemoveFrontItem(list);
-        r = get_thread(r->tid, thread_list);
+void unblock_threads_from_list(listNode_t* list) {
+    while (getFront_t(list)!= NULL) {
+        CEThread_treadInfo *r = getFront_t(list);
         r->state = READY;
+        deleteNodePosition(&list, 0);
     }
 };

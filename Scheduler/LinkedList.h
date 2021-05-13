@@ -7,12 +7,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ucontext.h>
 
 typedef unsigned long int CEThread_t;
 typedef struct Thread_t{
      CEThread_t tid;
-    //CEThread_t joining;
+    CEThread_t joining;
     int state;
+    int detach;
     int priority;
     int var_SJF;
     int flag_SJF;
@@ -22,7 +24,7 @@ typedef struct Thread_t{
     void* (*pFunction)(void*);
     void* arg;
     void* retval;
-    //ucontext_t* thread_context;
+    ucontext_t* thread_context;
 } CEThread_treadInfo;
 
 typedef struct listNode_t{

@@ -167,6 +167,10 @@ void listCycle_t(struct listNode_t** head){
 }
 
 CEThread_treadInfo* getFront_t(struct listNode_t* head){
+
+    if(head == NULL){
+        return NULL;
+    }
     return getNode_t(head,0);
 
 }

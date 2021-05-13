@@ -269,7 +269,7 @@ int main() {
                             side = 'r';
                             break;
                         case SDL_SCANCODE_T:
-                            
+
                             sendHomeRequested  = 1;
                             break;
                     }
@@ -309,7 +309,7 @@ int main() {
             spawnAnt(fila,3,type,side,filas);
             redAntRequested = 0;
         }
-        updateNPC(rend);
+        updateNPC(rend, filas);
         //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
         SDL_RenderPresent(rend);
         SDL_Delay(100);

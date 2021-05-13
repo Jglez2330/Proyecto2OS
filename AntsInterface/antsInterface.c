@@ -110,7 +110,9 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
 
         }
 
-
+        ants[antCounter].fila_act = fila;
+        if(side == 'l') ants[antCounter].col_act = -1;
+        if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
@@ -124,7 +126,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
     }
 }
 
-void updateNPC(SDL_Renderer *rend) {
+void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
 
     //Ants
     int counter;
@@ -184,47 +186,10 @@ void updateNPC(SDL_Renderer *rend) {
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
             }
-            positionInInitialRow(rend,sprite, counter, 'r');
-//            int secondVerticalRoad_x = vertical_road3_x + 30;
-//
-//            if(ants[counter].size.x >= secondVerticalRoad_x) {
-//                ants[counter].size.x -= regularSpeed * ants[counter].speed;
-//                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                continue;
-//            }
-//            int disty = ants[counter].size.y - ants[counter].y_dest;
-//            if(disty > 0){
-//                if(abs(disty) < 10) ants[counter].size.y -= 1;
-//                else ants[counter].size.y -= regularSpeed * ants[counter].speed;
-//
-//            }
-//            if(disty < 0){
-//                if(abs(disty) < 10) ants[counter].size.y += 1;
-//                else ants[counter].size.y += regularSpeed * ants[counter].speed;
-//
-//            }
-//            int distx = ants[counter].size.x - ants[counter].x_dest;
-//
-//
-//            if (disty == 0){
-//                if (distx == 0){
-//                    ants[counter].waiting = 1;
-//                }
-//
-//                if(distx > 0){
-//                    if(abs(distx) < 10) ants[counter].size.x -= 1;
-//                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//                if(distx < 0){
-//                    if(abs(distx) < 10) ants[counter].size.x += 1;
-//                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//            }
-//            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+            if (positionInInitialRow(rend,sprite, counter, 'r')){
+                moveAntInStack(rend,sprite, counter,  'r', filas);
+            }
+
 
         }
         if(ants[counter].side == 'l'){
@@ -235,30 +200,13 @@ void updateNPC(SDL_Renderer *rend) {
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
                 continue;
             }
-            int distx = ants[counter].size.x - ants[counter].x_dest;
+
             if (positionInInitialRow(rend,sprite, counter, 'l')){
-//                if (distx == 0){
-//                    ants[counter].waiting = 1;
-//                }
-//                ants[counter].size.x += regularSpeed * ants[counter].speed;
-//                if(distx > 0){
-//                    if(abs(distx) < 10) ants[counter].size.x -= 1;
-//                    if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
-//                if(distx < 0){
-//                    if(abs(distx) < 10) ants[counter].size.x += 1;
-//                    if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
-//                    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-//                    continue;
-//                }
+                moveAntInStack(rend,sprite, counter,  'l', filas);
             }
-
-
-
-
-
+            else{
+                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+            }
         }
 
 
@@ -266,7 +214,3 @@ void updateNPC(SDL_Renderer *rend) {
 
     }
 }
-void moveAntToFinalAntHill(){
-
-}
-

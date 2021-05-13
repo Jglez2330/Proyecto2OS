@@ -1,4 +1,4 @@
-# define COLAMAX 10
+# define COLAMAX 3
 # define STACKMAX 5
 # define MAXANTS 40
 #define WINDOW_WIDTH (1850)
@@ -33,7 +33,7 @@ typedef struct {
 
 
 
-enum antType {black = 0, red = 1,queen = 2};
+enum antType {black = 0, red = 1, queen = 2};
 enum spritesEnum {blackRight1=0 , redRight1=1, blackLeft1 = 2, redLeft1 = 3, queenRight1 = 4, queenLeft1 = 5};
 
 
@@ -45,6 +45,10 @@ struct Ant{
     char side;
     int x_dest;
     int y_dest;
+    int fila_act;
+    int col_act;
+    int fila_dest;
+    int col_dest;
     int waiting;
     int antId;
     int sentHome;

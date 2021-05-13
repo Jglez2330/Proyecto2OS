@@ -81,12 +81,14 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     } else{
         listCycle_t(&selectedReady);
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+        } while (next->state > RUNNING);
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady !=NULL);
 
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
@@ -126,12 +128,15 @@ listNode_t* priority (scheduler_t * scheduler){
 
     } else{
     }
-    CEThread_treadInfo* next;
+
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+        } while (next->state > RUNNING);
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady != NULL);
 
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
@@ -184,12 +189,15 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
 
     } else{
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+        } while (next->state > RUNNING);
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady!=NULL);
+
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
@@ -224,12 +232,16 @@ listNode_t* FCFS(scheduler_t * scheduler){
         deleteNodeTID_t(&selectedReady,listItem->tid);
     } else{
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+        } while (next->state > RUNNING);
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING);
+
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
@@ -295,11 +307,13 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
         deleteNodeTID_t(&selectedReady,listItem->tid);
     } else{
     }
-    CEThread_treadInfo* next;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady !=NULL);
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+        } while (next->state > RUNNING);
+    }
     resultQueue = selectedReady;
     if(SIDE_FLAG ==0){
 

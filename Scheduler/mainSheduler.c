@@ -150,10 +150,7 @@ int main() {
 
     printList_t(schedulerMain->zombie_ants_a);
 
-    /*listNode_t* resultCalendarizador2 =schedulerMain->funcion_calendarizador(schedulerMain);
-    printf("\nResultadoCalendarizador con front sate !=3");
-    printList_t(resultCalendarizador2);
-    printList_t(schedulerMain->ant_list_ready_a);*/
+
 
 
     return 0;

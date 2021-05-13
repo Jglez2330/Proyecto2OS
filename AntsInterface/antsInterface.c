@@ -113,6 +113,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].fila_act = fila;
         if(side == 'l') ants[antCounter].col_act = -1;
         if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
+        ants[antCounter].col_dest = columna;
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;

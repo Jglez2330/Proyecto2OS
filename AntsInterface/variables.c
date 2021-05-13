@@ -52,6 +52,7 @@ struct Ant{
     int waiting;
     int antId;
     int sentHome;
+    int inStack;
 };
 
 struct AntSprites{

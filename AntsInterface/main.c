@@ -292,7 +292,7 @@ int main() {
         if (blackAntRequested){
 
             enum antType type = black;
-            spawnAnt(fila,1,type,side,filas);
+            spawnAnt(fila,3,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){

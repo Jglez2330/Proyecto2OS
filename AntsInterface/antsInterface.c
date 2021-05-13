@@ -122,6 +122,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].type = type;
         ants[antCounter].antId = antCounter;
         ants[antCounter].sentHome = 0;
+        ants[antCounter].passedBridge = 0;
 
         antCounter++;
     }
@@ -179,6 +180,7 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
                 }
                 break;
         }
+        detectIfAntCross(counter,ants[counter].side);
         if(ants[counter].side == 'r'){
             if (ants[counter].sentHome){
                 sendHome(rend,sprite,counter,'r');

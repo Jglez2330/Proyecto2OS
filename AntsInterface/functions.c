@@ -456,11 +456,24 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
         }
     }
 }
-void detectIfAntCross(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side, Matrix *filas[6]){
+void detectIfAntCross( int counter, char side){
+    int delCol;
     if (side == 'l'){
+        delCol = STACKMAX + COLAMAX - 1;
+        if (ants[counter].col_act > delCol) {
+            ants[counter].sentHome = 1;
+
+        }
+    }
+    if (side == 'r'){
+        delCol = STACKMAX - 1;
+        if (ants[counter].col_act < delCol){
+            ants[counter].sentHome = 1;
+
+        }
 
     }
-    if (side == 'r'){}
+
 }
 
 

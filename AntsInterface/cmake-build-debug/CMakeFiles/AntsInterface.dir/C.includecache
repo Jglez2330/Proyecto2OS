@@ -31,10 +31,10 @@ unistd.h
 -
 variables.c
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/variables.c
-antsInterface.c
-/home/isaacpope/Documents/Proyecto2OS/AntsInterface/antsInterface.c
 functions.c
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/functions.c
+antsInterface.c
+/home/isaacpope/Documents/Proyecto2OS/AntsInterface/antsInterface.c
 
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/variables.c
 

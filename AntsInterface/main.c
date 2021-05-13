@@ -6,8 +6,9 @@
 #include "SDL2/SDL_timer.h"
 #include <unistd.h>
 #include "variables.c"
-#include "antsInterface.c"
 #include "functions.c"
+#include "antsInterface.c"
+
 
 
 
@@ -201,17 +202,17 @@ int main() {
                             break;
                         case SDL_SCANCODE_C:
                             fila = 4;
-                            blackAntRequested  = 1;
+                            redAntRequested  = 1;
                             side = 'l';
                             break;
                         case SDL_SCANCODE_R:
                             fila = 0;
-                            redAntRequested  = 1;
+                            blackAntRequested  = 1;
                             side = 'l';
                             break;
                         case SDL_SCANCODE_F:
                             fila = 2;
-                            redAntRequested  = 1;
+                            blackAntRequested  = 1;
                             side = 'l';
                             break;
                         case SDL_SCANCODE_V:

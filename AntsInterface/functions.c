@@ -141,7 +141,7 @@ void initialize_AntPos(int x_start, int y_start, Matrix *f1,Matrix *f2,Matrix *f
 
 
 void drawCanal(SDL_Renderer *rend, SDL_Rect canal_roads){
-    SDL_SetRenderDrawColor(rend, 255, 100, 255, 255);
+    SDL_SetRenderDrawColor(rend, 193, 154, 107, 255);
 
     canal_roads.w = w_canal_road;
     canal_roads.x = x_finalH_road;
@@ -455,6 +455,12 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
             printf("Algo inesperado ocurrio");
         }
     }
+}
+void detectIfAntCross(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side, Matrix *filas[6]){
+    if (side == 'l'){
+
+    }
+    if (side == 'r'){}
 }
 
 

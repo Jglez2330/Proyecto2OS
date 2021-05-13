@@ -1,4 +1,4 @@
-# define COLAMAX 3
+# define COLAMAX 5
 # define STACKMAX 5
 # define MAXANTS 40
 #define WINDOW_WIDTH (1850)
@@ -53,6 +53,7 @@ struct Ant{
     int antId;
     int sentHome;
     int inStack;
+    int passedBridge;
 };
 
 struct AntSprites{

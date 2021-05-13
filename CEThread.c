@@ -79,7 +79,7 @@ int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* sc
     ceThreadTreadInfo->arg = arg;
     ceThreadTreadInfo->thread_context = (ucontext_t *) malloc(sizeof(ucontext_t));
     ceThreadTreadInfo->joining = 0;
-    schedulers[channel] = *scheduler;
+
     memset(ceThreadTreadInfo->thread_context, '\0', sizeof(ucontext_t));
 
 
@@ -100,7 +100,14 @@ int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* sc
 
     //TODO: place thread into the ready list
 
-    append(&schedulers[channel].ant_list_ready_a, ceThreadTreadInfo);
+    if (SIDE_FLAG == 0){
+        append(&scheduler->ant_list_ready_a, ceThreadTreadInfo);
+    }else{
+        append(&scheduler->ant_list_ready_b, ceThreadTreadInfo);
+    }
+
+
+    schedulers[channel] = *scheduler;
     schedulers[channel].funcion_calendarizador = scheduler->funcion_calendarizador;
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     return 0;
@@ -137,6 +144,7 @@ void default_algo(int sig) {
             current_thread_running->state = READY;
 
         }
+        //TODO: Cambiar dependiendo del lado
         next = getFront_t(schedulers[0].ant_list_ready_a);
         next->state = RUNNING;
         current_thread_running = next;

@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include "Scheduler.h"
-#define SIDE_FLAG 0
+
 
 listNode_t* receiveThreads(scheduler_t * scheduler){
 

@@ -78,6 +78,7 @@ bool colitionDetect(int counter,char movDir, int distanceMoving){
 void moveInX(int counter, int finalX){
 
     int distx = ants[counter].size.x - finalX;
+    printf("La distancia absoluta es %i \n",distx);
     if(distx > 0){
 
         if(abs(distx) <= 10){
@@ -105,15 +106,11 @@ void moveInX(int counter, int finalX){
 
         }
         if(abs(distx) > 10) {
+            if (colitionDetect(counter,'r',regularSpeed * ants[counter].speed)){
 
-            bool colicion =  colitionDetect(counter,'r',regularSpeed * ants[counter].speed);
-//            printf("Se va a mover 10 en X  a la derecha la hormiga %i y tiene colicion %i \n", counter, colicion);
-            if (colicion){
-//                printf("No se va a mover la hormiga %i \n", counter);
                 return;
             }
             else{
-//                printf("Moviendo la hormiga %i \n", counter);
                 ants[counter].size.x += regularSpeed * ants[counter].speed;
 
             }
@@ -517,21 +514,17 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
     if(side == 'l') x_position = x_start_road + w_vertical_road/2;
     if(side == 'r') x_position = vertical_road3_x + w_vertical_road/2;
 
-    if(ants[counter].size.x <= x_position && side == 'l') {
-        int diffx = abs(ants[counter].size.x - x_position);
-        if(diffx <= 10){
-            moveInX(counter, x_position);
-            ants[counter].size.x += direction * 1;
-        }
-        if(diffx > 10) moveInX(counter, x_position);
+    if(ants[counter].size.x < x_position && side == 'l') {
+
+        moveInX(counter, x_position);
 
         SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
         return false;
     }
-    if(ants[counter].size.x >= x_position && side == 'r') {
+    if(ants[counter].size.x > x_position && side == 'r') {
 
         moveInX(counter, x_position);
-        ants[counter].size.x += direction * 1;
+
         SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
         return false;
     }

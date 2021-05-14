@@ -336,7 +336,7 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
 }
 
 bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
-    printf("inStack %i \n",ants[counter].inStack);
+
     if(ants[counter].inStack == 1) return true;
 
     int direction;
@@ -384,19 +384,125 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
         SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
     }
 }
+
+
+bool verifyXColition(int x1,int x2){
+    int distance = abs(x1-x2);
+    printf("Distance %i , w_ant %i \n", distance ,w_ant);
+
+    if (distance < w_ant){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+bool verifyYColition(int y1, int y2){
+    int distance = abs(y1-y2);
+
+    if (distance <  w_ant){
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}
+
+bool colitionDetect(int counter,char movDir, int distanceMoving){
+
+    int x1;
+    int x2;
+    int y1;
+    int y2;
+    printf("antcounter %i \n",antCounter);
+    for (int i = 0; i < antCounter;i++){
+        printf("Verificando colicion de hormiga %i con %i \n", counter, i);
+        if(i == counter){
+            continue;
+        }
+        if(movDir == 'u'){  //Verificamos si hay alguien arriba
+            int safeDistance = h_ant + 10;
+            y1 = ants[counter].size.y - distanceMoving - safeDistance;
+            y2 = ants[i].size.y;
+            x1 =ants[counter].size.x;
+            x2 = ants[i].size.x;
+
+        }
+        if(movDir == 'd'){  //Verificamos si hay alguien abajo
+            int safeDistance = h_ant + 10;
+             y1 = ants[counter].size.y + distanceMoving + safeDistance;
+             y2 = ants[i].size.y;
+             x1 = ants[counter].size.x;
+             x2 = ants[i].size.x;
+
+        }
+        if(movDir == 'r'){  //Verificamos si hay alguien a la derecha
+            int safeDistance = w_ant + 10;
+            int nextX = ants[counter].size.x + distanceMoving + safeDistance;
+            x1 = nextX;
+            x2 = ants[i].size.x;
+            y1 = ants[counter].size.y;
+            y2 = ants[i].size.y;
+        }
+        if(movDir == 'l'){  //Verificamos si hay alguien a la izquierda
+            int safeDistance = w_ant + 10;
+            x1 = ants[counter].size.x - distanceMoving - safeDistance;
+            x2=  ants[i].size.x;
+            y1 = ants[counter].size.y;
+            y2 = ants[i].size.y;
+
+        }
+//        printf("Hormiga numero %i \n", counter);
+        if (verifyYColition(y1, y2) && verifyXColition(x1,x2)){
+            return 1;           //No se puede mover porque se translapa con hormiga de arriba
+        }
+    }
+    return 0;
+}
 void moveInX(int counter, int finalX){
-    printf("Se va a mover en X \n");
+
     int distx = ants[counter].size.x - finalX;
     if(distx > 0){
 
-        if(abs(distx) <= 10) ants[counter].size.x -= 1;
-        if(abs(distx) > 10) ants[counter].size.x -= regularSpeed * ants[counter].speed;
+        if(abs(distx) <= 10){
+            if(colitionDetect(counter,'l',1)) return;
+            else{
+                ants[counter].size.x -= 1;
+            }
+        }
+        if(abs(distx) > 10){
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if(colitionDetect(counter,'l',regularSpeed * ants[counter].speed)) return;
+            else{
+                ants[counter].size.x -= regularSpeed * ants[counter].speed;
+            }
+        }
 
     }
     if(distx < 0){
 
-        if(abs(distx) <= 10) ants[counter].size.x += 1;
-        if(abs(distx) > 10) ants[counter].size.x += regularSpeed * ants[counter].speed;
+        if(abs(distx) <= 10){
+            if(colitionDetect(counter,'r',10)) return;
+            else{
+                ants[counter].size.x += 1;
+            }
+
+        }
+        if(abs(distx) > 10) {
+
+            bool colicion =  colitionDetect(counter,'r',regularSpeed * ants[counter].speed);
+//            printf("Se va a mover 10 en X  a la derecha la hormiga %i y tiene colicion %i \n", counter, colicion);
+            if (colicion){
+//                printf("No se va a mover la hormiga %i \n", counter);
+                return;
+            }
+            else{
+//                printf("Moviendo la hormiga %i \n", counter);
+                ants[counter].size.x += regularSpeed * ants[counter].speed;
+
+            }
+        }
     }
     else{
         return;
@@ -407,15 +513,43 @@ void moveInY(int counter, int finalY){
     int disty = ants[counter].size.y - finalY;
     if(disty > 0){
 
-        if(abs(disty) <= 10) ants[counter].size.y -= 1;
-        if(abs(disty) > 10) ants[counter].size.y -= regularSpeed * ants[counter].speed;
+        if(abs(disty) <= 10){
+            if(colitionDetect(counter,'u',1)){
+                return ;
+            }
+            else{
+                ants[counter].size.y -= 1;
+            }
+
+        }
+        if(abs(disty) > 10){
+            if(colitionDetect(counter,'u',regularSpeed * ants[counter].speed)) {
+                return;
+            }
+            else{
+                ants[counter].size.y -= regularSpeed * ants[counter].speed;
+            }
+
+        }
         return;
 
     }
     if(disty < 0){
 
-        if(abs(disty) <= 10) ants[counter].size.y += 1;
-        if(abs(disty) > 10) ants[counter].size.y += regularSpeed * ants[counter].speed;
+        if(abs(disty) <= 10){
+            if(colitionDetect(counter,'d',1)){
+                return;
+            }
+            else{
+                ants[counter].size.y += 1;
+            }
+
+        }
+        if(abs(disty) > 10){
+            if(colitionDetect(counter,'d',regularSpeed * ants[counter].speed)) {return;}
+
+            else{ants[counter].size.y += regularSpeed * ants[counter].speed;}
+        }
         return;
 
     }
@@ -440,7 +574,7 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
 
         if (ants[counter].size.x != finalX
             || ants[counter].size.y != finalY){
-            printf("Tiene que moverse \n");
+
             if (ants[counter].size.x != finalX) moveInX(counter,finalX);
             if (ants[counter].size.y != finalY) moveInY(counter,finalY);
 
@@ -450,8 +584,8 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
         }
         if (ants[counter].size.x == finalX
             && ants[counter].size.y == finalY){
-            printf("No se tiene que moverse \n");
-            if (side == 'l')ants[counter].col_act += 1;
+
+            if (side == 'l') ants[counter].col_act += 1;
             if (side == 'r')ants[counter].col_act -= 1;
             SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
             return;

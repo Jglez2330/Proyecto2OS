@@ -197,6 +197,7 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
             }
             if (positionInInitialRow(rend,sprite, counter, 'r')){
                 moveAntInStack(rend,sprite, counter,  'r', filas);
+                continue;
             }
 
 
@@ -213,6 +214,7 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
 
             if (positionInInitialRow(rend,sprite, counter, 'l')){
                 moveAntInStack(rend,sprite, counter,  'l', filas);
+                continue;
             }
             else{
                 SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
@@ -220,7 +222,6 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
         }
 
 
-        //Render to screen
-
     }
 }
+

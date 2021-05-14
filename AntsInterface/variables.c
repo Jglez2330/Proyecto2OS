@@ -7,6 +7,7 @@
 #define y_start_road (100)
 #define gap_roads (55)
 #define w_horizontal_road (350)
+
 #define w_vertical_road (50)
 #define h_horizontal_road (100)
 #define h_vertical_road (800)
@@ -68,3 +69,6 @@ struct AntSprites{
 const int maxAnts = MAXANTS;
 struct Ant ants[COLAMAX];
 int antCounter = 0;
+int w_ant;
+int h_ant;
+int cellSize;

@@ -93,9 +93,10 @@ int main() {
 
     blackAnt_r.w *= 0.03;
     blackAnt_r.h *= 0.06;
+    w_ant = blackAnt_r.w;
+    h_ant = blackAnt_r.h;
 
-
-    int cellSize = w_horizontal_road / sizeOfStack;
+    cellSize = w_horizontal_road / sizeOfStack;
     drawLines(rend, sizeOfStack, x_start_road, y_start_road);
     int x_startPoint = x_start_road + distanceBetweenRoads / 2 + gap_roads / 2;
     drawLines(rend, sizeOfStack, x_startPoint, y_start_road);
@@ -292,20 +293,20 @@ int main() {
         if (blackAntRequested){
 
             enum antType type = black;
-            spawnAnt(fila,10,type,side,filas);
+            spawnAnt(fila,4,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(fila,10,type,side,filas);
+            spawnAnt(fila,4,type,side,filas);
             queenAntRequested = 0;
         }
 
 
         if (redAntRequested){
             enum antType type = red;
-            spawnAnt(fila,1,type,side,filas);
+            spawnAnt(fila,4,type,side,filas);
             redAntRequested = 0;
         }
         updateNPC(rend, filas);

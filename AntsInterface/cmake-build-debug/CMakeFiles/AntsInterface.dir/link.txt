@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/AntsInterface.dir/main.c.o -o AntsInterface  -lSDL2 -lSDL2_image -lSDL2_mixer 

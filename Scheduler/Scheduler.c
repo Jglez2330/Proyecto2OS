@@ -8,10 +8,9 @@
 
 listNode_t* receiveThreads(scheduler_t * scheduler){
 
-    int scheduler_Selected = 4;
     listNode_t* listResult;
 
-    switch (scheduler_Selected)
+    switch (scheduler->scheduler_Selected)
     {
         case 0:
             printf("\nRR");
@@ -64,7 +63,7 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     listNode_t * selectedReady;
     listNode_t * selectedZombie;
 
-    if(SIDE_FLAG ==0){
+    if(scheduler->side_Flag ==0){
         selectedReady = scheduler->ant_list_ready_a;
         selectedZombie = scheduler->zombie_ants_a;
     }
@@ -94,7 +93,7 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     }
     resultQueue = selectedReady;
 
-    if(SIDE_FLAG ==0){
+    if(scheduler->side_Flag ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
     }

@@ -2,13 +2,13 @@
 // Created by jglez2330 on 2/5/21.
 //
 #define QUANTUM 100000
-#define Channels 4
+#define Channels 3
 #include "CEThread.h"
 
 
 int globalTID = 0;
 int current_channel = 0;
-scheduler_t schedulers[Channels];
+scheduler_t* schedulers[Channels];
 void free_thread(CEThread_treadInfo *pThread);
 
 CEThread_treadInfo *get_next_thread();
@@ -54,17 +54,14 @@ int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* sc
             exit(-1);
         }
 
-        scheduler_t * scheduler_temp = malloc(sizeof(scheduler_t)*4);
 
-        for (int i = 0; i < Channels; ++i) {
-            scheduler_temp[i].ant_list_ready_a = NULL;
-            scheduler_temp[i].ant_list_ready_b = NULL;
-            scheduler_temp[i].zombie_ants_a = NULL;
-            scheduler_temp[i].zombie_ants_b = NULL;
+        for (int i = 0; i < Channels; i++) {
+            schedulers[i] = NULL;
         }
 
-
-        append(&schedulers[0].ant_list_ready_a, main_thread_info);
+        schedulers[0] = (scheduler_t *) malloc(sizeof(scheduler_t));
+        schedulers[0]->ant_list_ready_a = NULL;
+        append(&schedulers[0]->ant_list_ready_a, main_thread_info);
 
 
         globalTID++;
@@ -107,8 +104,8 @@ int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* sc
     }
 
 
-    schedulers[channel] = *scheduler;
-    schedulers[channel].funcion_calendarizador = scheduler->funcion_calendarizador;
+    schedulers[channel] = scheduler;
+    schedulers[channel]->funcion_calendarizador = scheduler->funcion_calendarizador;
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     return 0;
 
@@ -145,7 +142,7 @@ void default_algo(int sig) {
 
         }
         //TODO: Cambiar dependiendo del lado
-        next = getFront_t(schedulers[0].ant_list_ready_a);
+        next = getFront_t(schedulers[0]->ant_list_ready_a);
         next->state = RUNNING;
         current_thread_running = next;
         sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
@@ -153,7 +150,7 @@ void default_algo(int sig) {
         return;
     }
     /* if no thread in the ready queue, resume execution */
-    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL)
         return;
 
@@ -176,7 +173,7 @@ void default_algo(int sig) {
 
 void CEThread_end(void *pVoid) {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL) {
         sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
         exit((int) pVoid);
@@ -225,11 +222,11 @@ CEThread_treadInfo *get_next_thread() {
     CEThread_treadInfo *next = NULL;
     if (current_channel == 0){
         //TODO: Run main thread
-        next = getFront_t(schedulers[0].ant_list_ready_a);
+        next = getFront_t(schedulers[0]->ant_list_ready_a);
         return next;
     }
     /* if no thread in the ready queue, resume execution */
-    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL)
         return NULL;
     next = getFront_t(list_threads);
@@ -294,12 +291,12 @@ CEThread_treadInfo * get_thread_zombie(CEThread_t thread){
     CEThread_treadInfo *result = NULL;
     listNode_t* list;
     for (int i = 0; i < Channels; i++){
-        scheduler_t selected_channel = schedulers[i];
+        scheduler_t* selected_channel = schedulers[i];
 
-        if ((result = get_thread(thread, selected_channel.zombie_ants_a)) != NULL){
+        if ((result = get_thread(thread, selected_channel->zombie_ants_a)) != NULL){
             break;
         }
-        else if ((result = get_thread(thread, selected_channel.zombie_ants_b)) != NULL){
+        else if ((result = get_thread(thread, selected_channel->zombie_ants_b)) != NULL){
             break;
         }
 
@@ -310,12 +307,12 @@ CEThread_treadInfo * get_thread_ready(CEThread_t thread){
     CEThread_treadInfo *result = NULL;
     listNode_t* list;
     for (int i = 0; i < Channels; i++){
-        scheduler_t selected_channel = schedulers[i];
+        scheduler_t* selected_channel = schedulers[i];
 
-        if ((result = get_thread(thread, selected_channel.ant_list_ready_a)) != NULL){
+        if ((result = get_thread(thread, selected_channel->ant_list_ready_a)) != NULL){
             break;
         }
-        else if ((result = get_thread(thread, selected_channel.ant_list_ready_b)) != NULL){
+        else if ((result = get_thread(thread, selected_channel->ant_list_ready_b)) != NULL){
             break;
         }
 
@@ -325,7 +322,7 @@ CEThread_treadInfo * get_thread_ready(CEThread_t thread){
 
 int CEThread_yield() {
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    listNode_t * list_threads = (*schedulers[current_channel].funcion_calendarizador)(&schedulers[current_channel]);
+    listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
 
     if (getFront_t(list_threads) == NULL) {
         return -1;

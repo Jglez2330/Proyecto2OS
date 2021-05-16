@@ -439,7 +439,7 @@ void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *
     drawRoads(rend, horizontal_roads, vertical_roads);
    drawCanal(rend, canal_roads);
 }
-void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
+void sendHome( int counter, char side){
 
         int direction = 1;
         if (side == 'l') direction = 1;
@@ -454,7 +454,7 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
             if (ants[counter].size.x != antHillpos) {
                 ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
 
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
                 return;
             }
             if (ants[counter].size.x <= antHillpos ) return;
@@ -473,7 +473,7 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
 
             }
 
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
             return;
         }
         if(ants[counter].size.y < entrance) {
@@ -485,7 +485,7 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
                 ants[counter].size.y += regularSpeed * ants[counter].speed;
             }
 
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
             return;
         }
         if(ants[counter].size.y > entrance) {
@@ -497,12 +497,12 @@ void sendHome(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
                 ants[counter].size.y -= regularSpeed * ants[counter].speed;
             }
 
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
             return;
         }
 }
 
-bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side){
+bool positionInInitialRow( int counter, char side){
 
     if(ants[counter].inStack == 1) return true;
 
@@ -518,14 +518,14 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
 
         moveInX(counter, x_position);
 
-        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
         return false;
     }
     if(ants[counter].size.x > x_position && side == 'r') {
 
         moveInX(counter, x_position);
 
-        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
         return false;
     }
     int disty = ants[counter].size.y - ants[counter].y_dest;
@@ -546,13 +546,13 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
         return true;
     }
     else{
-        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
     }
 }
 
 
 
-void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char side, Matrix *filas[6]){
+void moveAntInStack(int counter, char side, Matrix *filas[6]){
     int fila = ants[counter].fila_act;
     int col ;
     if (side == 'l') col = ants[counter].col_act + 1;
@@ -571,7 +571,7 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
             if (ants[counter].size.x != finalX) moveInX(counter,finalX);
             if (ants[counter].size.y != finalY) moveInY(counter,finalY);
 
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
             return;
 
         }
@@ -580,7 +580,7 @@ void moveAntInStack(SDL_Renderer *rend,SDL_Texture *sprite, int counter, char si
 
             if (side == 'l') ants[counter].col_act += 1;
             if (side == 'r')ants[counter].col_act -= 1;
-            SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
             return;
 
         }

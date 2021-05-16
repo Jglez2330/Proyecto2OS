@@ -3,6 +3,13 @@
 #include "SDL2/SDL_image.h"
 #include <pthread.h>
 
+
+struct Params {
+
+    int antId;
+    Matrix **filas;
+};
+
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 
     //Cargar imagenes
@@ -50,10 +57,26 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     }
     printf("Initialize NPC succesfull\n");
 }
-void* startAntMotion(void* counter){
-    int * c = counter;
+void* startAntMotion(void* params){
+    struct Params * p = params;
 
-    printf("EL counter es: %i \n", *c);
+    while (1){
+        sleep(1);
+        if (ants[p->antId].sentHome){
+            sendHome(p->antId,ants[p->antId].side);
+            continue;
+        }
+
+        if (ants[p->antId].waiting){
+
+            continue;
+        }
+        if (positionInInitialRow( p->antId, ants[p->antId].side)){
+            moveAntInStack(p->antId,  ants[p->antId].side, p->filas);
+            continue;
+        }
+
+    }
 }
 void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6]){
     if(antCounter < maxAnts) {
@@ -132,7 +155,11 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
 
         pthread_t thread1;
 
-        pthread_create( &thread1, NULL, startAntMotion, &ants[antCounter].antId);
+        struct Params *param;
+        param = malloc(sizeof(struct Params));
+        param->antId = ants[antCounter].antId;
+        param->filas = filas;
+        pthread_create( &thread1, NULL, startAntMotion, param);
         antCounter++;
     }
 }
@@ -193,21 +220,9 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
 
 
 
-
-
-    if (ants[counter].sentHome){
-        sendHome(rend,sprite,counter,ants[counter].side);
-        continue;
-    }
-
-    if (ants[counter].waiting){
         SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-        continue;
-    }
-    if (positionInInitialRow(rend,sprite, counter, ants[counter].side)){
-        moveAntInStack(rend,sprite, counter,  ants[counter].side, filas);
-        continue;
-    }
+
+
 
     }
 }

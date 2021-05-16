@@ -78,7 +78,7 @@ bool colitionDetect(int counter,char movDir, int distanceMoving){
 void moveInX(int counter, int finalX){
 
     int distx = ants[counter].size.x - finalX;
-    printf("La distancia absoluta es %i \n",distx);
+
     if(distx > 0){
 
         if(abs(distx) <= 10){
@@ -121,7 +121,7 @@ void moveInX(int counter, int finalX){
     }
 }
 void moveInY(int counter, int finalY){
-    printf("Se va a mover en Y \n");
+
     int disty = ants[counter].size.y - finalY;
     if(disty > 0){
 
@@ -529,7 +529,7 @@ bool positionInInitialRow(SDL_Renderer *rend,SDL_Texture *sprite, int counter, c
         return false;
     }
     int disty = ants[counter].size.y - ants[counter].y_dest;
-    printf("LA distancia en y es de %i", disty);
+
     if(disty > 0){
         if(abs(disty) < 10) moveInY(counter, ants[counter].y_dest);
         else moveInY(counter, ants[counter].y_dest);

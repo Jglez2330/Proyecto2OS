@@ -1,7 +1,7 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-
+#include <pthread.h>
 
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 
@@ -50,7 +50,11 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     }
     printf("Initialize NPC succesfull\n");
 }
+void* startAntMotion(void* counter){
+    int * c = counter;
 
+    printf("EL counter es: %i \n", *c);
+}
 void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6]){
     if(antCounter < maxAnts) {
         switch(type){
@@ -124,6 +128,11 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].sentHome = 0;
         ants[antCounter].passedBridge = 0;
 
+
+
+        pthread_t thread1;
+
+        pthread_create( &thread1, NULL, startAntMotion, &ants[antCounter].antId);
         antCounter++;
     }
 }
@@ -184,43 +193,21 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
 
 
 
-        if(ants[counter].side == 'r'){
-//            printf("sendHome %i \n",ants[counter].sentHome);
-            if (ants[counter].sentHome){
-                sendHome(rend,sprite,counter,'r');
-                continue;
-            }
-//            printf("waiting %i \n",ants[counter].waiting);
-            if (ants[counter].waiting){
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                continue;
-            }
-            if (positionInInitialRow(rend,sprite, counter, 'r')){
-                moveAntInStack(rend,sprite, counter,  'r', filas);
-                continue;
-            }
 
 
-        }
-        if(ants[counter].side == 'l'){
-            if (ants[counter].sentHome){
-                sendHome(rend,sprite,counter,'l');
-                continue;
-            }
-            if (ants[counter].waiting){
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-                continue;
-            }
+    if (ants[counter].sentHome){
+        sendHome(rend,sprite,counter,ants[counter].side);
+        continue;
+    }
 
-            if (positionInInitialRow(rend,sprite, counter, 'l')){
-                moveAntInStack(rend,sprite, counter,  'l', filas);
-                continue;
-            }
-            else{
-                SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
-            }
-        }
-
+    if (ants[counter].waiting){
+        SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+        continue;
+    }
+    if (positionInInitialRow(rend,sprite, counter, ants[counter].side)){
+        moveAntInStack(rend,sprite, counter,  ants[counter].side, filas);
+        continue;
+    }
 
     }
 }

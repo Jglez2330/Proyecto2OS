@@ -561,11 +561,9 @@ void moveAntInStack(int counter, char side, Matrix *filas[6]){
         if (ants[counter].size.x != finalX
             || ants[counter].size.y != finalY){
 
-            if (ants[counter].size.x != finalX) moveInX(counter,finalX);
-            if (ants[counter].size.y != finalY) moveInY(counter,finalY);
+            if (ants[counter].size.x != finalX) {moveInX(counter,finalX); return;}
+            if (ants[counter].size.y != finalY) {moveInY(counter,finalY); return;}
 
-
-            return;
 
         }
         if (ants[counter].size.x == finalX

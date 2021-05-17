@@ -29,7 +29,7 @@ SDL2/SDL_mixer.h
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/SDL2/SDL_mixer.h
 SDL2/SDL_timer.h
 /home/isaacpope/Documents/Proyecto2OS/AntsInterface/SDL2/SDL_timer.h
-unistd.h
+time.h
 -
 ../CEThread.h
 /home/isaacpope/Documents/Proyecto2OS/CEThread.h

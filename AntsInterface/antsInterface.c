@@ -58,22 +58,32 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     }
     printf("Initialize NPC succesfull\n");
 }
+
 void* startAntMotion(void* params){
     struct Params * p = params;
-
+    struct timespec {
+        time_t tv_sec;
+        long   tv_nsec;
+    };
+    struct timespec tiempo ;
+    tiempo.tv_sec = 0;
+    tiempo.tv_nsec = 100000000;
     while (1){
-       printf("Ejecutando");
+        nanosleep(&tiempo,&tiempo);
+
         if (ants[p->antId].sentHome){
             sendHome(p->antId,ants[p->antId].side);
+            CEThread_yield();
             continue;
         }
 
         if (ants[p->antId].waiting){
-
+            CEThread_yield();
             continue;
         }
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
             moveAntInStack(p->antId,  ants[p->antId].side, p->filas);
+            CEThread_yield();
             continue;
         }
 
@@ -154,15 +164,16 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
 
 
 
-        CEThread_t thread1;
-
+        //CEThread_t thread1;
+        pthread_t thread1;
         struct Params *param;
         param = malloc(sizeof(struct Params));
         param->antId = ants[antCounter].antId;
         param->filas = filas;
-        printf("HOla");
-        CEThread_create( &thread1,startAntMotion, param, scheduler,ants[antCounter].fila_act);
-        printf("H2la");
+        printf("Fila:%i \n",scheduler->canalNumber);
+        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
+//        pthread_create( &thread1,NULL,startAntMotion, param);
+
         antCounter++;
     }
 }

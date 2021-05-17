@@ -25,7 +25,7 @@ int synchronizerInit(){
         snprintf(pathName, 30, "/etc/Project2_SO/Canal%i.conf", i+1);
         cfg_parse(cfg, pathName);
         cfg_free(cfg);
-        printf("\n%li", valuesChannel[i].calendarizador);
+        printf("\n CALENDARIZADOR%li", valuesChannel[i].calendarizador);
         printf("\n%li", valuesChannel[i].tiempoMaximoRMS);
 
     }

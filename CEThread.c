@@ -1,7 +1,7 @@
 //
 // Created by jglez2330 on 2/5/21.
 //
-#define QUANTUM 100000
+#define QUANTUM 10000
 #define Channels 3
 #include "CEThread.h"
 
@@ -131,7 +131,7 @@ void default_algo(int sig) {
     /* block the signal */
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     current_channel++;
-    current_channel = current_channel % 2;
+    current_channel = current_channel % Channels;
     CEThread_treadInfo *prev;
     CEThread_treadInfo *next;
     if (current_channel == 0){
@@ -197,8 +197,9 @@ void CEThread_end(void *pVoid) {
     CEThread_treadInfo *prev = current_thread_running;
     prev->state = TERMINATED;
 
-
     current_thread_running = get_next_thread();
+    if (current_thread_running == NULL)
+        current_thread_running = getFront_t(schedulers[0]->ant_list_ready_a);
     current_thread_running->state = RUNNING;
 
     /* free up memory allocated for exit thread */
@@ -217,8 +218,10 @@ void CEThread_end(void *pVoid) {
 }
 
 CEThread_treadInfo *get_next_thread() {
-    current_channel++;
-    current_channel = current_channel % 2;
+    do{
+        current_channel++;
+        current_channel = current_channel % Channels;
+    } while (schedulers[current_channel] != NULL);
     CEThread_treadInfo *next = NULL;
     if (current_channel == 0){
         //TODO: Run main thread
@@ -226,6 +229,7 @@ CEThread_treadInfo *get_next_thread() {
         return next;
     }
     /* if no thread in the ready queue, resume execution */
+
     listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL)
         return NULL;
@@ -278,7 +282,7 @@ void free_thread(CEThread_treadInfo *pThread) {
 }
 CEThread_treadInfo * get_thread(CEThread_t thread, listNode_t* list){
     CEThread_treadInfo* result = NULL;
-    for (int i = 0; i < getCount_t(list); i++) {
+    for (int i = 0; i < getCount_t(list) + 1; i++) {
         if (getNode_t(list,i)->tid == thread){
             result = getNode_t(list,i);
             break;

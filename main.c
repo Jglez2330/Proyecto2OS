@@ -11,6 +11,9 @@ void* increaseCounter(void* idStruct);
 int main() {
 
     scheduler_t * schedulerMain = malloc(sizeof (scheduler_t));
+    scheduler_t * schedulerMain2 = malloc(sizeof (scheduler_t));
+    scheduler_t * schedulerMain3 = malloc(sizeof (scheduler_t));
+
     CEThread_t t1, t2,t3,t4,t5;
     schedulerMain->funcion_calendarizador = receiveThreads;
     schedulerMain->ant_list_ready_a = NULL;

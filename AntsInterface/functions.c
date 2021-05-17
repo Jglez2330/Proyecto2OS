@@ -530,15 +530,8 @@ bool positionInInitialRow( int counter, char side){
     }
     int disty = ants[counter].size.y - ants[counter].y_dest;
 
-    if(disty > 0){
-        if(abs(disty) < 10) moveInY(counter, ants[counter].y_dest);
-        else moveInY(counter, ants[counter].y_dest);
+    moveInY(counter, ants[counter].y_dest);
 
-    }
-    if(disty < 0){
-        if(abs(disty) < 10) moveInY(counter, ants[counter].y_dest);
-        else moveInY(counter, ants[counter].y_dest);
-    }
 
 
     if (disty == 0){ //Significa que está posicionado en las carreteras verticales laterales y listo para meterse en las filas

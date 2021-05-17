@@ -165,11 +165,18 @@ int main() {
 
     //Inicializamos los calendarizadores
     scheduler_t * schedulerMain = malloc(sizeof (scheduler_t));
-    //funcion_calendarizador = receiveThreads;
+    synchronizerInit();
+    equidad_Init(schedulerMain);
+    schedulerMain->funcion_calendarizador = receiveThreads;
     schedulerMain->ant_list_ready_a = NULL;
     schedulerMain->ant_list_ready_b = NULL;
     schedulerMain->zombie_ants_a = NULL;
     schedulerMain->zombie_ants_b =NULL;
+    schedulerMain->canalNumber=0;
+
+
+
+
 
     //
 

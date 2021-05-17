@@ -530,7 +530,7 @@ bool positionInInitialRow( int counter, char side){
     }
     int disty = ants[counter].size.y - ants[counter].y_dest;
 
-    moveInY(counter, ants[counter].y_dest);
+
 
 
 
@@ -539,7 +539,8 @@ bool positionInInitialRow( int counter, char side){
         return true;
     }
     else{
-
+        moveInY(counter, ants[counter].y_dest);
+        return false;
     }
 }
 

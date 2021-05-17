@@ -87,6 +87,10 @@ void* startAntMotion(void* params){
             CEThread_yield();
             continue;
         }
+        else{
+            CEThread_yield();
+            continue;
+        }
 
     }
 }

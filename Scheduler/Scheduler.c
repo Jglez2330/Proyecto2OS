@@ -86,10 +86,15 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     }
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
+        int i = -1;
         do {
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
-        } while (next->state > RUNNING);
+            i++;
+        } while (next->state > RUNNING && i<=1000);
+        if (i == 1000){
+            selectedReady = NULL;
+        }
     }
     resultQueue = selectedReady;
 
@@ -138,10 +143,16 @@ listNode_t* priority (scheduler_t * scheduler){
 
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
+        int i = -1;
         do {
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
-        } while (next->state > RUNNING);
+            i++;
+        } while (next->state > RUNNING && i<=1000);
+        if (i == 1000){
+            selectedReady = NULL;
+        }
+
     }
     resultQueue = selectedReady;
 
@@ -199,10 +210,15 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
     }
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
+        int i = -1;
         do {
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
-        } while (next->state > RUNNING);
+            i++;
+        } while (next->state > RUNNING && i<=1000);
+        if (i == 1000){
+            selectedReady = NULL;
+        }
     }
     resultQueue = selectedReady;
 
@@ -245,10 +261,15 @@ listNode_t* FCFS(scheduler_t * scheduler){
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
 
+        int i = -1;
         do {
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
-        } while (next->state > RUNNING);
+            i++;
+        } while (next->state > RUNNING && i<=1000);
+        if (i == 1000){
+            selectedReady = NULL;
+        }
     }
     resultQueue = selectedReady;
 
@@ -322,10 +343,15 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
     }
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
+        int i = -1;
         do {
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
-        } while (next->state > RUNNING);
+            i++;
+        } while (next->state > RUNNING && i<=1000);
+        if (i == 1000){
+            selectedReady = NULL;
+        }
     }
     resultQueue = selectedReady;
     if(SIDE_FLAG ==0){

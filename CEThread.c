@@ -1,7 +1,7 @@
 //
 // Created by jglez2330 on 2/5/21.
 //
-#define QUANTUM 10000
+#define QUANTUM 1000
 #define Channels 3
 #include "CEThread.h"
 
@@ -151,9 +151,20 @@ void default_algo(int sig) {
     }
     /* if no thread in the ready queue, resume execution */
     listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
-    if (getFront_t(list_threads) == NULL)
-        return;
+    if (getFront_t(list_threads) == NULL) {
+        prev = current_thread_running;
+        if (current_thread_running->state == RUNNING) {
+            current_thread_running->state = READY;
 
+        }
+        //TODO: Cambiar dependiendo del lado
+        next = getFront_t(schedulers[0]->ant_list_ready_a);
+        next->state = RUNNING;
+        current_thread_running = next;
+        sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
+        swapcontext(prev->thread_context, current_thread_running->thread_context);
+        return;
+    }
     /* get the next runnable thread and use preemptive scheduling */
     prev = current_thread_running;
     if (current_thread_running->state == RUNNING) {
@@ -221,7 +232,7 @@ CEThread_treadInfo *get_next_thread() {
     do{
         current_channel++;
         current_channel = current_channel % Channels;
-    } while (schedulers[current_channel] != NULL);
+    } while (schedulers[current_channel] == NULL);
     CEThread_treadInfo *next = NULL;
     if (current_channel == 0){
         //TODO: Run main thread
@@ -371,6 +382,7 @@ void CEThread_mutex_unlock(CEThread_mutex_t *mutex) {
     } else {
         unblock_threads_from_list(mutex->blocked_list);
         mutex->owner_thread = 0;
+        mutex->blocked_list = NULL;
     }
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
 }
@@ -391,5 +403,6 @@ void unblock_threads_from_list(listNode_t* list) {
         CEThread_treadInfo *r = getFront_t(list);
         r->state = READY;
         deleteNodePosition(&list, 0);
+
     }
 };

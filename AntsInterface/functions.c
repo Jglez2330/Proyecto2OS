@@ -80,14 +80,19 @@ void moveInX(int counter, int finalX){
     int distx = ants[counter].size.x - finalX;
 
     if(distx > 0){
-
-        if(abs(distx) <= 10){
+        if(abs(distx) <= 5 ){
             if(colitionDetect(counter,'l',1)) return;
             else{
                 ants[counter].size.x -= 1;
             }
         }
-        if(abs(distx) > 10){
+        else if(abs(distx) > 5 && abs(distx) <= 10){
+            if(colitionDetect(counter,'l',5)) return;
+            else{
+                ants[counter].size.x -= 5;
+            }
+        }
+        else if(abs(distx) > 10){
 //            printf("Se va a mover 10 en X a la izquierda\n");
             if(colitionDetect(counter,'l',regularSpeed * ants[counter].speed)) return;
             else{
@@ -97,15 +102,21 @@ void moveInX(int counter, int finalX){
 
     }
     if(distx < 0){
-
-        if(abs(distx) <= 10){
-            if(colitionDetect(counter,'r',10)) return;
+        if(abs(distx) <= 5 ){
+            if(colitionDetect(counter,'r',1)) return;
             else{
                 ants[counter].size.x += 1;
             }
+        }
+
+        else if(abs(distx) > 5 && abs(distx) <= 10){
+            if(colitionDetect(counter,'r',5)) return;
+            else{
+                ants[counter].size.x += 5;
+            }
 
         }
-        if(abs(distx) > 10) {
+        else if(abs(distx) > 10) {
             if (colitionDetect(counter,'r',regularSpeed * ants[counter].speed)){
 
                 return;

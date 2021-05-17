@@ -81,6 +81,30 @@
 		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/AntsInterface/main.c">
 			<Option target="AntsInterface"/>
 		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/CEThread.c">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/CEThread.h">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.h">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.h">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c">
+			<Option target="AntsInterface"/>
+		</Unit>
+		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.h">
+			<Option target="AntsInterface"/>
+		</Unit>
 		<Unit filename="/home/isaacpope/Documents/Proyecto2OS/AntsInterface/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

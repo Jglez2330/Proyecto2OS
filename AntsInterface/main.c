@@ -5,9 +5,13 @@
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_timer.h"
 #include <unistd.h>
+#include "../CEThread.h"
+#include "../Synchronizer/synchronizer.h"
 #include "variables.c"
 #include "functions.c"
 #include "antsInterface.c"
+#include "../Scheduler/Scheduler.h"
+
 
 
 
@@ -159,6 +163,16 @@ int main() {
     int blackAntRequested = 0;
     int queenAntRequested = 0;
 
+    //Inicializamos los calendarizadores
+    scheduler_t * schedulerMain = malloc(sizeof (scheduler_t));
+    //funcion_calendarizador = receiveThreads;
+    schedulerMain->ant_list_ready_a = NULL;
+    schedulerMain->ant_list_ready_b = NULL;
+    schedulerMain->zombie_ants_a = NULL;
+    schedulerMain->zombie_ants_b =NULL;
+
+    //
+
     int sendHomeRequested = 0;
     initializeNPC(rend,win);
     int fila = 0;
@@ -293,20 +307,20 @@ int main() {
         if (blackAntRequested){
 
             enum antType type = black;
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,4,type,side,filas,schedulerMain);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,4,type,side,filas,schedulerMain);
             queenAntRequested = 0;
         }
 
 
         if (redAntRequested){
             enum antType type = red;
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,4,type,side,filas,schedulerMain);
             redAntRequested = 0;
         }
         updateNPC(rend, filas);

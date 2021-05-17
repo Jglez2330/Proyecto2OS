@@ -4,6 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/home/isaacpope/Documents/Proyecto2OS/CEThread.c" "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o"
+  "/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c" "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o"
+  "/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c" "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o"
+  "/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c" "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o"
   "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/main.c" "/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles/AntsInterface.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

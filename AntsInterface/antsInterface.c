@@ -1,6 +1,7 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+
 #include <pthread.h>
 
 
@@ -61,7 +62,7 @@ void* startAntMotion(void* params){
     struct Params * p = params;
 
     while (1){
-        sleep(1);
+       printf("Ejecutando");
         if (ants[p->antId].sentHome){
             sendHome(p->antId,ants[p->antId].side);
             continue;
@@ -78,7 +79,7 @@ void* startAntMotion(void* params){
 
     }
 }
-void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6]){
+void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6], scheduler_t *scheduler ){
     if(antCounter < maxAnts) {
         switch(type){
             case black:
@@ -153,13 +154,15 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
 
 
 
-        pthread_t thread1;
+        CEThread_t thread1;
 
         struct Params *param;
         param = malloc(sizeof(struct Params));
         param->antId = ants[antCounter].antId;
         param->filas = filas;
-        pthread_create( &thread1, NULL, startAntMotion, param);
+        printf("HOla");
+        CEThread_create( &thread1,startAntMotion, param, scheduler,ants[antCounter].fila_act);
+        printf("H2la");
         antCounter++;
     }
 }

@@ -142,6 +142,114 @@ AntsInterface/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/build
 .PHONY : AntsInterface/fast
 
+home/isaacpope/Documents/Proyecto2OS/CEThread.o: home/isaacpope/Documents/Proyecto2OS/CEThread.c.o
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.o
+
+# target to build an object file
+home/isaacpope/Documents/Proyecto2OS/CEThread.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.c.o
+
+home/isaacpope/Documents/Proyecto2OS/CEThread.i: home/isaacpope/Documents/Proyecto2OS/CEThread.c.i
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.i
+
+# target to preprocess a source file
+home/isaacpope/Documents/Proyecto2OS/CEThread.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.i
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.c.i
+
+home/isaacpope/Documents/Proyecto2OS/CEThread.s: home/isaacpope/Documents/Proyecto2OS/CEThread.c.s
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.s
+
+# target to generate assembly for a file
+home/isaacpope/Documents/Proyecto2OS/CEThread.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.s
+.PHONY : home/isaacpope/Documents/Proyecto2OS/CEThread.c.s
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.o: home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.o
+
+# target to build an object file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.i: home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.i
+
+# target to preprocess a source file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.s: home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.s
+
+# target to generate assembly for a file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.o: home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.o
+
+# target to build an object file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.i: home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.i
+
+# target to preprocess a source file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i
+
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.s: home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.s
+
+# target to generate assembly for a file
+home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s
+
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.o: home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.o
+
+# target to build an object file
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o
+
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.i: home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.i
+
+# target to preprocess a source file
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i
+
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.s: home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s
+
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.s
+
+# target to generate assembly for a file
+home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s
+.PHONY : home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -178,6 +286,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... AntsInterface"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/CEThread.o"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/CEThread.i"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/CEThread.s"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.o"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.i"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.s"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.o"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.i"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.s"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.o"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.i"
+	@echo "... home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

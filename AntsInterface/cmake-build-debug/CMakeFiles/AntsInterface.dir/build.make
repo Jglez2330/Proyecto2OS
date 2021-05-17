@@ -89,17 +89,77 @@ CMakeFiles/AntsInterface.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/AntsInterface.dir/main.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/isaacpope/Documents/Proyecto2OS/AntsInterface/main.c -o CMakeFiles/AntsInterface.dir/main.c.s
 
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o: CMakeFiles/AntsInterface.dir/flags.make
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o: /home/isaacpope/Documents/Proyecto2OS/CEThread.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o -c /home/isaacpope/Documents/Proyecto2OS/CEThread.c
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/isaacpope/Documents/Proyecto2OS/CEThread.c > CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.i
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/isaacpope/Documents/Proyecto2OS/CEThread.c -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.s
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o: CMakeFiles/AntsInterface.dir/flags.make
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o: /home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o -c /home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c > CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.i
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.s
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o: CMakeFiles/AntsInterface.dir/flags.make
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o: /home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o -c /home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c > CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.i
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.s
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o: CMakeFiles/AntsInterface.dir/flags.make
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o: /home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o -c /home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c > CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.i
+
+CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c -o CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.s
+
 # Object files for target AntsInterface
 AntsInterface_OBJECTS = \
-"CMakeFiles/AntsInterface.dir/main.c.o"
+"CMakeFiles/AntsInterface.dir/main.c.o" \
+"CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o" \
+"CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o" \
+"CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o" \
+"CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o"
 
 # External object files for target AntsInterface
 AntsInterface_EXTERNAL_OBJECTS =
 
 AntsInterface: CMakeFiles/AntsInterface.dir/main.c.o
+AntsInterface: CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/CEThread.c.o
+AntsInterface: CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/LinkedList.c.o
+AntsInterface: CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Scheduler/Scheduler.c.o
+AntsInterface: CMakeFiles/AntsInterface.dir/home/isaacpope/Documents/Proyecto2OS/Synchronizer/synchronizer.c.o
 AntsInterface: CMakeFiles/AntsInterface.dir/build.make
 AntsInterface: CMakeFiles/AntsInterface.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable AntsInterface"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable AntsInterface"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AntsInterface.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -93,12 +93,12 @@ clean: CMakeFiles/AntsInterface.dir/clean
 CMakeFiles/AntsInterface.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AntsInterface.dir/build.make CMakeFiles/AntsInterface.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target AntsInterface"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target AntsInterface"
 .PHONY : CMakeFiles/AntsInterface.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AntsInterface.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/AntsInterface.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/isaacpope/Documents/Proyecto2OS/AntsInterface/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/AntsInterface.dir/rule

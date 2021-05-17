@@ -117,6 +117,15 @@ int main() {
     listCycle_t(&schedulerMain->ant_list_ready_a);
     printList_t(schedulerMain->ant_list_ready_a);
 
+    printf("\n Cycle");
+    int i = 0;
+    while(i<10000) {
+        listCycle_t(&schedulerMain->ant_list_ready_a);
+        printList_t(schedulerMain->ant_list_ready_a);
+        i++;
+    }
+    i = 0;
+
     printf("\n Get Front");
     CEThread_treadInfo* result= getFront_t(schedulerMain->ant_list_ready_a);
     printf("\nTID FRONT %li",result->tid);
@@ -138,7 +147,7 @@ int main() {
     schedulerMain->ant_list_ready_a->threadInfo->state=TERMINATED;
 
     schedulerMain->funcion_calendarizador(schedulerMain);
-    printList_t(schedulerMain->ant_list_ready_a);*/
+    printList_t(schedulerMain->ant_list_ready_a);
 
 
 
@@ -148,7 +157,7 @@ int main() {
     printf("\nDatos mostrados por A");
     printList_t(schedulerMain->ant_list_ready_a);
 
-    printList_t(schedulerMain->zombie_ants_a);
+    printList_t(schedulerMain->zombie_ants_a);*/
 
 
 

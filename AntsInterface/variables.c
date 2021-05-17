@@ -1,6 +1,6 @@
 # define COLAMAX 5
 # define STACKMAX 5
-# define MAXANTS 40
+# define MAXANTS 1000
 #define WINDOW_WIDTH (1850)
 #define WINDOW_HEIGHT (1050)
 #define x_start_road (400)
@@ -67,8 +67,8 @@ struct AntSprites{
 } antSprites;
 
 const int maxAnts = MAXANTS;
-struct Ant ants[COLAMAX];
-int antCounter = 0;
+struct Ant ants[MAXANTS];
+int antCounter = 100;
 int w_ant;
 int h_ant;
 int cellSize;

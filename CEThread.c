@@ -2,7 +2,7 @@
 // Created by jglez2330 on 2/5/21.
 //
 #define QUANTUM 10000
-#define Channels 3
+#define Channels 4
 #include "CEThread.h"
 
 

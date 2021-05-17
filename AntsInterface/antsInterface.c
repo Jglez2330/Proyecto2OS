@@ -69,6 +69,7 @@ void* startAntMotion(void* params){
     tiempo.tv_sec = 0;
     tiempo.tv_nsec = 100000000;
     while (1){
+//        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
         nanosleep(&tiempo,&tiempo);
 
         if (ants[p->antId].sentHome){
@@ -170,7 +171,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         param = malloc(sizeof(struct Params));
         param->antId = ants[antCounter].antId;
         param->filas = filas;
-        printf("Fila:%i \n",scheduler->canalNumber);
+        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
         CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
 //        pthread_create( &thread1,NULL,startAntMotion, param);
 

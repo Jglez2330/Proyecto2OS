@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/c,clion,clion+iml,clion+all,linux,vscode,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=c,clion,clion+iml,clion+all,linux,vscode,macos
 
+
+AntsInterface/cmake-build-debug/
+AntsInterface/cmake-build-debug/*
 ### C ###
 # Prerequisites
 *.d
@@ -322,3 +325,4 @@ Temporary Items
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/c,clion,clion+iml,clion+all,linux,vscode,macos
+

@@ -130,8 +130,10 @@ CEThread_attr_t *CEThread_default_attr() {
 void default_algo(int sig) {
     /* block the signal */
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
-    current_channel++;
-    current_channel = current_channel % Channels;
+    do{
+        current_channel++;
+        current_channel = current_channel % Channels;
+    } while (schedulers[current_channel] == NULL);
     CEThread_treadInfo *prev;
     CEThread_treadInfo *next;
     if (current_channel == 0){
@@ -406,3 +408,7 @@ void unblock_threads_from_list(listNode_t* list) {
 
     }
 };
+
+scheduler_t** get_schedulers(){
+    return schedulers;
+}

@@ -81,8 +81,6 @@ listNode_t* roundRobin (scheduler_t * scheduler){
         push_t(&selectedZombie,listItem);
         deleteNodeTID_t(&selectedReady,listItem->tid);
 
-    } else{
-        listCycle_t(&selectedReady);
     }
     if(selectedReady != NULL) {
         CEThread_treadInfo* next;
@@ -91,8 +89,8 @@ listNode_t* roundRobin (scheduler_t * scheduler){
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
             i++;
-        } while (next->state > RUNNING && i<=1000);
-        if (i == 1000){
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
             selectedReady = NULL;
         }
     }
@@ -148,8 +146,8 @@ listNode_t* priority (scheduler_t * scheduler){
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
             i++;
-        } while (next->state > RUNNING && i<=1000);
-        if (i == 1000){
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
             selectedReady = NULL;
         }
 
@@ -215,8 +213,8 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
             i++;
-        } while (next->state > RUNNING && i<=1000);
-        if (i == 1000){
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
             selectedReady = NULL;
         }
     }
@@ -266,8 +264,8 @@ listNode_t* FCFS(scheduler_t * scheduler){
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
             i++;
-        } while (next->state > RUNNING && i<=1000);
-        if (i == 1000){
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
             selectedReady = NULL;
         }
     }
@@ -348,8 +346,8 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
             listCycle_t(&selectedReady);
             next = getFront_t(selectedReady);
             i++;
-        } while (next->state > RUNNING && i<=1000);
-        if (i == 1000){
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
             selectedReady = NULL;
         }
     }

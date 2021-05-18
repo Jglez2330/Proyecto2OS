@@ -2,19 +2,24 @@
 // Created by jglez2330 on 17/5/21.
 //
 
+#include <slcurses.h>
 #include "CEThread.h"
 #define QUANTUM 1000
 #define Channels 4
 long globalTID = 0;
 int current_channel;
 CEThread_treadInfo* main_thread;
+listNode_t* thread_list;
+listNode_t* zombie_list;
+
 CEThread_treadInfo* current_running_thread;
 sigset_t context_switching_alarm;
 static struct itimerval timer_context;
 
 CEThread_treadInfo *get_next_thread();
 
-scheduler_t* schedulers[Channels];
+
+bool is_thread_inside(listNode_t *pNode, CEThread_treadInfo *pThread);
 
 void CEThread_get_main_thread_context() {
     struct sigaction act;
@@ -63,27 +68,26 @@ void CEThread_get_main_thread_context() {
         perror ("Unable to install handler");
         exit(EXIT_FAILURE);
     }
+    thread_list = NULL;
+    zombie_list = NULL;
+    append_thread(&thread_list, main_thread);
 }
 
-int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_routine)(void*), void *arg, scheduler_t* scheduler){
+int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_routine)(void*), void *arg){
 
-    if (globalTID == 0){
+    if (globalTID++ == 0){
         CEThread_get_main_thread_context();
-        globalTID++;
-        current_channel = 0;
-        schedulers[Channels - 1] = malloc(sizeof(scheduler_t));
-        schedulers[Channels - 1]->ant_list_ready_a = NULL;
-        schedulers[Channels - 1]->zombie_ants_a = NULL;
     }
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
     CEThread_treadInfo* new_thread = (CEThread_treadInfo* ) malloc(sizeof(CEThread_treadInfo));
-    new_thread->tid = globalTID++;
+    new_thread->tid = globalTID;
     *thread_id = new_thread->tid;
     new_thread->state = READY;
     new_thread->pFunction = start_routine;
     new_thread->arg = arg;
     new_thread->joining = 0;
+    new_thread->detach = 0;
 
     new_thread->thread_context = (ucontext_t*) malloc(sizeof(ucontext_t));
     memset(new_thread->thread_context, 0, sizeof(ucontext_t));
@@ -101,9 +105,8 @@ int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_r
 
     makecontext(new_thread->thread_context, (void (*)(void)) CEThread_start, 2, start_routine, arg);
 
-    append(&scheduler->ant_list_ready_a, new_thread);
+    append_thread(&thread_list, new_thread);
 
-    schedulers[scheduler->canalNumber] = scheduler;
 
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
 }
@@ -118,49 +121,41 @@ void CEThread_start(void* (*start_routine)(void*), void* args){
 
 int CEThread_yield(){
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
-    CEThread_treadInfo* next = get_next_thread();
-    CEThread_treadInfo* prev = current_running_thread;
+    context_switching(SIGVTALRM);
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
-    if (prev->thread_context == NULL){
-        setcontext(main_thread->thread_context);
-    } else{
-        swapcontext(prev->thread_context, next->thread_context);
-    }
-
-
     return 0;
 }
 
 CEThread_treadInfo *get_next_thread() {
     CEThread_treadInfo* result;
-    do{
-        current_channel++;
-        current_channel = current_channel % Channels;
-    } while (schedulers[current_channel] == NULL && current_channel != 0);
-    if (current_channel == 0){
+
+    listCycle_t_thread(&thread_list);
+    result = getFront_t_thread(thread_list);
+
+    if (result == NULL){
         return main_thread;
     } else{
-        listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
-        if (getFront_t(list_threads) == NULL){
-            return main_thread;
-        }
-        return getFront_t(list_threads);
+        return result;
     }
+
 }
 void context_switching(int sig){
     /* block the signal */
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
-
-
-    CEThread_treadInfo * next = get_next_thread();
+    CEThread_treadInfo *next;
+    do {
+        next = get_next_thread();
+    } while (next->state != READY);
 
     CEThread_treadInfo * prev = current_running_thread;
     if (prev->state == RUNNING){
         prev->state = READY;
     }
 
+
     next->state = RUNNING;
+
     current_running_thread = next;
 
     /* unblock the signal */
@@ -171,11 +166,23 @@ void context_switching(int sig){
 void CEThread_end(void* return_value){
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
+    CEThread_treadInfo * prev = getFront_t_thread(thread_list);
+    deleteNodePosition_thread(&thread_list, 0);
 
-
-    CEThread_treadInfo * prev = current_running_thread;
     current_running_thread = get_next_thread();
     current_running_thread->state = RUNNING;
+
+    if(prev->detach == 1 ){
+        free(prev->thread_context->uc_stack.ss_sp);
+        free(prev->thread_context);
+        prev->thread_context = NULL;
+
+        free(prev);
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        setcontext(current_running_thread->thread_context);
+        return;
+    }
+
     if (current_running_thread->tid == prev->tid){
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         setcontext(current_running_thread->thread_context);
@@ -190,10 +197,161 @@ void CEThread_end(void* return_value){
         prev->retval = return_value;
         prev->joining = 0;
 
-        append(&schedulers[current_channel]->zombie_ants_a, prev);
+        append_thread(&zombie_list, prev);
+
 
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         setcontext(current_running_thread->thread_context);
     }
 }
 
+int CEThread_detach(CEThread_t thread){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    CEThread_treadInfo* thread_to_detach;
+
+    thread_to_detach = get_thread_by_tid_zombie(thread);
+    if (thread_to_detach != NULL) {
+        deleteNodeTID_t_thread(&zombie_list, thread);
+        free(thread_to_detach->thread_context->uc_stack.ss_sp);
+        free(thread_to_detach->thread_context);
+        thread_to_detach->thread_context = NULL;
+
+        free(thread_to_detach);
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        return 0;
+    }
+    thread_to_detach = get_thread_by_tid(thread);
+
+    if (thread_to_detach == NULL){
+
+        perror("Thread to detach doesn't exists\n");
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        return -1;
+    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+    thread_to_detach->detach = 1;
+    return 0;
+}
+int CEThread_join(CEThread_t thread, void ** return_value){
+    CEThread_treadInfo* thread_to_join;
+
+    thread_to_join = get_thread_by_tid(thread);
+
+    if (thread_to_join == NULL){
+        thread_to_join = get_thread_by_tid_zombie(thread);
+        if (thread_to_join != NULL) {
+            return 0;
+        }
+        perror("Thread to join doesn't exists\n");
+        return -1;
+    }
+    if (thread_to_join->tid == current_running_thread->tid){
+
+        perror("Thread unable to join itself\n");
+        return -1;
+    }
+    if (thread_to_join->joining == current_running_thread->tid){
+        perror("Thread already joining me\n");
+        return -1;
+    }
+    if (thread_to_join->detach == 1){
+        perror("Thread is detached, unable to join it\n");
+        return -1;
+    }
+
+    thread_to_join->joining = current_running_thread->tid;
+
+    while (thread_to_join->state != TERMINATED){
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        context_switching(SIGVTALRM);
+        sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    }
+    if (return_value == NULL){
+        return 0;
+    } else{
+        *return_value = thread_to_join->retval;
+        return 0;
+    }
+}
+
+CEThread_treadInfo* get_thread_by_tid_zombie(CEThread_t thread) {
+    CEThread_treadInfo* result = NULL;
+    for (int i = 0; i < getCount_t_thread(zombie_list); i++) {
+        if (getNode_t_thread(zombie_list, i)->tid == thread){
+            result = getNode_t_thread(zombie_list, i);
+            break;
+        }
+    }
+    return result;
+}
+
+CEThread_treadInfo* get_thread_by_tid(CEThread_t tid){
+    CEThread_treadInfo* result = NULL;
+    for (int i = 0; i < getCount_t_thread(thread_list); i++) {
+        if (getNode_t_thread(thread_list, i)->tid == tid){
+            result = getNode_t_thread(thread_list, i);
+            break;
+        }
+    }
+    return result;
+}
+
+int CEThread_mutex_init(CEThread_mutex_t* mutex){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    mutex->blocked_list = NULL;
+    mutex->owner_thread = 0;
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+    return 0;
+}
+int CEThread_mutex_lock(CEThread_mutex_t *mutex) {
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    if (mutex->owner_thread != current_running_thread->tid && mutex->owner_thread != 0) {
+        if (!is_thread_inside(mutex->blocked_list, current_running_thread)) {
+            append_thread(&mutex->blocked_list, current_running_thread);
+            current_running_thread->state = BLOCKED;
+            //deleteNodePosition_thread(&thread_list, 0);
+            while (current_running_thread->state == BLOCKED){
+                CEThread_yield();
+
+            };
+            CEThread_mutex_lock(mutex);
+        }
+    } else {
+        mutex->owner_thread = current_running_thread->tid;
+    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+    return 0;
+}
+
+bool is_thread_inside(listNode_t *pNode, CEThread_treadInfo *pThread) {
+    bool result = FALSE;
+    for (int i = 0; i < getCount_t_thread(pNode); i++) {
+        if(getNode_t_thread(pNode, i)->tid == pThread->tid){
+            result = TRUE;
+            break;
+        }
+
+    }
+    return result;
+};
+
+int CEThread_mutex_unlock(CEThread_mutex_t *mutex) {
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    if (mutex->owner_thread != current_running_thread->tid && mutex->owner_thread != 0) {
+        printf("Only the lock owner can free the mutex");
+    } else {
+        unblock_threads_from_list(mutex->blocked_list);
+        mutex->owner_thread = 0;
+        mutex->blocked_list = NULL;
+    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+    return 0;
+}
+void unblock_threads_from_list(listNode_t* list) {
+    while (getFront_t_thread(list)!= NULL) {
+        CEThread_treadInfo *r = getFront_t_thread(list);
+        r->state = READY;
+        //append_thread(&thread_list, r);
+        deleteNodePosition_thread(&list, 0);
+    }
+};

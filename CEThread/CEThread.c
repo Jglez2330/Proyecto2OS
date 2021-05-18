@@ -87,6 +87,7 @@ int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_r
     new_thread->pFunction = start_routine;
     new_thread->arg = arg;
     new_thread->joining = 0;
+    new_thread->detach = 0;
 
     new_thread->thread_context = (ucontext_t*) malloc(sizeof(ucontext_t));
     memset(new_thread->thread_context, 0, sizeof(ucontext_t));
@@ -170,6 +171,18 @@ void CEThread_end(void* return_value){
 
     current_running_thread = get_next_thread();
     current_running_thread->state = RUNNING;
+
+    if(prev->detach == 1 ){
+        free(prev->thread_context->uc_stack.ss_sp);
+        free(prev->thread_context);
+        prev->thread_context = NULL;
+
+        free(prev);
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        setcontext(current_running_thread->thread_context);
+        return;
+    }
+
     if (current_running_thread->tid == prev->tid){
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         setcontext(current_running_thread->thread_context);
@@ -190,6 +203,34 @@ void CEThread_end(void* return_value){
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         setcontext(current_running_thread->thread_context);
     }
+}
+
+int CEThread_detach(CEThread_t thread){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    CEThread_treadInfo* thread_to_detach;
+
+    thread_to_detach = get_thread_by_tid_zombie(thread);
+    if (thread_to_detach != NULL) {
+        deleteNodeTID_t_thread(&zombie_list, thread);
+        free(thread_to_detach->thread_context->uc_stack.ss_sp);
+        free(thread_to_detach->thread_context);
+        thread_to_detach->thread_context = NULL;
+
+        free(thread_to_detach);
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        return 0;
+    }
+    thread_to_detach = get_thread_by_tid(thread);
+
+    if (thread_to_detach == NULL){
+
+        perror("Thread to detach doesn't exists\n");
+        sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+        return -1;
+    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+    thread_to_detach->detach = 1;
+    return 0;
 }
 int CEThread_join(CEThread_t thread, void ** return_value){
     CEThread_treadInfo* thread_to_join;
@@ -273,7 +314,7 @@ int CEThread_mutex_lock(CEThread_mutex_t *mutex) {
                 CEThread_yield();
 
             };
-            //CEThread_mutex_lock(mutex);
+            CEThread_mutex_lock(mutex);
         }
     } else {
         mutex->owner_thread = current_running_thread->tid;

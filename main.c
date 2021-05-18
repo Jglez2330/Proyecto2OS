@@ -34,6 +34,7 @@ int main() {
     CEThread_create(&t4,NULL, increaseCounter, id4);
     CEThread_create(&t5,NULL, increaseCounter, id5);
 
+    CEThread_detach(t1);
     CEThread_join(t1, NULL);
     CEThread_join(t2, NULL);
     CEThread_join(t3, NULL);

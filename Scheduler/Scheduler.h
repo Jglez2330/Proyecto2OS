@@ -4,7 +4,7 @@
 
 #ifndef SCHEDULER_SCHEDULER_H
 #define SCHEDULER_SCHEDULER_H
-
+#define SIDE_FLAG 0
 #include <sys/ucontext.h>
 #include "LinkedList.h"
 #include <math.h>
@@ -19,11 +19,19 @@ typedef struct scheduler_t {
 }scheduler_t;*/
 
 typedef struct scheduler_t {
+    int canalNumber;
+    int side_Flag;
     listNode_t* (*funcion_calendarizador)(struct scheduler_t*);
     listNode_t* ant_list_ready_a;
     listNode_t* ant_list_ready_b;
     listNode_t* zombie_ants_a;
     listNode_t* zombie_ants_b;
+    long scheduler_Selected;
+    long flowControl;
+    long parameterW_A;
+    long parameterW_B;
+    long timeCambioLetrero;
+
 }scheduler_t;
 
 enum TYPESORT {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};

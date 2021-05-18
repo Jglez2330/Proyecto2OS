@@ -159,14 +159,48 @@ int getCount_t(struct listNode_t* head)
     }
     return count -1;
 }
-void listCycle_t(struct listNode_t** head){
+/*void listCycle_t(struct listNode_t** head){
     CEThread_treadInfo* listItem= getNode_t(*head ,  0);
 
     append(head,listItem);
     deleteNodePosition(head,0);
+}*/
+
+void listCycle_t(struct listNode_t** head_ref){
+    int k = 1;
+    if (k == 0)
+        return;
+
+
+    struct listNode_t* current = *head_ref;
+
+    int count = 1;
+    while (count < k && current != NULL) {
+        current = current->next;
+        count++;
+    }
+
+    if (current == NULL)
+        return;
+
+    struct listNode_t* kthNode = current;
+
+    while (current->next != NULL)
+        current = current->next;
+
+    current->next = *head_ref;
+
+    *head_ref = kthNode->next;
+
+    kthNode->next = NULL;
 }
 
+
 CEThread_treadInfo* getFront_t(struct listNode_t* head){
+
+    if(head == NULL){
+        return NULL;
+    }
     return getNode_t(head,0);
 
 }

@@ -4,14 +4,13 @@
 
 #include <stdio.h>
 #include "Scheduler.h"
-#define SIDE_FLAG 0
+
 
 listNode_t* receiveThreads(scheduler_t * scheduler){
 
-    int scheduler_Selected = 4;
     listNode_t* listResult;
 
-    switch (scheduler_Selected)
+    switch (scheduler->scheduler_Selected)
     {
         case 0:
             printf("\nRR");
@@ -64,7 +63,7 @@ listNode_t* roundRobin (scheduler_t * scheduler){
     listNode_t * selectedReady;
     listNode_t * selectedZombie;
 
-    if(SIDE_FLAG ==0){
+    if(scheduler->side_Flag ==0){
         selectedReady = scheduler->ant_list_ready_a;
         selectedZombie = scheduler->zombie_ants_a;
     }
@@ -72,23 +71,32 @@ listNode_t* roundRobin (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
+
+    if (selectedReady == NULL){
+        return NULL;
+    }
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
 
     if(listItem->state == TERMINATED){
         push_t(&selectedZombie,listItem);
         deleteNodeTID_t(&selectedReady,listItem->tid);
 
-    } else{
-        listCycle_t(&selectedReady);
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        int i = -1;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+            i++;
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
+            selectedReady = NULL;
+        }
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady !=NULL);
 
-    if(SIDE_FLAG ==0){
+    if(scheduler->side_Flag ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
     }
@@ -114,6 +122,10 @@ listNode_t* priority (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
+    if (selectedReady == NULL){
+        return NULL;
+    }
+
     bubbleSort_t(selectedReady,PRIORITY);
 
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
@@ -126,12 +138,21 @@ listNode_t* priority (scheduler_t * scheduler){
 
     } else{
     }
-    CEThread_treadInfo* next;
+
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        int i = -1;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+            i++;
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
+            selectedReady = NULL;
+        }
+
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady != NULL);
 
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
@@ -160,8 +181,9 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
-
-
+    if (selectedReady == NULL){
+        return NULL;
+    }
 
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
     if(listItem->flag_SJF != 1){
@@ -184,12 +206,20 @@ listNode_t* shortJobFirst (scheduler_t * scheduler){
 
     } else{
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        int i = -1;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+            i++;
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
+            selectedReady = NULL;
+        }
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady!=NULL);
+
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
@@ -216,7 +246,9 @@ listNode_t* FCFS(scheduler_t * scheduler){
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
     }
-
+    if (selectedReady == NULL){
+        return NULL;
+    }
     CEThread_treadInfo* listItem= getFront_t(selectedReady);
 
     if(listItem->state == TERMINATED){
@@ -224,12 +256,21 @@ listNode_t* FCFS(scheduler_t * scheduler){
         deleteNodeTID_t(&selectedReady,listItem->tid);
     } else{
     }
-    CEThread_treadInfo* next;
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+
+        int i = -1;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+            i++;
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
+            selectedReady = NULL;
+        }
+    }
     resultQueue = selectedReady;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING);
+
     if(SIDE_FLAG ==0){
         scheduler->ant_list_ready_a = selectedReady;
         scheduler->zombie_ants_a = selectedZombie;
@@ -255,6 +296,9 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
     else{
         selectedReady = scheduler->ant_list_ready_b;
         selectedZombie = scheduler->zombie_ants_b;
+    }
+    if (selectedReady == NULL){
+        return NULL;
     }
 
     if(selectedReady->threadInfo->rms_Status == 0){
@@ -295,11 +339,18 @@ listNode_t* tiempoReal(scheduler_t * scheduler){
         deleteNodeTID_t(&selectedReady,listItem->tid);
     } else{
     }
-    CEThread_treadInfo* next;
-    do {
-        listCycle_t(&selectedReady);
-        next = getFront_t(selectedReady);
-    } while (next->state > RUNNING && selectedReady !=NULL);
+    if(selectedReady != NULL) {
+        CEThread_treadInfo* next;
+        int i = -1;
+        do {
+            listCycle_t(&selectedReady);
+            next = getFront_t(selectedReady);
+            i++;
+        } while (next->state > RUNNING && i<=100);
+        if (i == 100){
+            selectedReady = NULL;
+        }
+    }
     resultQueue = selectedReady;
     if(SIDE_FLAG ==0){
 

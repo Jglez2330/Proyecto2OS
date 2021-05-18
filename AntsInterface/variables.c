@@ -63,6 +63,7 @@ typedef struct Ant{
     int passedBridge;
     int finalX;
     int finalY;
+    int sorted;
     dataItem dataItem;
 
 

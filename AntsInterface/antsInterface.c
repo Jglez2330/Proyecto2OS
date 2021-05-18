@@ -80,9 +80,9 @@ void postionAllAnt(listNode_t list, Matrix *filas[6] ){
                     ants[j].col_dest = (STACKMAX - 1) - i;
                     ants[antCounter].finalX = filas[ants[antCounter].fila_dest][ants[j].col_dest]->x;
                     ants[antCounter].finalY = filas[ants[antCounter].fila_dest][ants[j].col_dest]->y;
-                    if (ants[j].antId == 0){
-                        printf("Columna asignada %i a hormiga %i \n ", ants[j].col_dest, ants[j].antId);
-                    }
+
+                    printf("Columna asignada %i a hormiga %i \n ", ants[j].col_dest, ants[j].antId);
+
 //
 
                 }
@@ -94,8 +94,9 @@ void postionAllAnt(listNode_t list, Matrix *filas[6] ){
         }
     }
 }
-int ordenadas = 1;
-void* startAntMotion(void* params){
+
+
+_Noreturn void* startAntMotion(void* params){
     struct Params * p = params;
     struct timespec {
         time_t tv_sec;
@@ -115,35 +116,64 @@ void* startAntMotion(void* params){
             continue;
         }
 
-        if (ants[p->antId].waiting){
-            if(p->antId == 0){
-                printf("La hormiga esta esperando \n");
-            }
-//            ants[p->antId].dataItem
-//            printf("Largo Canal : %i\n", getCount_t(list_Ant_L_Canal1) + 1);
-            if (getCount_t(list_Ant_L_Canal1) + 1 == 5 && ordenadas){
-               // sleep(3);
-//                printf("Hola mundo!\n");
-//                printList_t(list_Ant_L_Canal1);
 
-
-//                printList_t(list_Ant_L_Canal1);
-                setMovingAnts();
-                postionAllAnt(*list_Ant_L_Canal1, p->filas);
-                ordenadas = 0;
-
-
-//                printf("La columna a la que va es: %i y esta en %i \n", ants[0].col_dest, ants[0].col_act);
-                //sleep(10);
-
-
-            }
-            //CEThread_yield();
-
-        }
 
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
-            moveAntInStack(p->antId, p->filas);
+
+            if (ants[p->antId].fila_act == 0 && ants[p->antId].sorted == 0){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_L_Canal1, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+            else if(ants[p->antId].fila_act == 1 && ants[p->antId].sorted == 0 ){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_R_Canal1, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+
+
+            else if(ants[p->antId].fila_act == 2 && ants[p->antId].sorted == 0){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_L_Canal2, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+            else if(ants[p->antId].fila_act == 3 && ants[p->antId].sorted == 0){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_R_Canal2, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+
+
+
+
+            else if(ants[p->antId].fila_act == 4 && ants[p->antId].sorted == 0){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_L_Canal3, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+            else if(ants[p->antId].fila_act == 5 && ants[p->antId].sorted == 0){
+                setMovingAnts();
+                postionAllAnt(*list_Ant_R_Canal3, p->filas);
+
+                moveAntInStack(p->antId, p->filas);
+                ants[p->antId].sorted = 1;
+            }
+            else{
+                moveAntInStack(p->antId, p->filas);
+                continue;
+            }
+
+
             //CEThread_yield();
             continue;
         }

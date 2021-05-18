@@ -82,10 +82,10 @@ int h_ant;
 int cellSize;
 int colitionsFlag = 0;
 
-listNode_t * list_Ant_L_Canal1 = NULL;
-listNode_t * list_Ant_L_Canal2 = NULL;
-listNode_t * list_Ant_L_Canal3 = NULL;
+listNode_t * list_Ant_L_Canal1;
+listNode_t * list_Ant_L_Canal2;
+listNode_t * list_Ant_L_Canal3;
 
-listNode_t * list_Ant_R_Canal1 = NULL;
-listNode_t * list_Ant_R_Canal2 = NULL;
-listNode_t * list_Ant_R_Canal3 = NULL;
+listNode_t * list_Ant_R_Canal1;
+listNode_t * list_Ant_R_Canal2;
+listNode_t * list_Ant_R_Canal3;

@@ -18,6 +18,17 @@
 
 
 int main() {
+
+
+    list_Ant_L_Canal1 = NULL;
+    list_Ant_L_Canal2 = NULL;
+    list_Ant_L_Canal3 = NULL;
+
+    list_Ant_R_Canal1 = NULL;
+    list_Ant_R_Canal2 = NULL;
+    list_Ant_R_Canal3 = NULL;
+
+
     // Se inicializa SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) != 0) {
         printf("error initializing SDL:%s\n", SDL_GetError());

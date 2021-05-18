@@ -30,7 +30,11 @@ int synchronizerInit(){
 
     }
     return 0;
-}/*
+}
+
+
+
+/*
 int equidad_Init(scheduler_t * scheduler){
     if(scheduler->canalNumber==0) {
         scheduler->scheduler_Selected = valuesChannel[0].calendarizador;

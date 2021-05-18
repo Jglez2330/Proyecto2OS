@@ -317,20 +317,20 @@ int main() {
 
             enum antType type = black;
 
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,type,side,filas);
             queenAntRequested = 0;
         }
 
 
         if (redAntRequested){
             enum antType type = red;
-            spawnAnt(fila,4,type,side,filas);
+            spawnAnt(fila,type,side,filas);
             redAntRequested = 0;
         }
         updateNPC(rend, filas);

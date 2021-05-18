@@ -95,28 +95,37 @@ void* startAntMotion(void* params){
 
     }
 }
-void postionAnt(){
-    int listSize = getCount_t(list_Ant_A_Canal1) + 1;
-    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
+int postionAnt(listNode_t list){
+    int listSize = getCount_t(&list) + 1;
+//    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
     for(int i = 0; i < listSize;i++){
-        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
+//        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
         for (int j = 0; j <= antCounter ;j++){
-            if(getNode_t(list_Ant_A_Canal1, i)->antId == ants[j].antId){
-                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
-                ants[j].col_dest = (STACKMAX - 1) - j;
+            if(getNode_t(&list, i)->antId == ants[j].antId){
+//                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
+                if (ants[j].side == 'l') {
+                    ants[j].col_dest = (STACKMAX - 1) - j;
+                    return (STACKMAX - 1) - j;
+                }
+                else if (ants[j].side == 'r'){
+                    ants[j].col_dest = (STACKMAX + COLAMAX - 1) + j;
+                    return (STACKMAX + COLAMAX ) - j;
+                }
             }
         }
 
     }
 }
 
-void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6] ){
+void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
     if(antCounter < maxAnts) {
         dataItem  * hormiga0 = malloc(sizeof (dataItem));
         switch(type){
             //dataItem  * dataItem ;
 
             case black:
+                ants[antCounter].speed = 1;
+
                 hormiga0->state = 0;
                 hormiga0->priority= 10;
                 hormiga0->var_SJF = 4;
@@ -149,7 +158,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
                 }
                 break;
             case red:
-                ants[antCounter].speed = 1.5;
+                ants[antCounter].speed = 2;
 
                 hormiga0->state = 0;
                 hormiga0->priority= 10;
@@ -221,29 +230,25 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
-        ants[antCounter].x_dest = filas[fila][columna]->x;
-        ants[antCounter].y_dest = filas[fila][columna]->y;
+
         ants[antCounter].type = type;
         ants[antCounter].antId = antCounter;
         ants[antCounter].sentHome = 0;
         ants[antCounter].passedBridge = 0;
+        listNode_t * list;
+        printf("Fila: %i \n",fila);
+        if (fila == 0) list = list_Ant_L_Canal1;
+        if (fila == 1) list = list_Ant_R_Canal1;
+        if (fila == 2) list = list_Ant_L_Canal2;
+        if (fila == 3) list = list_Ant_R_Canal2;
+        if (fila == 4) list = list_Ant_L_Canal3;
+        if (fila == 5) list = list_Ant_R_Canal3;
+        push_t(&list, &ants[antCounter].dataItem);
 
-
-        push_t(&list_Ant_A_Canal1, &ants[antCounter].dataItem);
-
-        postionAnt();
-
-//        dataList  * hormiga0 = malloc(sizeof (dataList));
-//        hormiga0->state = 0;
-//        hormiga0->priority= 10;
-//        hormiga0->var_SJF = 4;
-//        hormiga0->scheduler_Selected = scheduler_Selected;
-//        hormiga0->rms_C = 1;
-//        hormiga0->rms_P = 6;
-//        hormiga0->tid = toledoAnt_1;
-//        hormiga0->column = 0;
-//        hormiga0->row = 0;
-
+        int col = postionAnt(*list);
+        printf("Col: %i \n",col);
+        ants[antCounter].x_dest = filas[fila][col]->x;
+        ants[antCounter].y_dest = filas[fila][col]->y;
 
 
         //CEThread_t thread1;

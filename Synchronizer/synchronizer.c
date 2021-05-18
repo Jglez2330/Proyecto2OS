@@ -34,7 +34,10 @@ int synchronizerInit(){
 
 
 
+
+
 /*
+
 int equidad_Init(scheduler_t * scheduler){
     if(scheduler->canalNumber==0) {
         scheduler->scheduler_Selected = valuesChannel[0].calendarizador;
@@ -58,8 +61,8 @@ int equidad_Init(scheduler_t * scheduler){
         scheduler->parameterW_B = 0;
     }
     return 0;
-}
-
+}*/
+/*
 int letrero_Init(scheduler_t * scheduler) {
     if(scheduler->canalNumber==0) {
         scheduler->timeCambioLetrero = valuesChannel[0].timeCambioLetrero;

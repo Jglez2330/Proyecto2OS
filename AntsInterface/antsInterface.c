@@ -96,7 +96,15 @@ void postionAllAnt(listNode_t list, Matrix *filas[6] ){
         }
     }
 }
-
+void crossAnt(int id){
+    for(int i = 0; i < antCounter;i++){
+        if (ants[i].antId == id){
+            if (ants[i].side == 'l') ants[i].col_dest = STACKMAX + COLAMAX + 2;
+            else if(ants[i].side == 'r') ants[i].col_dest = STACKMAX - 1;
+        }
+    }
+}
+int spacesInBridge = 3;
 
 _Noreturn void* startAntMotion(void* params){
     struct Params * p = params;
@@ -117,6 +125,38 @@ _Noreturn void* startAntMotion(void* params){
             //CEThread_yield();
             continue;
         }
+        if (semaforoC1 == 1 && list_Ant_L_Canal1 != NULL){
+           // pthread_mutex_lock(&mutex);
+            printList_t(list_Ant_L_Canal1);
+
+            printList_t(list_Ant_L_Canal1);
+            int id = getNode_t(list_Ant_L_Canal1, 0)->antId;
+            ants[id].passingBridge = 1;
+            if (spacesInBridge != 0  ){
+
+                deleteNodePosition(&list_Ant_L_Canal1,0);
+                if(list_Ant_L_Canal1 ==NULL){
+                    spacesInBridge-= 1;
+
+                }else {
+                    setMovingAnts();
+                    schedulerInit(list_Ant_L_Canal1);
+                    postionAllAnt(*list_Ant_L_Canal1, p->filas);
+                    spacesInBridge -= 1;
+                }
+            }
+            semaforoC1 = !semaforoC1;
+           // pthread_mutex_unlock(&mutex);
+            printf("\nSALIO MUTEX");
+            printList_t(list_Ant_L_Canal1);
+
+            crossAnt(id);
+
+//            semaforoC1  = !semaforoC1;
+        }
+//        if (ants[p->antId].passingBridge == 1){
+//
+//        }
 
 
 
@@ -326,6 +366,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
         }
 
         ants[antCounter].fila_act = fila;
+        ants[antCounter].passingBridge = 0;
 
 //        ants[antCounter].col_dest = STACKMAX;
 
@@ -355,12 +396,12 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
 
 
         if (fila == 0){
-            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
+            ants[antCounter].dataItem.scheduler_Selected = 0; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_L_Canal1, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_L_Canal1, antCounter);
         }
         else if (fila == 1){
-            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
+            ants[antCounter].dataItem.scheduler_Selected = 0; // TODO LEER ARCHIVO CANAL1
 
             append(&list_Ant_R_Canal1, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_R_Canal1, antCounter);
@@ -382,13 +423,13 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
         }
 
         else if (fila == 4){
-            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
+            ants[antCounter].dataItem.scheduler_Selected = 2; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_L_Canal3, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_L_Canal3, antCounter);
 
         }
         else if (fila == 5) {
-            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
+            ants[antCounter].dataItem.scheduler_Selected = 2; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_R_Canal3, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_R_Canal3, antCounter);
         }

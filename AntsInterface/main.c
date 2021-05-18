@@ -307,6 +307,13 @@ int main() {
 
                             sendHomeRequested  = 1;
                             break;
+                        case SDL_SCANCODE_Y:
+
+                            semaforoC1 = !semaforoC1;
+                            break;
+
+
+
                     }
                     break;
             }

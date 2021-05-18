@@ -4,7 +4,6 @@
 
 #ifndef SCHEDULER_SCHEDULER_H
 #define SCHEDULER_SCHEDULER_H
-#define SIDE_FLAG 0
 #include <sys/ucontext.h>
 #include "LinkedList.h"
 #include <math.h>

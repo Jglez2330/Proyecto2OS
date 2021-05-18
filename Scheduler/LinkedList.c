@@ -58,12 +58,12 @@ void deleteNodePosition(struct listNode_t **head_ref, int position)
     temp->next = next;
 }
 
-void deleteNodeTID_t(struct listNode_t** head_ref, pthread_t key)
+void deleteNodeAntId_t(struct listNode_t** head_ref,int antId)
 {
     int count = 0;
 
     struct listNode_t* temp = *head_ref;
-    while (temp->dataInfo->antId!= key && temp!=NULL)
+    while (temp->dataInfo->antId!= antId && temp!=NULL)
     {
         temp = temp->next;
         count ++;

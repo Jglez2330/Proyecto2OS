@@ -61,6 +61,7 @@ typedef struct Ant{
     int inStack;
     int notSorting;
     int passedBridge;
+    int passingBridge;
     int finalX;
     int finalY;
     int sorted;
@@ -85,6 +86,7 @@ int w_ant;
 int h_ant;
 int cellSize;
 int colitionsFlag = 0;
+int semaforoC1 = 0;
 
 listNode_t * list_Ant_L_Canal1;
 listNode_t * list_Ant_L_Canal2;

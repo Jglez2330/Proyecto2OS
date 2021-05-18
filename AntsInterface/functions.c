@@ -488,6 +488,10 @@ void sendHome( int counter, char side){
 
             return;
         }
+        if(distx <= 0){
+            ants[counter].passingBridge = 0;
+            ants[counter].passedBridge = 1;
+        }
         if(ants[counter].size.y < entrance) {
 
             if (abs(disty) <= 10){

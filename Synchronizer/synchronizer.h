@@ -5,7 +5,7 @@
 #ifndef PROYECTO2OS_SYNCHRONIZER_H
 #define PROYECTO2OS_SYNCHRONIZER_H
 
-#include "../CEThread.h"
+#include "../CEThread1.h"
 #include "confuse.h"
 #define channelCount 3
 

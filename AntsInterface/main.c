@@ -5,7 +5,7 @@
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_timer.h"
 #include <time.h>
-#include "../CEThread.h"
+#include "../CEThread1.h"
 #include "../Synchronizer/synchronizer.h"
 #include "variables.c"
 #include "functions.c"

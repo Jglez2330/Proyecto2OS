@@ -33,7 +33,7 @@ void append(struct listNode_t** head_ref, dataItem  * dataInfo)
     last->next = new_node;
     return;
 }
-void deleteNodePosition_thread(struct listNode_t **head_ref, int position)
+void deleteNodePosition(struct listNode_t **head_ref, int position)
 {
     if (*head_ref == NULL)
         return;
@@ -71,7 +71,7 @@ void deleteNodeAntId_t(struct listNode_t** head_ref,int antId)
     deleteNodePosition(head_ref,count);
 }
 
-void deleteList_thread(struct listNode_t** head_ref){
+void deleteList(struct listNode_t** head_ref){
     struct listNode_t* current = *head_ref;
     struct listNode_t* next;
     while (current != NULL){
@@ -99,7 +99,7 @@ dataItem * getNode_t(struct listNode_t* head, int index){
 }
 
 
-void printList_t_thread(struct listNode_t *start)
+void printList_t(struct listNode_t *start)
 {
     struct listNode_t *temp = start;
     printf("\n");
@@ -113,7 +113,7 @@ void printList_t_thread(struct listNode_t *start)
 
 }
 
-void bubbleSort_t_thread(struct listNode_t *start, int typeSort)
+void bubbleSort_t(struct listNode_t *start, int typeSort)
 {
     int swapped, i;
     struct listNode_t *ptr1;
@@ -141,14 +141,14 @@ void bubbleSort_t_thread(struct listNode_t *start, int typeSort)
     while (swapped);
 }
 
-void swap_thread(struct listNode_t *a, struct listNode_t *b){
+void swap(struct listNode_t *a, struct listNode_t *b){
 
     struct Ant *temp   = a->dataInfo;
     a->dataInfo = b->dataInfo;
     b->dataInfo = temp;
 }
 
-int getCount_t_thread(struct listNode_t* head)
+int getCount_t(struct listNode_t* head)
 {
     int count = 0;  // Initialize count
     struct listNode_t* current = head;  // Initialize current
@@ -166,9 +166,9 @@ int getCount_t_thread(struct listNode_t* head)
     deleteNodePosition(head,0);
 }*/
 
-void listCycle_t_thread(struct listNode_t** head){
+void listCycle_t(struct listNode_t** head){
     int k = 1;
-    struct listNode_t* current = *head_ref;
+    struct listNode_t* current = *head;
 
     int count = 1;
     while (count < k && current != NULL) {

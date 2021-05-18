@@ -564,9 +564,12 @@ void moveAntInStack(int counter, Matrix *filas[6]){
     int finalX = ants[counter].finalX;
     int finalY = ants[counter].finalY;
 
-
+    if(ants[counter].antId == 0){
+        printf("La columna a la que va es: %i y esta en %i \n", ants[counter].col_dest, ants[counter].col_act);
+    }
     if(ants[counter].col_act == ants[counter].col_dest && ants[counter].size.x == finalX
                                                           && ants[counter].size.y == finalY){
+
         ants[counter].waiting = 1;
         return;
     }

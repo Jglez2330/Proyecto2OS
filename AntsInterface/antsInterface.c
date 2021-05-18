@@ -10,7 +10,7 @@ struct Params {
     int antId;
     Matrix **filas;
 };
-
+pthread_mutex_t mutex;
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 
     //Cargar imagenes
@@ -62,25 +62,28 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 //4 == 4
 
 void setMovingAnts(){
-    for (int i = 0; i < antCounter ; i++ ){
+    for (int i = 0; i <= antCounter ; i++ ){
         ants[antCounter].notSorting = 0;
         ants[antCounter].waiting = 0;
     }
 }
 void postionAllAnt(listNode_t list, Matrix *filas[6] ){
-        printf("\nREORDENANDO \n");
+//        printf("\nREORDENANDO \n");
     int listSize = getCount_t(&list) + 1;
 //    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
     for(int i = 0; i < listSize;i++){
 //        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
-        for (int j = 0; j <= antCounter ;j++){
+        for (int j = 0; j < antCounter ;j++){
             if(getNode_t(&list, i)->antId == ants[j].antId){
 //                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
                 if (ants[j].side == 'l') {
                     ants[j].col_dest = (STACKMAX - 1) - i;
-                    ants[antCounter].finalX = filas[ants[antCounter].fila_dest][(STACKMAX - 1) - i]->x;
-                    ants[antCounter].finalY = filas[ants[antCounter].fila_dest][(STACKMAX - 1) - i]->y;
-                    printf("Columna asignada %i a hormiga %i \n ", (STACKMAX - 1) - i, ants[j].antId);
+                    ants[antCounter].finalX = filas[ants[antCounter].fila_dest][ants[j].col_dest]->x;
+                    ants[antCounter].finalY = filas[ants[antCounter].fila_dest][ants[j].col_dest]->y;
+                    if (ants[j].antId == 0){
+                        printf("Columna asignada %i a hormiga %i \n ", ants[j].col_dest, ants[j].antId);
+                    }
+//
 
                 }
 //                else if (ants[j].side == 'r'){
@@ -91,7 +94,7 @@ void postionAllAnt(listNode_t list, Matrix *filas[6] ){
         }
     }
 }
-
+int ordenadas = 1;
 void* startAntMotion(void* params){
     struct Params * p = params;
     struct timespec {
@@ -101,6 +104,7 @@ void* startAntMotion(void* params){
     struct timespec tiempo ;
     tiempo.tv_sec = 0;
     tiempo.tv_nsec = 100000000;
+    schedulerInit(list_Ant_L_Canal1);
     while (1){
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
         nanosleep(&tiempo,&tiempo);
@@ -112,28 +116,38 @@ void* startAntMotion(void* params){
         }
 
         if (ants[p->antId].waiting){
+            if(p->antId == 0){
+                printf("La hormiga esta esperando \n");
+            }
 //            ants[p->antId].dataItem
 //            printf("Largo Canal : %i\n", getCount_t(list_Ant_L_Canal1) + 1);
-            if (getCount_t(list_Ant_L_Canal1) + 1 == 5){
+            if (getCount_t(list_Ant_L_Canal1) + 1 == 5 && ordenadas){
                // sleep(3);
 //                printf("Hola mundo!\n");
 //                printList_t(list_Ant_L_Canal1);
-                schedulerInit(list_Ant_L_Canal1);
+
+
 //                printList_t(list_Ant_L_Canal1);
                 setMovingAnts();
                 postionAllAnt(*list_Ant_L_Canal1, p->filas);
+                ordenadas = 0;
+
+
+//                printf("La columna a la que va es: %i y esta en %i \n", ants[0].col_dest, ants[0].col_act);
                 //sleep(10);
 
 
             }
             //CEThread_yield();
-            continue;
+            
         }
+
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
             moveAntInStack(p->antId, p->filas);
             //CEThread_yield();
             continue;
         }
+
         else{
             //CEThread_yield();
             continue;

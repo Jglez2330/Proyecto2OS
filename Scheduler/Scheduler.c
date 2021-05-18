@@ -21,7 +21,7 @@ listNode_t* schedulerInit(listNode_t* listResult){
             break;
 
         case 1:
-            printf("Prioridad");
+//            printf("Prioridad");
             bubbleSort_t(listResult,PRIORITY);
 
             break;
@@ -44,7 +44,7 @@ listNode_t* schedulerInit(listNode_t* listResult){
 
     }
 
-    printf("\nSALIO de schedulerINIT");
+//    printf("\nSALIO de schedulerINIT");
 
 
     return listResult;

@@ -2,7 +2,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "../Scheduler/Scheduler.h"
-#include <pthread.h>
+#include "../CEThread/CEThread.h"
 #include <unistd.h>
 
 struct Params {
@@ -10,7 +10,7 @@ struct Params {
     int antId;
     Matrix **filas;
 };
-pthread_mutex_t mutex;
+CEThread_mutex_t mutex;
 int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
 
     //Cargar imagenes
@@ -110,8 +110,8 @@ _Noreturn void* startAntMotion(void* params){
     printf("La fila de la hormiga es: %i \n", ants[p->antId].fila_act);
     while (1){
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
-        nanosleep(&tiempo,&tiempo);
-
+        //nanosleep(&tiempo,&tiempo);
+        CEThread_yield();
         if (ants[p->antId].sentHome){
             sendHome(p->antId,ants[p->antId].side);
             //CEThread_yield();
@@ -401,14 +401,14 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
 
 
         //CEThread_t thread1;
-        pthread_t thread1;
+        CEThread_t thread1;
         struct Params *param;
         param = malloc(sizeof(struct Params));
         param->antId = ants[antCounter].antId;
         param->filas = filas;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
 //        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
-        pthread_create( &thread1,NULL,startAntMotion, param);
+        CEThread_create( &thread1,NULL,startAntMotion, param);
 
         antCounter++;
     }

@@ -5,13 +5,14 @@
 #ifndef SCHEDULER_LINKEDLIST_H
 #define SCHEDULER_LINKEDLIST_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/ucontext.h>
+#include "LinkedList.h"
+#include <math.h>
+#include "../CEThread/CEThread.h"
 
 
 typedef struct dataItem{
-    pthread_t *tid;
+    CEThread_t *tid;
     int state;
     int priority;
     int var_SJF;

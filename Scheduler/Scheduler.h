@@ -17,7 +17,7 @@ typedef struct scheduler_t {
     queue_t* zombie_ants_a;
     queue_t* zombie_ants_b;
 }scheduler_t;*/
-
+/*
 typedef struct scheduler_t {
     int canalNumber;
     int side_Flag;
@@ -32,7 +32,10 @@ typedef struct scheduler_t {
     long parameterW_B;
     long timeCambioLetrero;
 
-}scheduler_t;
+}scheduler_t;*/
+
+
+
 
 enum TYPESORT {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};
 /*
@@ -47,12 +50,15 @@ typedef struct Thread_t{
     //ucontext_t* thread_context;
 } CEThread_treadInfo;*/
 
-listNode_t* receiveThreads(scheduler_t* scheduler);
-listNode_t* roundRobin (scheduler_t * scheduler);
-listNode_t* priority (scheduler_t * scheduler);
-listNode_t* shortJobFirst (scheduler_t * scheduler);
-listNode_t* FCFS(scheduler_t * scheduler);
-listNode_t* tiempoReal(scheduler_t * scheduler);
+
+listNode_t* schedulerInit(listNode_t* listThreads);
+
+//listNode_t* receiveThreads(listNode_t* listResult);
+listNode_t* roundRobin (listNode_t* listResult);
+listNode_t* priority (listNode_t* listResult);
+listNode_t* shortJobFirst (listNode_t* listResult);
+listNode_t* FCFS(listNode_t* listResult);
+listNode_t* tiempoReal_Init(listNode_t* listResult);
 
 
 

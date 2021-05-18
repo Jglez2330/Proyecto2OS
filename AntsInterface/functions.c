@@ -1,3 +1,4 @@
+#include "../Scheduler/LinkedList.h"
 
 bool verifyXColition(int x1,int x2){
     int distance = abs(x1-x2);
@@ -81,20 +82,20 @@ void moveInX(int counter, int finalX){
 
     if(distx > 0){
         if(abs(distx) <= 5 ){
-            if(colitionDetect(counter,'l',1)) return;
+            if(colitionDetect(counter,'l',1) * !ants[counter].inStack) return;
             else{
                 ants[counter].size.x -= 1;
             }
         }
         else if(abs(distx) > 5 && abs(distx) <= 10){
-            if(colitionDetect(counter,'l',5)) return;
+            if(colitionDetect(counter,'l',5) * !ants[counter].inStack ) return;
             else{
                 ants[counter].size.x -= 5;
             }
         }
         else if(abs(distx) > 10){
 //            printf("Se va a mover 10 en X a la izquierda\n");
-            if(colitionDetect(counter,'l',regularSpeed * ants[counter].speed)) return;
+            if(colitionDetect(counter,'l',regularSpeed * ants[counter].speed) * !ants[counter].inStack) return;
             else{
                 ants[counter].size.x -= regularSpeed * ants[counter].speed;
             }
@@ -103,21 +104,21 @@ void moveInX(int counter, int finalX){
     }
     if(distx < 0){
         if(abs(distx) <= 5 ){
-            if(colitionDetect(counter,'r',1)) return;
+            if(colitionDetect(counter,'r',1) * !ants[counter].inStack) return;
             else{
                 ants[counter].size.x += 1;
             }
         }
 
         else if(abs(distx) > 5 && abs(distx) <= 10){
-            if(colitionDetect(counter,'r',5)) return;
+            if(colitionDetect(counter,'r',5) * !ants[counter].inStack) return;
             else{
                 ants[counter].size.x += 5;
             }
 
         }
         else if(abs(distx) > 10) {
-            if (colitionDetect(counter,'r',regularSpeed * ants[counter].speed)){
+            if (colitionDetect(counter,'r',regularSpeed * ants[counter].speed) * !ants[counter].inStack){
 
                 return;
             }
@@ -137,7 +138,7 @@ void moveInY(int counter, int finalY){
     if(disty > 0){
 
         if(abs(disty) <= 10){
-            if(colitionDetect(counter,'u',1)){
+            if(colitionDetect(counter,'u',1) * !ants[counter].inStack){
                 return ;
             }
             else{
@@ -146,7 +147,7 @@ void moveInY(int counter, int finalY){
 
         }
         if(abs(disty) > 10){
-            if(colitionDetect(counter,'u',regularSpeed * ants[counter].speed)) {
+            if(colitionDetect(counter,'u',regularSpeed * ants[counter].speed) * !ants[counter].inStack) {
                 return;
             }
             else{
@@ -160,7 +161,7 @@ void moveInY(int counter, int finalY){
     if(disty < 0){
 
         if(abs(disty) <= 10){
-            if(colitionDetect(counter,'d',1)){
+            if(colitionDetect(counter,'d',1) * !ants[counter].inStack){
                 return;
             }
             else{
@@ -169,7 +170,7 @@ void moveInY(int counter, int finalY){
 
         }
         if(abs(disty) > 10){
-            if(colitionDetect(counter,'d',regularSpeed * ants[counter].speed)) {return;}
+            if(colitionDetect(counter,'d',regularSpeed * ants[counter].speed) * !ants[counter].inStack) {return;}
 
             else{ants[counter].size.y += regularSpeed * ants[counter].speed;}
         }
@@ -557,14 +558,18 @@ bool positionInInitialRow( int counter, char side){
 
 
 
-void moveAntInStack(int counter, char side, Matrix *filas[6]){
-    int fila = ants[counter].fila_act;
-    int col ;
-    if (side == 'l') col = ants[counter].col_act + 1;
-    if (side == 'r') col = ants[counter].col_act;
-    int finalX = filas[fila][col]->x;
-    int finalY = filas[fila][col]->y;
-    if(ants[counter].col_act == ants[counter].col_dest){
+void moveAntInStack(int counter, Matrix *filas[6]){
+//    int fila = ;
+
+    int finalX = ants[counter].finalX;
+    int finalY = ants[counter].finalY;
+
+    if(ants[counter].antId == 0){
+//        printf("La columna a la que va es: %i y esta en %i \n", ants[counter].col_dest, ants[counter].col_act);
+    }
+    if(ants[counter].col_act == ants[counter].col_dest && ants[counter].size.x == finalX
+                                                          && ants[counter].size.y == finalY){
+
         ants[counter].waiting = 1;
         return;
     }
@@ -580,9 +585,19 @@ void moveAntInStack(int counter, char side, Matrix *filas[6]){
         }
         if (ants[counter].size.x == finalX
             && ants[counter].size.y == finalY){
+            int colDif = ants[counter].col_dest - ants[counter].col_act;
+            if (colDif > 0) {
+                ants[counter].col_act += 1;
 
-            if (side == 'l') ants[counter].col_act += 1;
-            if (side == 'r')ants[counter].col_act -= 1;
+                ants[counter].finalX = filas[ants[counter].fila_act][ants[counter].col_act]->x;
+                ants[counter].finalY = filas[ants[counter].fila_act][ants[counter].col_act]->y;
+            }
+            else if (colDif < 0) {
+                ants[counter].col_act -= 1;
+
+                ants[counter].finalX = filas[ants[counter].fila_act][ants[counter].col_act]->x;
+                ants[counter].finalY = filas[ants[counter].fila_act][ants[counter].col_act]->y;
+            }
 
             return;
 

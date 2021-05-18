@@ -9,26 +9,26 @@
 #include <stdlib.h>
 #include <sys/ucontext.h>
 
-typedef unsigned long int CEThread_t;
-typedef struct {
-     CEThread_t tid;
-    CEThread_t joining;
+
+typedef struct dataItem{
+    pthread_t *tid;
     int state;
-    int detach;
     int priority;
     int var_SJF;
-    int flag_SJF;
+    int channel;
     float rms_C;
     float rms_P;
-    int rms_Status;
-    void* (*pFunction)(void*);
-    void* arg;
-    void* retval;
-    ucontext_t* thread_context;
-} CEThread_treadInfo;
+    int scheduler_Selected; // Indica el calendarizador a utilizar
+    int column;
+    int row;
+    int antId;
+
+} dataItem;
+
+
 
 typedef struct listNode_t{
-    CEThread_treadInfo * threadInfo;
+    dataItem * dataInfo;
     struct listNode_t *next;
     int  size;
 }listNode_t;
@@ -36,16 +36,17 @@ typedef struct listNode_t{
 
 enum State {SJF = 0, PRIORITY = 1, PERIOD = 2};
 
-void push_t_thread(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo);
-void append_thread(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo);
-void deleteNodePosition_thread(struct listNode_t **head_ref, int position);
-void deleteNodeTID_t_thread(struct listNode_t** head_ref, CEThread_t key);
-void bubbleSort_t_thread(struct listNode_t *start, int typeSort);
-void deleteList_thread(struct listNode_t** head_ref);
-void swap_thread(struct listNode_t *a, struct listNode_t *b);
-CEThread_treadInfo* getNode_t_thread(struct listNode_t* head, int index);
-void printList_t_thread(struct listNode_t *start);
-void listCycle_t_thread(struct listNode_t** head);
-int getCount_t_thread(struct listNode_t* head);
-CEThread_treadInfo* getFront_t_thread(struct listNode_t* head);
+void push_t(struct listNode_t **start_ref,  dataItem  * dataInfo);
+void append(struct listNode_t** head_ref, dataItem  * dataInfo);
+void deleteNodePosition(struct listNode_t **head_ref, int position);
+void deleteNodeTID_t(struct listNode_t** head_ref, pthread_t key);
+void bubbleSort_t(struct listNode_t *start,int typeSort);
+void deleteList(struct listNode_t** head_ref);
+void swap(struct listNode_t *a, struct listNode_t *b);
+dataItem * getNode_t(struct listNode_t* head, int index);
+void printList_t(struct listNode_t *start);
+void listCycle_t(struct listNode_t** head);
+int getCount_t(struct listNode_t* head);
+dataItem* getFront_t(struct listNode_t* head);
+
 #endif //SCHEDULER_LINKEDLIST_H

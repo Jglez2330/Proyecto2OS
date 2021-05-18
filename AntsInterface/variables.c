@@ -1,3 +1,8 @@
+
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
+#include "../Scheduler/LinkedList.h"
+
 # define COLAMAX 5
 # define STACKMAX 5
 # define MAXANTS 1000
@@ -38,7 +43,7 @@ enum antType {black = 0, red = 1, queen = 2};
 enum spritesEnum {blackRight1=0 , redRight1=1, blackLeft1 = 2, redLeft1 = 3, queenRight1 = 4, queenLeft1 = 5};
 
 
-struct Ant{
+typedef struct Ant{
     enum antType type;
     enum spritesEnum currentSprite;
     SDL_Rect size;
@@ -54,8 +59,15 @@ struct Ant{
     int antId;
     int sentHome;
     int inStack;
+    int notSorting;
     int passedBridge;
-};
+    int finalX;
+    int finalY;
+    int sorted;
+    dataItem dataItem;
+
+
+}Ant;
 
 struct AntSprites{
     SDL_Texture *blackRight1; //0
@@ -68,7 +80,16 @@ struct AntSprites{
 
 const int maxAnts = MAXANTS;
 struct Ant ants[MAXANTS];
-int antCounter = 100;
+int antCounter = 0;
 int w_ant;
 int h_ant;
 int cellSize;
+int colitionsFlag = 0;
+
+listNode_t * list_Ant_L_Canal1;
+listNode_t * list_Ant_L_Canal2;
+listNode_t * list_Ant_L_Canal3;
+
+listNode_t * list_Ant_R_Canal1;
+listNode_t * list_Ant_R_Canal2;
+listNode_t * list_Ant_R_Canal3;

@@ -24,8 +24,8 @@ typedef struct pConfig {
 pConfig * valuesChannel;
 
 
-int synchronizerInit();
+int synchronizerInit();/*
 int equidad_Init(scheduler_t * scheduler);
 int letrero_Init(scheduler_t * scheduler);
-int tico_Init(scheduler_t * scheduler);
+int tico_Init(scheduler_t * scheduler);*/
 #endif //PROYECTO2OS_SYNCHRONIZER_H

@@ -5,19 +5,30 @@
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_timer.h"
 #include <time.h>
-#include "../CEThread1.h"
-#include "../Synchronizer/synchronizer.h"
+//#include "../Synchronizer/synchronizer.h"
+//
+
 #include "variables.c"
+#include "../Scheduler/LinkedList.h"
 #include "functions.c"
 #include "antsInterface.c"
-#include "../Scheduler/Scheduler.h"
 
 
 
-scheduler_t ** schedulerList;
 
 
 int main() {
+
+
+    list_Ant_L_Canal1 = NULL;
+    list_Ant_L_Canal2 = NULL;
+    list_Ant_L_Canal3 = NULL;
+
+    list_Ant_R_Canal1 = NULL;
+    list_Ant_R_Canal2 = NULL;
+    list_Ant_R_Canal3 = NULL;
+
+
     // Se inicializa SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) != 0) {
         printf("error initializing SDL:%s\n", SDL_GetError());
@@ -164,39 +175,7 @@ int main() {
     int queenAntRequested = 0;
 
     //Inicializamos los calendarizadores
-    synchronizerInit();
-
-    scheduler_t * schedulerMain1 = malloc(sizeof (scheduler_t));
-    schedulerMain1->funcion_calendarizador = receiveThreads;
-    schedulerMain1->ant_list_ready_a = NULL;
-    schedulerMain1->ant_list_ready_b = NULL;
-    schedulerMain1->zombie_ants_a = NULL;
-    schedulerMain1->zombie_ants_b =NULL;
-    schedulerMain1->canalNumber=1;
-    equidad_Init(schedulerMain1);
-
-    scheduler_t * schedulerMain2 = malloc(sizeof (scheduler_t));
-    schedulerMain2->funcion_calendarizador = receiveThreads;
-    schedulerMain2->ant_list_ready_a = NULL;
-    schedulerMain2->ant_list_ready_b = NULL;
-    schedulerMain2->zombie_ants_a = NULL;
-    schedulerMain2->zombie_ants_b =NULL;
-    schedulerMain2->canalNumber=2;
-    equidad_Init(schedulerMain2);
-
-    scheduler_t * schedulerMain3 = malloc(sizeof (scheduler_t));
-    schedulerMain3->funcion_calendarizador = receiveThreads;
-    schedulerMain3->ant_list_ready_a = NULL;
-    schedulerMain3->ant_list_ready_b = NULL;
-    schedulerMain3->zombie_ants_a = NULL;
-    schedulerMain3->zombie_ants_b =NULL;
-    schedulerMain3->canalNumber=3;
-    equidad_Init(schedulerMain3);
-
-   schedulerList = malloc(sizeof (scheduler_t)*3);
-   schedulerList[0] = schedulerMain1;
-   schedulerList[1] = schedulerMain2;
-   schedulerList[2] = schedulerMain3;
+    //synchronizerInit();
 
 
 
@@ -334,16 +313,7 @@ int main() {
 
         }
         //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
-        scheduler_t * schedulerInUse;
-        if (fila == 0 || fila == 1){
-            schedulerInUse = schedulerMain1;
-        }
-        else if(fila == 2 || fila == 3){
-            schedulerInUse = schedulerMain2;
-        }
-        else if(fila == 4 || fila == 5){
-            schedulerInUse = schedulerMain3;
-        }
+
         drawBackground(rend, background_t, anthill_t, antHill1_r, antHill2_r, horizontal_roads, verticals_roads,
                        mini_roads, canal_road);
         drawCells(rend);
@@ -358,20 +328,20 @@ int main() {
 
             enum antType type = black;
 
-            spawnAnt(fila,4,type,side,filas,schedulerInUse);
+            spawnAnt(fila,type,side,filas);
             blackAntRequested = 0;
         }
         if (queenAntRequested){
 
             enum antType type = queen;
-            spawnAnt(fila,4,type,side,filas,schedulerInUse);
+            spawnAnt(fila,type,side,filas);
             queenAntRequested = 0;
         }
 
 
         if (redAntRequested){
             enum antType type = red;
-            spawnAnt(fila,4,type,side,filas,schedulerInUse);
+            spawnAnt(fila,type,side,filas);
             redAntRequested = 0;
         }
         updateNPC(rend, filas);

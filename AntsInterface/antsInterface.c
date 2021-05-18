@@ -139,7 +139,7 @@ void* startAntMotion(void* params){
 
             }
             //CEThread_yield();
-            
+
         }
 
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
@@ -169,7 +169,7 @@ void postionInitialAnt(listNode_t list, int antCount){
                     return;
                 }
                 else if (ants[antCount].side == 'r'){
-                    ants[antCount].col_dest = (STACKMAX + COLAMAX - 1) + i;
+                    ants[antCount].col_dest = (STACKMAX + COLAMAX) + i;
                     return;
                 }
             }
@@ -288,8 +288,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
         }
 
         ants[antCounter].fila_act = fila;
-        if(side == 'l') ants[antCounter].col_act = 0;
-        if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
+
 //        ants[antCounter].col_dest = STACKMAX;
 
         ants[antCounter].size.h *= 0.06;
@@ -303,8 +302,14 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
         ants[antCounter].passedBridge = 0;
 
         int col ;
-        if (side == 'l' ) col = ants[antCounter].col_act;
-        else if (side == 'r') col = ants[antCounter].col_act;
+        if (side == 'l' ) {
+            ants[antCounter].col_act = 0;
+            col = ants[antCounter].col_act;}
+        else if (side == 'r'){
+
+            ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
+            col = ants[antCounter].col_act;
+        }
 
         ants[antCounter].finalX = filas[fila][col]->x;
         ants[antCounter].finalY = filas[fila][col]->y;

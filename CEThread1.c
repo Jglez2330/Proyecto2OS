@@ -3,8 +3,9 @@
 //
 #define QUANTUM 1000
 #define Channels 3
-#include "CEThread.h"
 /*
+#include "CEThread1.h"
+
 
 int globalTID = 0;
 int current_channel = 0;

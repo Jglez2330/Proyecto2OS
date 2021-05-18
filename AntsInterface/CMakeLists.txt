@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD 11)
 
 
 
-add_executable(AntsInterface main.c  ../CEThread.c ../CEThread.h ../Scheduler/LinkedList.c ../Scheduler/LinkedList.h ../Scheduler/Scheduler.c ../Scheduler/Scheduler.h ../Synchronizer/synchronizer.c ../Synchronizer/synchronizer.h  )
+add_executable(AntsInterface main.c ../CEThread1.c ../CEThread1.h ../Scheduler/LinkedList.c ../Scheduler/LinkedList.h ../Scheduler/Scheduler.c ../Scheduler/Scheduler.h ../Synchronizer/synchronizer.c ../Synchronizer/synchronizer.h )
 target_link_libraries(AntsInterface m confuse)
 
 find_package(SDL2 REQUIRED)

@@ -13,7 +13,7 @@ listNode_t* schedulerInit(listNode_t* listResult){
         return NULL;
     }
 
-    switch ( listResult->dataInfo->scheduler_Selected)
+    switch (listResult->dataInfo->scheduler_Selected)
     {
         case 0:
             printf("\nRR");

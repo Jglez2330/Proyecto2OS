@@ -59,7 +59,10 @@ typedef struct Ant{
     int antId;
     int sentHome;
     int inStack;
+    int notSorting;
     int passedBridge;
+    int finalX;
+    int finalY;
     dataItem dataItem;
 
 

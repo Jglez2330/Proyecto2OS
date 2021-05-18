@@ -1,9 +1,9 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-
+#include "../Scheduler/Scheduler.h"
 #include <pthread.h>
-
+#include <unistd.h>
 
 struct Params {
 
@@ -58,7 +58,39 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     }
     printf("Initialize NPC succesfull\n");
 }
+//[4,2,3,0]
+//4 == 4
 
+void setMovingAnts(){
+    for (int i = 0; i < antCounter ; i++ ){
+        ants[antCounter].notSorting = 0;
+        ants[antCounter].waiting = 0;
+    }
+}
+void postionAllAnt(listNode_t list, Matrix *filas[6] ){
+        printf("\nREORDENANDO \n");
+    int listSize = getCount_t(&list) + 1;
+//    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
+    for(int i = 0; i < listSize;i++){
+//        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
+        for (int j = 0; j <= antCounter ;j++){
+            if(getNode_t(&list, i)->antId == ants[j].antId){
+//                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
+                if (ants[j].side == 'l') {
+                    ants[j].col_dest = (STACKMAX - 1) - i;
+                    ants[antCounter].finalX = filas[ants[antCounter].fila_dest][(STACKMAX - 1) - i]->x;
+                    ants[antCounter].finalY = filas[ants[antCounter].fila_dest][(STACKMAX - 1) - i]->y;
+                    printf("Columna asignada %i a hormiga %i \n ", (STACKMAX - 1) - i, ants[j].antId);
+
+                }
+//                else if (ants[j].side == 'r'){
+//                    ants[j].col_dest = (STACKMAX + COLAMAX - 1) + i;
+//
+//                }
+            }
+        }
+    }
+}
 
 void* startAntMotion(void* params){
     struct Params * p = params;
@@ -83,13 +115,22 @@ void* startAntMotion(void* params){
 //            ants[p->antId].dataItem
 //            printf("Largo Canal : %i\n", getCount_t(list_Ant_L_Canal1) + 1);
             if (getCount_t(list_Ant_L_Canal1) + 1 == 5){
-                printf("Hola mundo!\n");
+               // sleep(3);
+//                printf("Hola mundo!\n");
+//                printList_t(list_Ant_L_Canal1);
+                schedulerInit(list_Ant_L_Canal1);
+//                printList_t(list_Ant_L_Canal1);
+                setMovingAnts();
+                postionAllAnt(*list_Ant_L_Canal1, p->filas);
+                //sleep(10);
+
+
             }
             //CEThread_yield();
             continue;
         }
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
-            moveAntInStack(p->antId,  ants[p->antId].side, p->filas);
+            moveAntInStack(p->antId, p->filas);
             //CEThread_yield();
             continue;
         }
@@ -110,7 +151,7 @@ void postionInitialAnt(listNode_t list, int antCount){
 //                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
                 if (ants[antCount].side == 'l') {
                     ants[antCount].col_dest = (STACKMAX - 1) - i;
-                    printf("Columna asignada %i \n", ants[antCount].col_dest);
+//                    printf("Columna asignada %i \n", ants[antCount].col_dest);
                     return;
                 }
                 else if (ants[antCount].side == 'r'){
@@ -123,28 +164,7 @@ void postionInitialAnt(listNode_t list, int antCount){
     }
 }
 
-void postionAllAnt(listNode_t list){
-    int listSize = getCount_t(&list) + 1;
-//    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
-    for(int i = 0; i < listSize;i++){
-//        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
-        for (int j = 0; j <= antCounter ;j++){
-            if(getNode_t(&list, i)->antId == ants[j].antId){
-//                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
-                if (ants[j].side == 'l') {
-                    ants[j].col_dest = (STACKMAX - 1) - i;
-                    printf("Columna asignada %i \n", (STACKMAX - 1) - i);
 
-                }
-                else if (ants[j].side == 'r'){
-                    ants[j].col_dest = (STACKMAX + COLAMAX - 1) + i;
-
-                }
-            }
-        }
-
-    }
-}
 
 void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
     if(antCounter < maxAnts) {
@@ -156,11 +176,11 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
                 ants[antCounter].speed = 1;
 
                 hormiga0->state = 0;
-                hormiga0->priority= 10;
-                hormiga0->var_SJF = 4;
-                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
-                hormiga0->rms_C = 1;
-                hormiga0->rms_P = 6;
+                hormiga0->priority= 30;
+                hormiga0->var_SJF = 7;
+//                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
+                hormiga0->rms_C = 6;
+                hormiga0->rms_P = 18;
                 //hormiga0->tid = toledoAnt_1;
                 hormiga0->column = 0;
                 hormiga0->row = 0;
@@ -192,11 +212,11 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
                 ants[antCounter].speed = 2;
 
                 hormiga0->state = 0;
-                hormiga0->priority= 10;
-                hormiga0->var_SJF = 4;
-                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
-                hormiga0->rms_C = 1;
-                hormiga0->rms_P = 6;
+                hormiga0->priority= 20;
+                hormiga0->var_SJF = 6;
+//                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
+                hormiga0->rms_C = 2;
+                hormiga0->rms_P = 9;
                 //hormiga0->tid = toledoAnt_1;
                 hormiga0->column = 0;
                 hormiga0->row = 0;
@@ -254,70 +274,65 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
         }
 
         ants[antCounter].fila_act = fila;
-        if(side == 'l') ants[antCounter].col_act = -1;
+        if(side == 'l') ants[antCounter].col_act = 0;
         if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
 //        ants[antCounter].col_dest = STACKMAX;
 
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
+        ants[antCounter].notSorting = 1;
 
         ants[antCounter].type = type;
         ants[antCounter].antId = antCounter;
         ants[antCounter].sentHome = 0;
         ants[antCounter].passedBridge = 0;
 
+        int col ;
+        if (side == 'l' ) col = ants[antCounter].col_act;
+        else if (side == 'r') col = ants[antCounter].col_act;
+
+        ants[antCounter].finalX = filas[fila][col]->x;
+        ants[antCounter].finalY = filas[fila][col]->y;
+
 
         if (fila == 0){
-//            printf("Va para fila cero\n");
-                //list = list_Ant_L_Canal1;
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal1) + 1);
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_L_Canal1, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal1) + 1);
             postionInitialAnt(*list_Ant_L_Canal1, antCounter);
         }
         else if (fila == 1){
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
 
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal1) + 1);
             append(&list_Ant_R_Canal1, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal1) + 1);
             postionInitialAnt(*list_Ant_R_Canal1, antCounter);
 
-         //list = list_Ant_R_Canal1;
+
             }
 
         else if (fila == 2){
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal2) + 1);
+
             append(&list_Ant_L_Canal2, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal2) + 1);
             postionInitialAnt(*list_Ant_L_Canal2, antCounter);
 
         }
         else if (fila == 3){
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal2) + 1);
+
             append(&list_Ant_R_Canal2, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal2) + 1);
             postionInitialAnt(*list_Ant_R_Canal2, antCounter);
 
         }
 
         else if (fila == 4){
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal3) + 1);
             append(&list_Ant_L_Canal3, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_L_Canal3) + 1);
             postionInitialAnt(*list_Ant_L_Canal3, antCounter);
 
         }
         else if (fila == 5) {
-//            printf("Antes : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal3) + 1);
             append(&list_Ant_R_Canal3, &ants[antCounter].dataItem);
-//            printf("Despues : Largo Canal : %i\n", getCount_t(list_Ant_R_Canal3) + 1);
             postionInitialAnt(*list_Ant_R_Canal3, antCounter);
         }
 
-       /* printf("Antes : Largo Canal : %i\n", getCount_t(list) + 1);
-        push_t(&list, &ants[antCounter].dataItem);
-        printf("Despues : Largo Canal : %i\n", getCount_t(list) + 1);*/
 
 
         printf("Col: %i \n",ants[antCounter].col_dest);

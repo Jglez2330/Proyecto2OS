@@ -1,23 +1,21 @@
 //
-// Created by leahycarlos21 on 6/5/21.
+// Created by jglez2330 on 17/5/21.
 //
 
-#include "LinkedList.h"
+#include "CEThread_List.h"
 
-
-
-void push_t(struct listNode_t **start_ref, dataItem  * dataInfo)
+void push_t_thread(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo)
 {
     struct listNode_t *ptr1 = (struct listNode_t*)malloc(sizeof(struct listNode_t));
-    ptr1->dataInfo = dataInfo;
+    ptr1->threadInfo = threadInfo;
     ptr1->next = *start_ref;
     *start_ref = ptr1;
 }
-void append(struct listNode_t** head_ref, dataItem  * dataInfo)
+void append_thread(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo)
 {
     struct listNode_t* new_node = (struct listNode_t*) malloc(sizeof(struct listNode_t));
     struct listNode_t *last = *head_ref;
-    new_node->dataInfo  = dataInfo;
+    new_node->threadInfo  = threadInfo;
     new_node->next = NULL;
 
 
@@ -58,17 +56,17 @@ void deleteNodePosition_thread(struct listNode_t **head_ref, int position)
     temp->next = next;
 }
 
-void deleteNodeAntId_t(struct listNode_t** head_ref,int antId)
+void deleteNodeTID_t_thread(struct listNode_t** head_ref, CEThread_t key)
 {
     int count = 0;
 
     struct listNode_t* temp = *head_ref;
-    while (temp->dataInfo->antId!= antId && temp!=NULL)
+    while (temp->threadInfo->tid!= key && temp!=NULL)
     {
         temp = temp->next;
         count ++;
     }
-    deleteNodePosition(head_ref,count);
+    deleteNodePosition_thread(head_ref, count);
 }
 
 void deleteList_thread(struct listNode_t** head_ref){
@@ -83,15 +81,14 @@ void deleteList_thread(struct listNode_t** head_ref){
     *head_ref = NULL;
 }
 
-dataItem * getNode_t(struct listNode_t* head, int index){
-
+CEThread_treadInfo* getNode_t_thread(struct listNode_t* head, int index){
 
     struct listNode_t* current = head;
 
     int count = 0;
     while (current != NULL) {
         if (count == index)
-            return (current->dataInfo);
+            return (current->threadInfo);
         count++;
         current = current->next;
     }
@@ -99,53 +96,14 @@ dataItem * getNode_t(struct listNode_t* head, int index){
 }
 
 
-void printList_t_thread(struct listNode_t *start)
-{
-    struct listNode_t *temp = start;
-    printf("\n");
 
-    while (temp!=NULL)
-    {
-        printf("||| Prioridad %d - ANT ID %i  - Time SJF %i - PERIOD %f||| ", temp->dataInfo->priority, temp->dataInfo->antId, temp->dataInfo->var_SJF, temp->dataInfo->rms_P);
-        temp = temp->next;
-    }
-    printf("\n");
 
-}
-
-void bubbleSort_t_thread(struct listNode_t *start, int typeSort)
-{
-    int swapped, i;
-    struct listNode_t *ptr1;
-    struct listNode_t *lptr = NULL;
-
-    if (start == NULL)
-        return;
-    do{
-        swapped = 0;
-        ptr1 = start;
-
-        while (ptr1->next != lptr)
-        {
-            if (((ptr1->dataInfo->priority > ptr1->next->dataInfo->priority) && (PRIORITY == typeSort)) ||
-                    ((ptr1->dataInfo->var_SJF > ptr1->next->dataInfo->var_SJF) && (SJF == typeSort))
-                     ||((ptr1->dataInfo->rms_P > ptr1->next->dataInfo->rms_P) && (PERIOD == typeSort)))
-            {
-                swap(ptr1, ptr1->next);
-                swapped = 1;
-            }
-            ptr1 = ptr1->next;
-        }
-        lptr = ptr1;
-    }
-    while (swapped);
-}
 
 void swap_thread(struct listNode_t *a, struct listNode_t *b){
 
-    struct Ant *temp   = a->dataInfo;
-    a->dataInfo = b->dataInfo;
-    b->dataInfo = temp;
+    CEThread_treadInfo *temp   = a->threadInfo;
+    a->threadInfo = b->threadInfo;
+    b->threadInfo = temp;
 }
 
 int getCount_t_thread(struct listNode_t* head)
@@ -157,18 +115,20 @@ int getCount_t_thread(struct listNode_t* head)
         count++;
         current = current->next;
     }
-    return count -1;
+    return count;
 }
-/*void listCycle_t(struct listNode_t** head){
-    CEThread_treadInfo* listItem= getNode_t(*head ,  0);
+/*void listCycle_t_thread(struct listNode_t** head){
+    CEThread_treadInfo* listItem= getNode_t_thread(*head ,  0);
 
-    append(head,listItem);
-    deleteNodePosition(head,0);
+    append_thread(head,listItem);
+    deleteNodePosition_thread(head,0);
 }*/
 
 void listCycle_t_thread(struct listNode_t** head){
     int k = 1;
-    struct listNode_t* current = *head_ref;
+
+
+    struct listNode_t* current = *head;
 
     int count = 1;
     while (count < k && current != NULL) {
@@ -192,12 +152,11 @@ void listCycle_t_thread(struct listNode_t** head){
 }
 
 
-dataItem * getFront_t(struct listNode_t* head){
-
+CEThread_treadInfo* getFront_t_thread(struct listNode_t* head){
 
     if(head == NULL){
         return NULL;
     }
-    return getNode_t(head,0);
+    return getNode_t_thread(head, 0);
 
 }

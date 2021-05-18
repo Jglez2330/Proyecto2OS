@@ -96,12 +96,14 @@ void* startAntMotion(void* params){
     }
 }
 void postionAnt(){
-    int listSize = getCount_t(list_Ant_A_Canal1)+1;
-    for(int i = 0; i < listSize;i++ ){
-        for (int j = 0; j < antCounter ;j++){
-            if(list_Ant_A_Canal1->dataInfo->antId == j){
-                printf("Se le va a asignar una columna a la hormiga %i  \n", STACKMAX);
-                ants[j].col_dest = STACKMAX;
+    int listSize = getCount_t(list_Ant_A_Canal1) + 1;
+    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
+    for(int i = 0; i < listSize;i++){
+        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
+        for (int j = 0; j <= antCounter ;j++){
+            if(getNode_t(list_Ant_A_Canal1, i)->antId == ants[j].antId){
+                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
+                ants[j].col_dest = (STACKMAX - 1) - j;
             }
         }
 
@@ -159,6 +161,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
                 hormiga0->column = 0;
                 hormiga0->row = 0;
                 //dataItem  * dataInfo ;
+                hormiga0->antId = antCounter;
                 ants[antCounter].dataItem = *hormiga0;
 
                 if(side == 'r' ){
@@ -189,6 +192,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
                 hormiga0->column = 0;
                 hormiga0->row = 0;
                 //dataItem  * dataInfo ;
+                hormiga0->antId = antCounter;
                 ants[antCounter].dataItem = *hormiga0;
 
                 if(side == 'r' ){
@@ -212,7 +216,7 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].fila_act = fila;
         if(side == 'l') ants[antCounter].col_act = -1;
         if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
-        ants[antCounter].col_dest = STACKMAX;
+//        ants[antCounter].col_dest = STACKMAX;
 
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;

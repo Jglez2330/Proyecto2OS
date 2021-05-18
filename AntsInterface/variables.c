@@ -76,7 +76,7 @@ struct AntSprites{
 
 const int maxAnts = MAXANTS;
 struct Ant ants[MAXANTS];
-int antCounter = 100;
+int antCounter = 0;
 int w_ant;
 int h_ant;
 int cellSize;

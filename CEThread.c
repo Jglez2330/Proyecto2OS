@@ -4,7 +4,7 @@
 #define QUANTUM 1000
 #define Channels 3
 #include "CEThread.h"
-
+/*
 
 int globalTID = 0;
 int current_channel = 0;
@@ -128,7 +128,6 @@ CEThread_attr_t *CEThread_default_attr() {
 }
 
 void default_algo(int sig) {
-    /* block the signal */
     sigprocmask(SIG_BLOCK, &alarm_timeout_thread, NULL);
     do{
         current_channel++;
@@ -151,7 +150,6 @@ void default_algo(int sig) {
         swapcontext(prev->thread_context, current_thread_running->thread_context);
         return;
     }
-    /* if no thread in the ready queue, resume execution */
     listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL) {
         prev = current_thread_running;
@@ -167,7 +165,6 @@ void default_algo(int sig) {
         swapcontext(prev->thread_context, current_thread_running->thread_context);
         return;
     }
-    /* get the next runnable thread and use preemptive scheduling */
     prev = current_thread_running;
     if (current_thread_running->state == RUNNING) {
         current_thread_running->state = READY;
@@ -178,7 +175,6 @@ void default_algo(int sig) {
     next->state = RUNNING;
     current_thread_running = next;
 
-    /* unblock the signal */
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     swapcontext(prev->thread_context, current_thread_running->thread_context);
 
@@ -192,7 +188,6 @@ void CEThread_end(void *pVoid) {
         exit((int) pVoid);
     }
 
-    /* if the main thread call CEThread_end */
     if (current_thread_running->tid == 1) {
         while (!(getFront_t(list_threads) == NULL)) {
             sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
@@ -215,16 +210,13 @@ void CEThread_end(void *pVoid) {
         current_thread_running = getFront_t(schedulers[0]->ant_list_ready_a);
     current_thread_running->state = RUNNING;
 
-    /* free up memory allocated for exit thread */
     free(prev->thread_context->uc_stack.ss_sp);
     free(prev->thread_context);
     prev->thread_context = NULL;
 
-    /* mark the exit thread as DONE and add to zombie_queue */
     prev->retval = pVoid;
     prev->joining = 0;
 
-    /* unblock alarm signal and setcontext for next thread */
     sigprocmask(SIG_UNBLOCK, &alarm_timeout_thread, NULL);
     setcontext(current_thread_running->thread_context);
     return;
@@ -241,7 +233,6 @@ CEThread_treadInfo *get_next_thread() {
         next = getFront_t(schedulers[0]->ant_list_ready_a);
         return next;
     }
-    /* if no thread in the ready queue, resume execution */
 
     listNode_t * list_threads = (*schedulers[current_channel]->funcion_calendarizador)(schedulers[current_channel]);
     if (getFront_t(list_threads) == NULL)
@@ -412,3 +403,4 @@ void unblock_threads_from_list(listNode_t* list) {
 scheduler_t** get_schedulers(){
     return schedulers;
 }
+*/

@@ -34,7 +34,7 @@ typedef struct {
 
 static struct itimerval thread_timer;
 sigset_t alarm_timeout_thread;
-static CEThread_treadInfo * current_thread_running;
+//static CEThread_treadInfo * current_thread_running;
 
 void default_algo (int sig);
 
@@ -42,7 +42,7 @@ void default_algo (int sig);
 
 void CEThread_end(void *pVoid);
 
-
+/*
 int CEThread_create(CEThread_t *thread, void *rutine, void *arg, scheduler_t* scheduler, int channel);
 void CEThread_start(void* (*start_routine)(void*), void* args);
 CEThread_attr_t* CEThread_default_attr();
@@ -58,4 +58,5 @@ int CEThread_mutex_destroy(CEThread_mutex_t* mutex);
 void unblock_threads_from_list(listNode_t* list);
 CEThread_treadInfo * get_thread_zombie(CEThread_t thread);
 CEThread_treadInfo * get_thread_ready(CEThread_t thread);
-#endif //PROYECTO2OS_CETHREAD_H
+*/
+ #endif //PROYECTO2OS_CETHREAD_H

@@ -1,3 +1,4 @@
+#include "../Scheduler/LinkedList.h"
 
 bool verifyXColition(int x1,int x2){
     int distance = abs(x1-x2);

@@ -59,6 +59,7 @@ int initializeNPC(SDL_Renderer* rend, SDL_Window *win){
     printf("Initialize NPC succesfull\n");
 }
 
+
 void* startAntMotion(void* params){
     struct Params * p = params;
     struct timespec {
@@ -74,33 +75,62 @@ void* startAntMotion(void* params){
 
         if (ants[p->antId].sentHome){
             sendHome(p->antId,ants[p->antId].side);
-            CEThread_yield();
+            //CEThread_yield();
             continue;
         }
 
         if (ants[p->antId].waiting){
-            CEThread_yield();
+            //CEThread_yield();
             continue;
         }
         if (positionInInitialRow( p->antId, ants[p->antId].side)){
             moveAntInStack(p->antId,  ants[p->antId].side, p->filas);
-            CEThread_yield();
+            //CEThread_yield();
             continue;
         }
         else{
-            CEThread_yield();
+            //CEThread_yield();
             continue;
         }
 
     }
 }
-void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6], scheduler_t *scheduler ){
-    if(antCounter < maxAnts) {
-        switch(type){
-            case black:
-                ants[antCounter].speed = 1;
-                if(side == 'r' ){
+void postionAnt(){
+    int listSize = getCount_t(list_Ant_A_Canal1)+1;
+    for(int i = 0; i < listSize;i++ ){
+        for (int j = 0; j < antCounter ;j++){
+            if(list_Ant_A_Canal1->dataInfo->antId == j){
+                printf("Se le va a asignar una columna a la hormiga %i  \n", STACKMAX);
+                ants[j].col_dest = STACKMAX;
+            }
+        }
 
+    }
+}
+
+void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas[6] ){
+    if(antCounter < maxAnts) {
+        dataItem  * hormiga0 = malloc(sizeof (dataItem));
+        switch(type){
+            //dataItem  * dataItem ;
+
+            case black:
+                hormiga0->state = 0;
+                hormiga0->priority= 10;
+                hormiga0->var_SJF = 4;
+                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
+                hormiga0->rms_C = 1;
+                hormiga0->rms_P = 6;
+                //hormiga0->tid = toledoAnt_1;
+                hormiga0->column = 0;
+                hormiga0->row = 0;
+                //dataItem  * dataInfo ;
+                hormiga0->antId = antCounter;
+                ants[antCounter].dataItem = *hormiga0;
+
+               // ants[antCounter].speed = 1;
+                //ants[antCounter].dataItem = ;
+                if(side == 'r' ){
                     SDL_QueryTexture(antSprites.blackLeft1, NULL, NULL,&(ants[antCounter].size.w), &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = blackLeft1;
                     ants[antCounter].size.x = antHill_x + distanceBetweenHills - 20;
@@ -118,6 +148,19 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
                 break;
             case red:
                 ants[antCounter].speed = 1.5;
+
+                hormiga0->state = 0;
+                hormiga0->priority= 10;
+                hormiga0->var_SJF = 4;
+                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
+                hormiga0->rms_C = 1;
+                hormiga0->rms_P = 6;
+                //hormiga0->tid = toledoAnt_1;
+                hormiga0->column = 0;
+                hormiga0->row = 0;
+                //dataItem  * dataInfo ;
+                ants[antCounter].dataItem = *hormiga0;
+
                 if(side == 'r' ){
 
                     SDL_QueryTexture(antSprites.redLeft1, NULL, NULL, &(ants[antCounter].size.w), &(ants[antCounter].size.h));
@@ -135,6 +178,19 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
                 break;
             case queen:
                 ants[antCounter].speed = 1;
+
+                hormiga0->state = 0;
+                hormiga0->priority= 10;
+                hormiga0->var_SJF = 4;
+                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
+                hormiga0->rms_C = 1;
+                hormiga0->rms_P = 6;
+                //hormiga0->tid = toledoAnt_1;
+                hormiga0->column = 0;
+                hormiga0->row = 0;
+                //dataItem  * dataInfo ;
+                ants[antCounter].dataItem = *hormiga0;
+
                 if(side == 'r' ){
 
                     SDL_QueryTexture(antSprites.queenLeft1, NULL, NULL, &(ants[antCounter].size.w), &(ants[antCounter].size.h));
@@ -156,7 +212,8 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].fila_act = fila;
         if(side == 'l') ants[antCounter].col_act = -1;
         if(side == 'r') ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
-        ants[antCounter].col_dest = columna;
+//        ants[antCounter].col_dest = columna;
+
         ants[antCounter].size.h *= 0.06;
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
@@ -168,6 +225,22 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         ants[antCounter].passedBridge = 0;
 
 
+        push_t(&list_Ant_A_Canal1, &ants[antCounter].dataItem);
+
+        postionAnt();
+
+//        dataList  * hormiga0 = malloc(sizeof (dataList));
+//        hormiga0->state = 0;
+//        hormiga0->priority= 10;
+//        hormiga0->var_SJF = 4;
+//        hormiga0->scheduler_Selected = scheduler_Selected;
+//        hormiga0->rms_C = 1;
+//        hormiga0->rms_P = 6;
+//        hormiga0->tid = toledoAnt_1;
+//        hormiga0->column = 0;
+//        hormiga0->row = 0;
+
+
 
         //CEThread_t thread1;
         pthread_t thread1;
@@ -175,9 +248,9 @@ void spawnAnt(int fila, int columna, enum antType type, char side, Matrix *filas
         param = malloc(sizeof(struct Params));
         param->antId = ants[antCounter].antId;
         param->filas = filas;
-        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
-        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
-//        pthread_create( &thread1,NULL,startAntMotion, param);
+//        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
+//        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
+        pthread_create( &thread1,NULL,startAntMotion, param);
 
         antCounter++;
     }

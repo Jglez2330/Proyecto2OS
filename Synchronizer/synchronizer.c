@@ -9,7 +9,7 @@ int synchronizerInit(){
     char pathName[30];
 
     for(int i = 0;i<channelCount;i++){
-        CEThread_mutex_init(&mutexes[i],NULL);
+       // CEThread_mutex_init(&mutexes[i],NULL);
         cfg_opt_t opts[] = {
                 CFG_SIMPLE_INT("Calendarizador", &valuesChannel[i].calendarizador),
                 CFG_SIMPLE_INT("MetodoControlFlujo", &valuesChannel[i].metodoControlFlujo),
@@ -30,7 +30,7 @@ int synchronizerInit(){
 
     }
     return 0;
-}
+}/*
 int equidad_Init(scheduler_t * scheduler){
     if(scheduler->canalNumber==0) {
         scheduler->scheduler_Selected = valuesChannel[0].calendarizador;
@@ -89,4 +89,4 @@ int tico_Init(scheduler_t * scheduler) {
 
 }
 
-
+*/

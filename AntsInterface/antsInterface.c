@@ -105,7 +105,7 @@ _Noreturn void* startAntMotion(void* params){
     struct timespec tiempo ;
     tiempo.tv_sec = 0;
     tiempo.tv_nsec = 100000000;
-    schedulerInit(list_Ant_L_Canal1);
+
     while (1){
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
         nanosleep(&tiempo,&tiempo);
@@ -122,6 +122,7 @@ _Noreturn void* startAntMotion(void* params){
 
             if (ants[p->antId].fila_act == 0 && ants[p->antId].sorted == 0){
                 setMovingAnts();
+                schedulerInit(list_Ant_L_Canal1);
                 postionAllAnt(*list_Ant_L_Canal1, p->filas);
 
                 moveAntInStack(p->antId, p->filas);
@@ -129,6 +130,7 @@ _Noreturn void* startAntMotion(void* params){
             }
             else if(ants[p->antId].fila_act == 1 && ants[p->antId].sorted == 0 ){
                 setMovingAnts();
+                schedulerInit(list_Ant_R_Canal1);
                 postionAllAnt(*list_Ant_R_Canal1, p->filas);
 
                 moveAntInStack(p->antId, p->filas);
@@ -138,13 +140,15 @@ _Noreturn void* startAntMotion(void* params){
 
             else if(ants[p->antId].fila_act == 2 && ants[p->antId].sorted == 0){
                 setMovingAnts();
+                schedulerInit(list_Ant_L_Canal2);
                 postionAllAnt(*list_Ant_L_Canal2, p->filas);
-
+                printList_t(list_Ant_L_Canal2);
                 moveAntInStack(p->antId, p->filas);
                 ants[p->antId].sorted = 1;
             }
             else if(ants[p->antId].fila_act == 3 && ants[p->antId].sorted == 0){
                 setMovingAnts();
+                schedulerInit(list_Ant_R_Canal2);
                 postionAllAnt(*list_Ant_R_Canal2, p->filas);
 
                 moveAntInStack(p->antId, p->filas);
@@ -156,6 +160,7 @@ _Noreturn void* startAntMotion(void* params){
 
             else if(ants[p->antId].fila_act == 4 && ants[p->antId].sorted == 0){
                 setMovingAnts();
+                schedulerInit(list_Ant_L_Canal3);
                 postionAllAnt(*list_Ant_L_Canal3, p->filas);
 
                 moveAntInStack(p->antId, p->filas);
@@ -163,6 +168,7 @@ _Noreturn void* startAntMotion(void* params){
             }
             else if(ants[p->antId].fila_act == 5 && ants[p->antId].sorted == 0){
                 setMovingAnts();
+                schedulerInit(list_Ant_R_Canal3);
                 postionAllAnt(*list_Ant_R_Canal3, p->filas);
 
                 moveAntInStack(p->antId, p->filas);
@@ -360,24 +366,26 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6] ){
             }
 
         else if (fila == 2){
-
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_L_Canal2, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_L_Canal2, antCounter);
 
         }
         else if (fila == 3){
-
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_R_Canal2, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_R_Canal2, antCounter);
 
         }
 
         else if (fila == 4){
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_L_Canal3, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_L_Canal3, antCounter);
 
         }
         else if (fila == 5) {
+            ants[antCounter].dataItem.scheduler_Selected = 1; // TODO LEER ARCHIVO CANAL1
             append(&list_Ant_R_Canal3, &ants[antCounter].dataItem);
             postionInitialAnt(*list_Ant_R_Canal3, antCounter);
         }

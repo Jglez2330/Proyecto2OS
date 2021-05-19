@@ -136,7 +136,7 @@ _Noreturn void* startAntMotion(void* params){
             int id = getNode_t(list_Ant_L_Canal1, 0)->antId;
             ants[id].passingBridge = 1;
             if (spacesInBridge != 0  ){
-
+                //getNode_t(list_Ant_L_Canal1,0)->state = TERMINATED;
                 deleteNodePosition(&list_Ant_L_Canal1,0);
                 if(list_Ant_L_Canal1 ==NULL){
                     spacesInBridge-= 1;
@@ -150,7 +150,7 @@ _Noreturn void* startAntMotion(void* params){
             }
             semaforoC1 = !semaforoC1;
            // pthread_mutex_unlock(&mutex);
-            printf("\nSALIO MUTEX");
+            //printf("\nSALIO MUTEX");
             printList_t(list_Ant_L_Canal1);
 
             crossAnt(id);

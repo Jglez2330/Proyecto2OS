@@ -32,8 +32,54 @@ int synchronizerInit(){
     return 0;
 }
 
+typedef struct flujoCana{
+    int valorW_L;
+    int valorW_R;
+    int flagLado; // Si es 0 va de Izquierda a Derecha, Si es 1 va de Derecha a Izquierda
+
+}flujoCana;
+
+int flowControl(listNode_t * listIn){
+
+        if (getCount_t(listIn)  == -1){
+            return NULL;
+        }
+
+        switch (listIn->dataInfo->scheduler_Selected)
+        {
+            case 0:
+                printf("\nRR");  // Apropiativo
+
+                break;
+
+            case 1:
+            printf("Prioridad"); // No Apropiativo
+               // bubbleSort_t(listResult,PRIORITY);
+
+                break;
+            case 2:
+                printf("SJF"); // No apropiativo
+             //   bubbleSort_t(listResult,SJF);
+
+                break;
+            case 3:
+                printf("FCFS"); // NO apropiativo
+                //listResult = FCFS(listResult);
+                break;
+            case 4:
+                printf("\nTiempo Real"); //No apropiativo
+               // tiempoReal_Init(listResult);
+                break;
+
+            default:
+                printf("Doesnt found");
+
+        }
 
 
+
+
+    }
 
 
 /*

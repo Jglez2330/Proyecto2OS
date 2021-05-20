@@ -93,12 +93,14 @@ int semaforoC1 = 0;
 
 typedef struct channelAnts{
     long count_W; //Cuenta cuantos pasan por lado
-    long spaceInCanal; // largoCanal
+    long largoCanal; // largoCanal
+    long spacesInBridge;
     long timer;  //AL acabarse el timer, cambia de lado
     long sideFlag; // Señala cual lado debe moverse
     long channelNumber;
     long valueRMS;
     long countAntsWait;
+    long starFlow;
 
     listNode_t *list_Ants_L; //lista izquier
     listNode_t *list_Ants_R; //lista derecha

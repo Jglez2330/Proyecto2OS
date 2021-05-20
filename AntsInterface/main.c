@@ -27,15 +27,17 @@ int main() {
 
     for(int i = 0;i<channelCount;i++){
         channel_Ants[i].channelNumber = i;
-        channel_Ants[i].controlFLow = fileValues->metodoControlFlujo;
-        channel_Ants[i].scheduler_selected = fileValues->calendarizador;
-        channel_Ants[i].spaceInCanal = fileValues->largoCanal;
-        channel_Ants[i].countAntsWait = fileValues->cantidadHormigasOrdenadas;
-        channel_Ants[i].timer = fileValues->timeCambioLetrero;
-        channel_Ants[i].count_W = fileValues->parametroW;
-        channel_Ants[i].valueRMS = fileValues->tiempoMaximoRMS;
+        channel_Ants[i].controlFLow = fileValues[i].metodoControlFlujo;
+        channel_Ants[i].scheduler_selected = fileValues[i].calendarizador;
+        channel_Ants[i].largoCanal = fileValues[i].largoCanal;
+        channel_Ants[i].countAntsWait = fileValues[i].cantidadHormigasOrdenadas;
+        channel_Ants[i].timer = fileValues[i].timeCambioLetrero;
+        channel_Ants[i].count_W = fileValues[i].parametroW;
+        channel_Ants[i].valueRMS = fileValues[i].tiempoMaximoRMS;
         channel_Ants[i].list_Ants_L = NULL;
         channel_Ants[i].list_Ants_R = NULL;
+        channel_Ants[i].spacesInBridge = fileValues[i].largoCanal;
+
     }
 
 

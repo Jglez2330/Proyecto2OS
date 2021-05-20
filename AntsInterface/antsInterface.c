@@ -115,6 +115,57 @@ void crossAnt(int id) {
 int spacesInBridge = 3;
 int parameterW_C1 = 3;
 
+bool antsFlowBridge(int antId_in, Matrix *filas[6]){
+    if (ants[antId_in].passedBridge == 1) {
+        spacesInBridge += 1;
+        ants[antId_in].passedBridge = 2;
+        printf("\nANT id %i", ants[antId_in].antId);
+        printf("\nAumentando spacesInBrigde %i\n", spacesInBridge);
+    }
+    if (ants[antId_in].sentHome) {
+        sendHome(antId_in, ants[antId_in].side);
+        //CEThread_yield();
+        return 1;
+        //continue;
+    }
+    if (semaforoC1 == 1 && spacesInBridge != 0 && list_Ant_L_Canal1 != NULL && parameterW_C1 != 0) {
+        parameterW_C1--;
+        printf("\nspacesInBrigde %i\n", spacesInBridge);
+        // pthread_mutex_lock(&mutex);
+        //printList_t(list_Ant_L_Canal1);
+
+        //printList_t(list_Ant_L_Canal1);
+        int id = getNode_t(list_Ant_L_Canal1, 0)->antId;
+        ants[antId_in].passingBridge = 1;
+
+
+//            if (spacesInBridge != 0) {
+        printList_t(list_Ant_L_Canal1);
+        deleteNodePosition(&list_Ant_L_Canal1, 0);  //-----------------
+        printList_t(list_Ant_L_Canal1);
+        if (list_Ant_L_Canal1 == NULL) {
+            spacesInBridge -= 1;
+
+        } else {
+            setMovingAnts();
+            schedulerInit(list_Ant_L_Canal1);
+            postionAllAnt(*list_Ant_L_Canal1, filas);
+            spacesInBridge -= 1;
+        }
+//            }
+        //semaforoC1 = !semaforoC1;
+        // pthread_mutex_unlock(&mutex);
+        //printf("\nSALIO MUTEX");
+        //printList_t(list_Ant_L_Canal1);
+
+        crossAnt(id);
+
+//            semaforoC1  = !semaforoC1;
+    }
+
+
+
+}
 _Noreturn void *startAntMotion(void *params) {
     struct Params *p = params;
     struct timespec {
@@ -128,51 +179,55 @@ _Noreturn void *startAntMotion(void *params) {
     while (1) {
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
         nanosleep(&tiempo, &tiempo);
-        if (ants[p->antId].passedBridge == 1) {
-            spacesInBridge += 1;
-            ants[p->antId].passedBridge = 2;
-            printf("\nANT id %i", ants[p->antId].antId);
-            printf("\nAumentando spacesInBrigde %i\n", spacesInBridge);
-        }
-        if (ants[p->antId].sentHome) {
-            sendHome(p->antId, ants[p->antId].side);
-            //CEThread_yield();
+        bool continueFlag = antsFlowBridge(p->antId,p->filas);
+        if (continueFlag){
             continue;
         }
-        if (semaforoC1 == 1 && spacesInBridge != 0 && list_Ant_L_Canal1 != NULL && parameterW_C1 != 0) {
-            parameterW_C1--;
-            printf("\nspacesInBrigde %i\n", spacesInBridge);
-            // pthread_mutex_lock(&mutex);
-            //printList_t(list_Ant_L_Canal1);
-
-            //printList_t(list_Ant_L_Canal1);
-            int id = getNode_t(list_Ant_L_Canal1, 0)->antId;
-            ants[p->antId].passingBridge = 1;
-
-
-//            if (spacesInBridge != 0) {
-            printList_t(list_Ant_L_Canal1);
-            deleteNodePosition(&list_Ant_L_Canal1, 0);  //-----------------
-            printList_t(list_Ant_L_Canal1);
-            if (list_Ant_L_Canal1 == NULL) {
-                spacesInBridge -= 1;
-
-            } else {
-                setMovingAnts();
-                schedulerInit(list_Ant_L_Canal1);
-                postionAllAnt(*list_Ant_L_Canal1, p->filas);
-                spacesInBridge -= 1;
-            }
+//        if (ants[p->antId].passedBridge == 1) {
+//            spacesInBridge += 1;
+//            ants[p->antId].passedBridge = 2;
+//            printf("\nANT id %i", ants[p->antId].antId);
+//            printf("\nAumentando spacesInBrigde %i\n", spacesInBridge);
+//        }
+//        if (ants[p->antId].sentHome) {
+//            sendHome(p->antId, ants[p->antId].side);
+//            //CEThread_yield();
+//            continue;
+//        }
+//        if (semaforoC1 == 1 && spacesInBridge != 0 && list_Ant_L_Canal1 != NULL && parameterW_C1 != 0) {
+//            parameterW_C1--;
+//            printf("\nspacesInBrigde %i\n", spacesInBridge);
+//            // pthread_mutex_lock(&mutex);
+//            //printList_t(list_Ant_L_Canal1);
+//
+//            //printList_t(list_Ant_L_Canal1);
+//            int id = getNode_t(list_Ant_L_Canal1, 0)->antId;
+//            ants[p->antId].passingBridge = 1;
+//
+//
+////            if (spacesInBridge != 0) {
+//            printList_t(list_Ant_L_Canal1);
+//            deleteNodePosition(&list_Ant_L_Canal1, 0);  //-----------------
+//            printList_t(list_Ant_L_Canal1);
+//            if (list_Ant_L_Canal1 == NULL) {
+//                spacesInBridge -= 1;
+//
+//            } else {
+//                setMovingAnts();
+//                schedulerInit(list_Ant_L_Canal1);
+//                postionAllAnt(*list_Ant_L_Canal1, p->filas);
+//                spacesInBridge -= 1;
 //            }
-            //semaforoC1 = !semaforoC1;
-            // pthread_mutex_unlock(&mutex);
-            //printf("\nSALIO MUTEX");
-            //printList_t(list_Ant_L_Canal1);
-
-            crossAnt(id);
-
-//            semaforoC1  = !semaforoC1;
-        }
+////            }
+//            //semaforoC1 = !semaforoC1;
+//            // pthread_mutex_unlock(&mutex);
+//            //printf("\nSALIO MUTEX");
+//            //printList_t(list_Ant_L_Canal1);
+//
+//            crossAnt(id);
+//
+////            semaforoC1  = !semaforoC1;
+//        }
 //        if (ants[p->antId].passingBridge == 1){
 //
 //        }

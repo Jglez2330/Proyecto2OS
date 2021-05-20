@@ -453,69 +453,39 @@ void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *
 }
 void sendHome( int counter, char side){
 
-        int direction = 1;
-        if (side == 'l') direction = 1;
-        if (side == 'r') direction = -1;
+
         int entrance = antHill_y + 100;
         int disty = ants[counter].size.y - entrance;  //Distancia en y que le falta a la hormiga para entrar
 
         if(disty == 0) {  //Si la distancia es igual a cero entonces metemos la hormiga al hormiguero
-            int antHillpos;
-            if(side == 'r') antHillpos = antHill_x - 100;
-            if(side == 'l') antHillpos = vertical_road3_x + 300;
-            if (ants[counter].size.x != antHillpos) {
-                ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
-
-
+            int antHillposX;
+            if(ants[counter].side == 'r') antHillposX = antHill_x - 100;
+            if(ants[counter].side == 'l') antHillposX = vertical_road3_x + 300;
+            if (ants[counter].size.x != antHillposX) {
+                moveInX(counter, antHillposX);
                 return;
             }
-            if (ants[counter].size.x <= antHillpos ) return;
+            else return;
         }
         int distx;
-        if (side == 'r')distx = ants[counter].size.x - x_start_road;
-        if (side == 'l')distx = vertical_road3_x - ants[counter].size.x;
+        if (ants[counter].side == 'r') distx = ants[counter].size.x - x_start_road;
+        if (ants[counter].side == 'l') distx = vertical_road3_x - ants[counter].size.x;
 
-        if(distx > 0) {       //Movemos las hormigas hasta el camino vertical de la izquierda
-            if(abs(distx) <= 10){
-                ants[counter].size.x += direction * 1;
+    if(distx == 0) {
+        moveInY(counter,antHill_y + 100);
+        ants[counter].passingBridge = 0;
 
-            }
-            if(abs(distx) > 10){
-                ants[counter].size.x += direction * regularSpeed * ants[counter].speed;
-
-            }
-
-
-            return;
-        }
-        if(distx <= 0){
-            ants[counter].passingBridge = 0;
-            ants[counter].passedBridge = 1;
-        }
-        if(ants[counter].size.y < entrance) {
-
-            if (abs(disty) <= 10){
-                ants[counter].size.y += 1;
-            }
-            if (abs(disty) > 10){
-                ants[counter].size.y += regularSpeed * ants[counter].speed;
-            }
+        return;
+    }
+    else if(distx != 0 ) {       //Movemos las hormigas hasta el camino vertical de la izquierda
+        int destRoadX;
+        if (ants[counter].side == 'r') destRoadX =  x_start_road;
+        if (ants[counter].side == 'l') destRoadX = vertical_road3_x;
+        moveInX(counter,destRoadX);
+        return;
+    }
 
 
-            return;
-        }
-        if(ants[counter].size.y > entrance) {
-
-            if (abs(disty) <= 10){
-
-            } ants[counter].size.y -= 1;
-            if (abs(disty) > 10){
-                ants[counter].size.y -= regularSpeed * ants[counter].speed;
-            }
-
-
-            return;
-        }
 }
 
 bool positionInInitialRow( int counter, char side){
@@ -614,9 +584,10 @@ void moveAntInStack(int counter, Matrix *filas[6]){
 bool detectIfAntCross( int counter, char side){
     int delCol;
     if (side == 'l'){
-        delCol = STACKMAX + COLAMAX - 1;
+        delCol = STACKMAX + COLAMAX;
         if (ants[counter].col_act > delCol) {
             ants[counter].sentHome = 1;
+            if(ants[counter].passedBridge == 0) ants[counter].passedBridge = 1;
             return true;
         }
         else{
@@ -627,6 +598,7 @@ bool detectIfAntCross( int counter, char side){
         delCol = STACKMAX - 1;
         if (ants[counter].col_act < delCol){
             ants[counter].sentHome = 1;
+            if(ants[counter].passedBridge == 0) ants[counter].passedBridge = 1;
             return true;
         }
         else{

@@ -303,10 +303,6 @@ int main() {
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
-                        case SDL_SCANCODE_T:
-
-                            sendHomeRequested  = 1;
-                            break;
                         case SDL_SCANCODE_Y:
 
                             semaforoC1 = !semaforoC1;

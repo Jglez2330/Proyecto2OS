@@ -18,7 +18,7 @@ typedef struct dataItem{
     int channel;
     float rms_C;
     float rms_P;
-    int scheduler_Selected; // Indica el calendarizador a utilizar
+    long scheduler_Selected; // Indica el calendarizador a utilizar
     int column;
     int row;
     int antId;

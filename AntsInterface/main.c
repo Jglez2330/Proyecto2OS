@@ -12,21 +12,33 @@
 #include "../Scheduler/LinkedList.h"
 #include "functions.c"
 #include "antsInterface.c"
-
-
-
+#include "../Synchronizer/synchronizer.h"
 
 
 int main() {
 
 
-    list_Ant_L_Canal1 = NULL;
-    list_Ant_L_Canal2 = NULL;
-    list_Ant_L_Canal3 = NULL;
 
-    list_Ant_R_Canal1 = NULL;
-    list_Ant_R_Canal2 = NULL;
-    list_Ant_R_Canal3 = NULL;
+
+    //control de flujo para canales
+    channel_Ants = malloc(sizeof (channelAnts)*3);
+    synchronizerInit();
+
+
+    for(int i = 0;i<channelCount;i++){
+        channel_Ants[i].channelNumber = i;
+        channel_Ants[i].controlFLow = fileValues->metodoControlFlujo;
+        channel_Ants[i].scheduler_selected = fileValues->calendarizador;
+        channel_Ants[i].spaceInCanal = fileValues->largoCanal;
+        channel_Ants[i].countAntsWait = fileValues->cantidadHormigasOrdenadas;
+        channel_Ants[i].timer = fileValues->timeCambioLetrero;
+        channel_Ants[i].count_W = fileValues->parametroW;
+        channel_Ants[i].valueRMS = fileValues->tiempoMaximoRMS;
+        channel_Ants[i].list_Ants_L = NULL;
+        channel_Ants[i].list_Ants_R = NULL;
+    }
+
+
 
 
     // Se inicializa SDL

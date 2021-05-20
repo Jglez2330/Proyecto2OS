@@ -7,7 +7,7 @@
 
 
 
-listNode_t* schedulerInit(listNode_t* listResult){
+listNode_t* schedulerSort(listNode_t* listResult){
 
     if (getCount_t(listResult)  == -1){
         return NULL;
@@ -21,7 +21,7 @@ listNode_t* schedulerInit(listNode_t* listResult){
             break;
 
         case 1:
-//            printf("Prioridad");
+            printf("Prioridad");
             bubbleSort_t(listResult,PRIORITY);
 
             break;

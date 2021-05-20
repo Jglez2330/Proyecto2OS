@@ -65,6 +65,8 @@ typedef struct Ant{
     int finalX;
     int finalY;
     int sorted;
+    long canal;
+    long scheduler_selected;
     dataItem dataItem;
 
 
@@ -88,10 +90,19 @@ int cellSize;
 int colitionsFlag = 0;
 int semaforoC1 = 0;
 
-listNode_t * list_Ant_L_Canal1;
-listNode_t * list_Ant_L_Canal2;
-listNode_t * list_Ant_L_Canal3;
 
-listNode_t * list_Ant_R_Canal1;
-listNode_t * list_Ant_R_Canal2;
-listNode_t * list_Ant_R_Canal3;
+typedef struct channelAnts{
+    long count_W; //Cuenta cuantos pasan por lado
+    long spaceInCanal; // largoCanal
+    long timer;  //AL acabarse el timer, cambia de lado
+    long sideFlag; // Señala cual lado debe moverse
+    long channelNumber;
+    long valueRMS;
+    long countAntsWait;
+
+    listNode_t *list_Ants_L; //lista izquier
+    listNode_t *list_Ants_R; //lista derecha
+    long controlFLow;
+    long scheduler_selected;
+}channelAnts;
+channelAnts * channel_Ants;

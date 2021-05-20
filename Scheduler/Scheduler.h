@@ -50,7 +50,7 @@ typedef struct Thread_t{
 } CEThread_treadInfo;*/
 
 
-listNode_t* schedulerInit(listNode_t* listThreads);
+listNode_t* schedulerSort(listNode_t* listThreads);
 
 //listNode_t* receiveThreads(listNode_t* listResult);
 listNode_t* roundRobin (listNode_t* listResult);

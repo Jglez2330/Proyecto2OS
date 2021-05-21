@@ -573,9 +573,10 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
         }
     }
 }
-
+//TODO implementar  calen
 bool detectIfAntCross(int counter, char side) {
     int delCol;
+
     if (side == 'l') {
         delCol = STACKMAX + COLAMAX;
         if (ants[counter].col_act > delCol) {
@@ -583,6 +584,9 @@ bool detectIfAntCross(int counter, char side) {
             if (ants[counter].passedBridge == 0){
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
+                printf("\nEL MAE YA PASO!\n");
+
+
             }
             return true;
         } else {
@@ -596,7 +600,9 @@ bool detectIfAntCross(int counter, char side) {
             if (ants[counter].passedBridge == 0) {
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
+                printf("\nEL MAE YA PASO!\n");
             }
+
             return true;
         } else {
             return false;

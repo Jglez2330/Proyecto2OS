@@ -106,10 +106,12 @@ void crossAnt(int id) {
             if (ants[i].side == 'l') {
                 ants[i].col_dest = STACKMAX + COLAMAX + 2;
                 ants[i].dataItem.state = 99;
+
             } else if (ants[i].side == 'r') {
                 ants[i].col_dest = STACKMAX - 2;
                 ants[i].dataItem.state = 99;
             }
+
 
         }
     }
@@ -171,10 +173,10 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         return 1;
         //continue;
     }
-    int flag = 0;
+
     int hormigasEspearando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
-    printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
-    printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
+   // printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
+    //printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
     if (channel_Ants[ants[antId_in].canal].countAntsWait == hormigasEspearando) {
 
         if (ants[antId_in].side == 'r' && channel_Ants[ants[antId_in].canal].sideFlag == 1) {
@@ -183,14 +185,10 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
         }
         if (ants[antId_in].side == 'l' && channel_Ants[ants[antId_in].canal].sideFlag == 0) {
-
-
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 1;
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
         }
-
-    } 
-
+    }
 
 
     if (channel_Ants[ants[antId_in].canal].passedAnts == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {

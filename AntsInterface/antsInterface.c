@@ -114,6 +114,13 @@ int equidad() {
 
 }
 
+int countAntsWaiting(long canal, char side){
+    int cuenta = 0;
+    for (int i = 0;i < antCounter; i++){
+        if(ants[i].canal == canal && ants[i].dataItem.state == 1  && ants[i].side ==  side)cuenta++;
+    }
+    return cuenta;
+}
 
 bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     //channel_Ants[i].channelNumber = i;
@@ -134,17 +141,27 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         return 1;
         //continue;
     }
-    if (ants[antId_in].waiting){
-        semaforoC1 = 1;
-    }
+
+
 
     listNode_t *listSelected ;
     if (channel_Ants[ants[antId_in].canal].sideFlag == 0) {
         listSelected = channel_Ants[ants[antId_in].canal].list_Ants_L;
     } else {
         listSelected = channel_Ants[ants[antId_in].canal].list_Ants_R;
-    }//semaforoC1 == 1 && ch    annel_Ants[ants[antId_in].canal].sideFlag == 0 &&
-    if (semaforoC1 == 1
+    }
+    
+
+
+    //semaforoC1 == 1 && ch    annel_Ants[ants[antId_in].canal].sideFlag == 0 &&
+
+    if (channel_Ants[ants[antId_in].canal].countAntsWait == countAntsWaiting(ants[antId_in].canal,ants[antId_in].side)){
+
+
+        channel_Ants[ants[antId_in].canal].semaforoActive = 1;
+    }
+
+    if (channel_Ants[ants[antId_in].canal].semaforoActive == 1
         && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
         && listSelected != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {

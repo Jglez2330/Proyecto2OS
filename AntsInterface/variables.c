@@ -88,10 +88,11 @@ int w_ant;
 int h_ant;
 int cellSize;
 int colitionsFlag = 0;
-int semaforoC1 = 0;
+
 
 
 typedef struct channelAnts{
+
     long count_W; //Cuenta cuantos pasan por lado
     long largoCanal; // largoCanal
     long spacesInBridge;
@@ -101,6 +102,7 @@ typedef struct channelAnts{
     long valueRMS;
     long countAntsWait;
     long starFlow;
+    long semaforoActive;
 
     listNode_t *list_Ants_L; //lista izquier
     listNode_t *list_Ants_R; //lista derecha

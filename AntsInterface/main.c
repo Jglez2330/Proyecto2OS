@@ -15,6 +15,7 @@
 #include "../Synchronizer/synchronizer.h"
 
 
+
 int main() {
 
 
@@ -37,6 +38,7 @@ int main() {
         channel_Ants[i].list_Ants_L = NULL;
         channel_Ants[i].list_Ants_R = NULL;
         channel_Ants[i].spacesInBridge = fileValues[i].largoCanal;
+        channel_Ants[i].semaforoActive = 0;
 
     }
 
@@ -317,10 +319,7 @@ int main() {
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
-                        case SDL_SCANCODE_Y:
 
-                            semaforoC1 = !semaforoC1;
-                            break;
 
 
 

@@ -531,7 +531,9 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
     if (ants[counter].col_act == ants[counter].col_dest && ants[counter].size.x == finalX
         && ants[counter].size.y == finalY) {
 
+        channel_Ants[ants[counter].canal].list_Ants_L;
         ants[counter].waiting = 1;
+        ants[counter].dataItem.state = 1;
         return;
     } else {
 

@@ -150,12 +150,12 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     } else {
         listSelected = channel_Ants[ants[antId_in].canal].list_Ants_R;
     }
-    
+
 
 
     //semaforoC1 == 1 && ch    annel_Ants[ants[antId_in].canal].sideFlag == 0 &&
 
-    if (channel_Ants[ants[antId_in].canal].countAntsWait == countAntsWaiting(ants[antId_in].canal,ants[antId_in].side)){
+    if (channel_Ants[ants[antId_in].canal].countAntsWait + 1 == countAntsWaiting(ants[antId_in].canal,ants[antId_in].side)){
 
 
         channel_Ants[ants[antId_in].canal].semaforoActive = 1;

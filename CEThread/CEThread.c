@@ -4,13 +4,13 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 1000
+#define QUANTUM 7500
 #define Channels 4
 long globalTID = 0;
 int current_channel;
 CEThread_treadInfo* main_thread;
-listNode_t* thread_list;
-listNode_t* zombie_list;
+listNode_t_thread* thread_list;
+listNode_t_thread* zombie_list;
 
 CEThread_treadInfo* current_running_thread;
 sigset_t context_switching_alarm;
@@ -19,7 +19,7 @@ static struct itimerval timer_context;
 CEThread_treadInfo *get_next_thread();
 
 
-bool is_thread_inside(listNode_t *pNode, CEThread_treadInfo *pThread);
+bool is_thread_inside(listNode_t_thread *pNode, CEThread_treadInfo *pThread);
 
 void CEThread_get_main_thread_context() {
     struct sigaction act;
@@ -29,7 +29,7 @@ void CEThread_get_main_thread_context() {
     memset(main_thread, 0, sizeof(CEThread_treadInfo));
 
     main_thread->tid = globalTID++;
-    main_thread->state = RUNNING;
+    main_thread->state = RUNNING_thread;
     main_thread->arg = NULL;
     main_thread->joining = 0;
     main_thread->detach = 0;
@@ -83,7 +83,7 @@ int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_r
     CEThread_treadInfo* new_thread = (CEThread_treadInfo* ) malloc(sizeof(CEThread_treadInfo));
     new_thread->tid = globalTID;
     *thread_id = new_thread->tid;
-    new_thread->state = READY;
+    new_thread->state = READY_thread;
     new_thread->pFunction = start_routine;
     new_thread->arg = arg;
     new_thread->joining = 0;
@@ -146,15 +146,15 @@ void context_switching(int sig){
     CEThread_treadInfo *next;
     do {
         next = get_next_thread();
-    } while (next->state != READY);
+    } while (next->state != READY_thread);
 
     CEThread_treadInfo * prev = current_running_thread;
-    if (prev->state == RUNNING){
-        prev->state = READY;
+    if (prev->state == RUNNING_thread){
+        prev->state = READY_thread;
     }
 
 
-    next->state = RUNNING;
+    next->state = RUNNING_thread;
 
     current_running_thread = next;
 
@@ -170,7 +170,7 @@ void CEThread_end(void* return_value){
     deleteNodePosition_thread(&thread_list, 0);
 
     current_running_thread = get_next_thread();
-    current_running_thread->state = RUNNING;
+    current_running_thread->state = RUNNING_thread;
 
     if(prev->detach == 1 ){
         free(prev->thread_context->uc_stack.ss_sp);
@@ -193,7 +193,7 @@ void CEThread_end(void* return_value){
         free(prev->thread_context);
         prev->thread_context = NULL;
 
-        prev->state = TERMINATED;
+        prev->state = TERMINATED_thread;
         prev->retval = return_value;
         prev->joining = 0;
 
@@ -261,7 +261,7 @@ int CEThread_join(CEThread_t thread, void ** return_value){
 
     thread_to_join->joining = current_running_thread->tid;
 
-    while (thread_to_join->state != TERMINATED){
+    while (thread_to_join->state != TERMINATED_thread){
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         context_switching(SIGVTALRM);
         sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
@@ -308,9 +308,9 @@ int CEThread_mutex_lock(CEThread_mutex_t *mutex) {
     if (mutex->owner_thread != current_running_thread->tid && mutex->owner_thread != 0) {
         if (!is_thread_inside(mutex->blocked_list, current_running_thread)) {
             append_thread(&mutex->blocked_list, current_running_thread);
-            current_running_thread->state = BLOCKED;
+            current_running_thread->state = BLOCKED_thread;
             //deleteNodePosition_thread(&thread_list, 0);
-            while (current_running_thread->state == BLOCKED){
+            while (current_running_thread->state == BLOCKED_thread){
                 CEThread_yield();
 
             };
@@ -323,7 +323,7 @@ int CEThread_mutex_lock(CEThread_mutex_t *mutex) {
     return 0;
 }
 
-bool is_thread_inside(listNode_t *pNode, CEThread_treadInfo *pThread) {
+bool is_thread_inside(listNode_t_thread *pNode, CEThread_treadInfo *pThread) {
     bool result = FALSE;
     for (int i = 0; i < getCount_t_thread(pNode); i++) {
         if(getNode_t_thread(pNode, i)->tid == pThread->tid){
@@ -347,10 +347,10 @@ int CEThread_mutex_unlock(CEThread_mutex_t *mutex) {
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
     return 0;
 }
-void unblock_threads_from_list(listNode_t* list) {
+void unblock_threads_from_list(listNode_t_thread* list) {
     while (getFront_t_thread(list)!= NULL) {
         CEThread_treadInfo *r = getFront_t_thread(list);
-        r->state = READY;
+        r->state = READY_thread;
         //append_thread(&thread_list, r);
         deleteNodePosition_thread(&list, 0);
     }

@@ -4,17 +4,17 @@
 
 #include "CEThread_List.h"
 
-void push_t_thread(struct listNode_t **start_ref, CEThread_treadInfo * threadInfo)
+void push_t_thread(struct listNode_t_thread **start_ref, CEThread_treadInfo * threadInfo)
 {
-    struct listNode_t *ptr1 = (struct listNode_t*)malloc(sizeof(struct listNode_t));
+    struct listNode_t_thread *ptr1 = (struct listNode_t_thread*)malloc(sizeof(struct listNode_t_thread));
     ptr1->threadInfo = threadInfo;
     ptr1->next = *start_ref;
     *start_ref = ptr1;
 }
-void append_thread(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo)
+void append_thread(struct listNode_t_thread** head_ref, CEThread_treadInfo * threadInfo)
 {
-    struct listNode_t* new_node = (struct listNode_t*) malloc(sizeof(struct listNode_t));
-    struct listNode_t *last = *head_ref;
+    struct listNode_t_thread* new_node = (struct listNode_t_thread*) malloc(sizeof(struct listNode_t_thread));
+    struct listNode_t_thread *last = *head_ref;
     new_node->threadInfo  = threadInfo;
     new_node->next = NULL;
 
@@ -31,12 +31,12 @@ void append_thread(struct listNode_t** head_ref, CEThread_treadInfo * threadInfo
     last->next = new_node;
     return;
 }
-void deleteNodePosition_thread(struct listNode_t **head_ref, int position)
+void deleteNodePosition_thread(struct listNode_t_thread **head_ref, int position)
 {
     if (*head_ref == NULL)
         return;
 
-    struct listNode_t* temp = *head_ref;
+    struct listNode_t_thread* temp = *head_ref;
     if (position == 0){
         *head_ref = temp->next;
         free(temp);
@@ -49,18 +49,18 @@ void deleteNodePosition_thread(struct listNode_t **head_ref, int position)
     if (temp == NULL || temp->next == NULL)
         return;
 
-    struct listNode_t *next = temp->next->next;
+    struct listNode_t_thread *next = temp->next->next;
 
     free(temp->next);
 
     temp->next = next;
 }
 
-void deleteNodeTID_t_thread(struct listNode_t** head_ref, CEThread_t key)
+void deleteNodeTID_t_thread(struct listNode_t_thread** head_ref, CEThread_t key)
 {
     int count = 0;
 
-    struct listNode_t* temp = *head_ref;
+    struct listNode_t_thread* temp = *head_ref;
     while (temp->threadInfo->tid!= key && temp!=NULL)
     {
         temp = temp->next;
@@ -69,9 +69,9 @@ void deleteNodeTID_t_thread(struct listNode_t** head_ref, CEThread_t key)
     deleteNodePosition_thread(head_ref, count);
 }
 
-void deleteList_thread(struct listNode_t** head_ref){
-    struct listNode_t* current = *head_ref;
-    struct listNode_t* next;
+void deleteList_thread(struct listNode_t_thread** head_ref){
+    struct listNode_t_thread* current = *head_ref;
+    struct listNode_t_thread* next;
     while (current != NULL){
         next = current->next;
         free(current);
@@ -81,9 +81,9 @@ void deleteList_thread(struct listNode_t** head_ref){
     *head_ref = NULL;
 }
 
-CEThread_treadInfo* getNode_t_thread(struct listNode_t* head, int index){
+CEThread_treadInfo* getNode_t_thread(struct listNode_t_thread* head, int index){
 
-    struct listNode_t* current = head;
+    struct listNode_t_thread* current = head;
 
     int count = 0;
     while (current != NULL) {
@@ -99,17 +99,17 @@ CEThread_treadInfo* getNode_t_thread(struct listNode_t* head, int index){
 
 
 
-void swap_thread(struct listNode_t *a, struct listNode_t *b){
+void swap_thread(struct listNode_t_thread *a, struct listNode_t_thread *b){
 
     CEThread_treadInfo *temp   = a->threadInfo;
     a->threadInfo = b->threadInfo;
     b->threadInfo = temp;
 }
 
-int getCount_t_thread(struct listNode_t* head)
+int getCount_t_thread(struct listNode_t_thread* head)
 {
     int count = 0;  // Initialize count
-    struct listNode_t* current = head;  // Initialize current
+    struct listNode_t_thread* current = head;  // Initialize current
     while (current != NULL)
     {
         count++;
@@ -124,11 +124,11 @@ int getCount_t_thread(struct listNode_t* head)
     deleteNodePosition_thread(head,0);
 }*/
 
-void listCycle_t_thread(struct listNode_t** head){
+void listCycle_t_thread(struct listNode_t_thread** head){
     int k = 1;
 
 
-    struct listNode_t* current = *head;
+    struct listNode_t_thread* current = *head;
 
     int count = 1;
     while (count < k && current != NULL) {
@@ -139,7 +139,7 @@ void listCycle_t_thread(struct listNode_t** head){
     if (current == NULL)
         return;
 
-    struct listNode_t* kthNode = current;
+    struct listNode_t_thread* kthNode = current;
 
     while (current->next != NULL)
         current = current->next;
@@ -152,7 +152,7 @@ void listCycle_t_thread(struct listNode_t** head){
 }
 
 
-CEThread_treadInfo* getFront_t_thread(struct listNode_t* head){
+CEThread_treadInfo* getFront_t_thread(struct listNode_t_thread* head){
 
     if(head == NULL){
         return NULL;

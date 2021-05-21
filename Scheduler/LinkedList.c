@@ -128,8 +128,8 @@ void bubbleSort_t(struct listNode_t *start, int typeSort)
         while (ptr1->next != lptr)
         {
             if (((ptr1->dataInfo->priority > ptr1->next->dataInfo->priority) && (PRIORITY == typeSort)) ||
-                    ((ptr1->dataInfo->var_SJF > ptr1->next->dataInfo->var_SJF) && (SJF == typeSort))
-                     ||((ptr1->dataInfo->rms_P > ptr1->next->dataInfo->rms_P) && (PERIOD == typeSort)))
+                ((ptr1->dataInfo->var_SJF > ptr1->next->dataInfo->var_SJF) && (SJF == typeSort))
+                ||((ptr1->dataInfo->rms_P > ptr1->next->dataInfo->rms_P) && (PERIOD == typeSort)))
             {
                 swap(ptr1, ptr1->next);
                 swapped = 1;

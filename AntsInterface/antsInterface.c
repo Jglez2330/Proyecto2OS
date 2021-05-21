@@ -2,7 +2,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "../Scheduler/Scheduler.h"
-#include <pthread.h>
+#include "../CEThread/CEThread.h"
 #include <unistd.h>
 //#include "../Scheduler/LinkedList.h"
 
@@ -169,13 +169,13 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     }
     if (ants[antId_in].sentHome) {
         sendHome(antId_in, ants[antId_in].side);
-        //CEThread_yield();
+        CEThread_yield();
         return 1;
         //continue;
     }
 
     int hormigasEspearando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
-   // printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
+    // printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
     //printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
     if (channel_Ants[ants[antId_in].canal].countAntsWait == hormigasEspearando) {
 
@@ -260,7 +260,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_R, 0);
         if (
                 getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_R) == NULL //||
-                //channel_Ants[ants[antId_in].canal].list_Ants_R->dataInfo != NULL
+            //channel_Ants[ants[antId_in].canal].list_Ants_R->dataInfo != NULL
                 ) {
             channel_Ants[ants[antId_in].canal].list_Ants_R = NULL;
         }
@@ -291,7 +291,8 @@ _Noreturn void *startAntMotion(void *params) {
 //    printf("La fila de la hormiga es: %i \n", ants[p->antId].fila_act);
     while (1) {
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
-        nanosleep(&tiempo, &tiempo);
+        //nanosleep(&tiempo, &tiempo);
+        CEThread_yield();
         bool continueFlag = antsFlowBridge(p->antId, p->filas);
         if (continueFlag) {
             continue;
@@ -325,10 +326,10 @@ _Noreturn void *startAntMotion(void *params) {
 
 
 
-            //CEThread_yield();
+            CEThread_yield();
             continue;
         } else {
-            //CEThread_yield();
+            CEThread_yield();
             continue;
         }
 
@@ -566,15 +567,16 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 //            ants[antCounter].sorted = 1;
 //        }
 
-        //CEThread_t thread1;
-        pthread_t thread1;
+        CEThread_t thread1;
+        //pthread_t thread1;
         struct Params *param;
         param = malloc(sizeof(struct Params));
         param->antId = antCounter;
         param->filas = filas;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
 //        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
-        pthread_create(&thread1, NULL, startAntMotion, param);
+        CEThread_create(&thread1, NULL, startAntMotion, param);
+        CEThread_detach(thread1); //Auto frees
 
         antCounter++;
     }

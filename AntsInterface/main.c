@@ -41,6 +41,7 @@ int main() {
         channel_Ants[i].semaforoActive_L = 0;
         channel_Ants[i].semaforoActive_R = 0;
         channel_Ants[i].passedAnts = 0;
+        channel_Ants[i].sideFlag =0;
         channel_Ants[i].parametroW_Fixed = fileValues[i].parametroW;
     }
 

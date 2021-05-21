@@ -102,7 +102,11 @@ typedef struct channelAnts{
     long valueRMS;
     long countAntsWait;
     long starFlow;
-    long semaforoActive;
+    long semaforoActive_L;
+    long semaforoActive_R;
+    int passedAnts;
+    long parametroW_Fixed;
+
 
     listNode_t *list_Ants_L; //lista izquier
     listNode_t *list_Ants_R; //lista derecha

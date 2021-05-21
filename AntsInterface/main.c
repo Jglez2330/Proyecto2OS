@@ -38,8 +38,10 @@ int main() {
         channel_Ants[i].list_Ants_L = NULL;
         channel_Ants[i].list_Ants_R = NULL;
         channel_Ants[i].spacesInBridge = fileValues[i].largoCanal;
-        channel_Ants[i].semaforoActive = 0;
-
+        channel_Ants[i].semaforoActive_L = 0;
+        channel_Ants[i].semaforoActive_R = 0;
+        channel_Ants[i].passedAnts = 0;
+        channel_Ants[i].parametroW_Fixed = fileValues[i].parametroW;
     }
 
 

@@ -114,10 +114,25 @@ int equidad() {
 
 }
 
-int countAntsWaiting(long canal, char side){
+int countAntsWaiting(long canal, char side) {
     int cuenta = 0;
-    for (int i = 0;i < antCounter; i++){
-        if(ants[i].canal == canal && ants[i].dataItem.state == 1  && ants[i].side ==  side)cuenta++;
+    for (int i = 0; i < antCounter; i++) {
+        if (ants[i].canal == canal && ants[i].dataItem.state == 1 && ants[i].side == side)cuenta++;
+    }
+    return cuenta;
+}
+int changeAntsWaiting(long canal, char side) {
+    int cuenta = 0;
+    for (int i = 0; i < antCounter; i++) {
+        if (ants[i].canal == canal && ants[i].dataItem.state == 1 && ants[i].side == side)ants[i].waiting = 2;
+    }
+    return cuenta;
+}
+
+int countAntsPassed(long canal, char side) {
+    int cuenta = 0;
+    for (int i = 0; i < antCounter; i++) {
+        if (ants[i].canal == canal && ants[i].passedBridge == 1 && ants[i].side == side)cuenta++;
     }
     return cuenta;
 }
@@ -141,61 +156,126 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         return 1;
         //continue;
     }
+    int flag = 0;
+    if (channel_Ants[ants[antId_in].canal].countAntsWait + 1 ==
+        countAntsWaiting(ants[antId_in].canal, ants[antId_in].side)) {
+
+        if (ants[antId_in].side == 'r') {
+
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_L= 0;
+        }
+        if (ants[antId_in].side == 'l') {
 
 
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_R= 0;
+        }
 
-    listNode_t *listSelected ;
-    if (channel_Ants[ants[antId_in].canal].sideFlag == 0) {
-        listSelected = channel_Ants[ants[antId_in].canal].list_Ants_L;
     } else {
-        listSelected = channel_Ants[ants[antId_in].canal].list_Ants_R;
+        //channel_Ants[ants[antId_in].canal].semaforoActive = 0;
+
+//        channel_Ants[ants[antId_in].canal].sideFlag = !channel_Ants[ants[antId_in].canal].sideFlag;
     }
 
+    /* listNode_t *listSelected ;
+
+     if (channel_Ants[ants[antId_in].canal].sideFlag == 0) {
+         listSelected = channel_Ants[ants[antId_in].canal].list_Ants_L;
+     } else {
+         listSelected = channel_Ants[ants[antId_in].canal].list_Ants_R;
+     }*/
 
 
+//    if (countAntsPassed(ants[antId_in].canal,ants[antId_in].side) == channel_Ants[ants[antId_in].canal].countAntsWait){
+//
+//    }
     //semaforoC1 == 1 && ch    annel_Ants[ants[antId_in].canal].sideFlag == 0 &&
 
-    if (channel_Ants[ants[antId_in].canal].countAntsWait + 1 == countAntsWaiting(ants[antId_in].canal,ants[antId_in].side)){
+    if (channel_Ants[ants[antId_in].canal].passedAnts == channel_Ants[ants[antId_in].canal].parametroW_Fixed){
+           // printf("\n ANTES SIDE FLAG%li", channel_Ants[ants[antId_in].canal].sideFlag);
+        // channel_Ants[ants[antId_in].canal].sideFlag = !channel_Ants[ants[antId_in].canal].sideFlag;
+//         printf("\n DESPUES SIDE FLAG%li", channel_Ants[ants[antId_in].canal].sideFlag);
+     
+         channel_Ants[ants[antId_in].canal].passedAnts = 0;
+         channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
+//
+        if (channel_Ants[ants[antId_in].canal].sideFlag == 'r'){
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 1;
+            channel_Ants[ants[antId_in].canal].sideFlag = 'l';
+        }
+        else if (channel_Ants[ants[antId_in].canal].sideFlag == 'l'){
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
+            channel_Ants[ants[antId_in].canal].sideFlag = 'r';
+        }
+     }
 
 
-        channel_Ants[ants[antId_in].canal].semaforoActive = 1;
-    }
 
-    if (channel_Ants[ants[antId_in].canal].semaforoActive == 1
+
+    if (channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
         && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
-        && listSelected != NULL
+        && channel_Ants[ants[antId_in].canal].list_Ants_L != NULL &&
+        channel_Ants[ants[antId_in].canal].list_Ants_L->dataInfo != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
         channel_Ants[ants[antId_in].canal].count_W--;
         printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);
         // pthread_mutex_lock(&mutex);
         //printList_t(list_Ant_L_Canal1);
 
-        printList_t(listSelected);
-        int id = getNode_t(listSelected, 0)->antId;
+        printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
+        int id = getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_L, 0)->antId;
         ants[id].passingBridge = 1;
 
-        printList_t(listSelected);
+        printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
 
-        deleteNodePosition(&listSelected, 0);
-        if(getFront_t(listSelected) == NULL){
-            listSelected = NULL;
-        }
-        if (channel_Ants[ants[antId_in].canal].sideFlag == 0) {
-             channel_Ants[ants[antId_in].canal].list_Ants_L = listSelected;
-        } else {
-            channel_Ants[ants[antId_in].canal].list_Ants_R = listSelected;
+        deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_L, 0);
+        if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_L) == NULL) {
+            channel_Ants[ants[antId_in].canal].list_Ants_L = NULL;
         }
 
 
-
-        if (listSelected != NULL) {
+        if (channel_Ants[ants[antId_in].canal].list_Ants_L != NULL) {
             channel_Ants[ants[antId_in].canal].spacesInBridge -= 1;
             setMovingAnts();
-            schedulerSort(listSelected);
-            postionAllAnt(*listSelected, filas);
+            schedulerSort(channel_Ants[ants[antId_in].canal].list_Ants_L);
+            postionAllAnt(*channel_Ants[ants[antId_in].canal].list_Ants_L, filas);
 
         }
-        printf("CrossAnt hormiga: %i\n",id);
+        printf("CrossAnt hormiga: %i\n", id);
+        crossAnt(id);
+    }
+    if (channel_Ants[ants[antId_in].canal].semaforoActive_R == 1
+        && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
+        && channel_Ants[ants[antId_in].canal].list_Ants_R != NULL &&
+        channel_Ants[ants[antId_in].canal].list_Ants_R->dataInfo != NULL
+        && channel_Ants[ants[antId_in].canal].count_W != 0) {
+        channel_Ants[ants[antId_in].canal].count_W--;
+        printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);
+        // pthread_mutex_lock(&mutex);
+        //printList_t(list_Ant_L_Canal1);
+
+        printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
+        int id = getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_R, 0)->antId;
+        ants[id].passingBridge = 1;
+
+        printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
+
+        deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_R, 0);
+        if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_R) == NULL) {
+            channel_Ants[ants[antId_in].canal].list_Ants_R = NULL;
+        }
+
+        if (channel_Ants[ants[antId_in].canal].list_Ants_R != NULL) {
+            channel_Ants[ants[antId_in].canal].spacesInBridge -= 1;
+            setMovingAnts();
+            schedulerSort(channel_Ants[ants[antId_in].canal].list_Ants_R);
+            postionAllAnt(*channel_Ants[ants[antId_in].canal].list_Ants_R, filas);
+
+        }
+        printf("CrossAnt hormiga: %i\n", id);
         crossAnt(id);
     }
 
@@ -222,7 +302,8 @@ _Noreturn void *startAntMotion(void *params) {
 
         if (positionInInitialRow(p->antId, ants[p->antId].side)) {
 
-            if (ants[p->antId].fila_act % 2 == 0 &&  ants[p->antId].sorted == 0 && channel_Ants[ants[p->antId].canal].list_Ants_L != NULL) {
+            if (ants[p->antId].fila_act % 2 == 0 && ants[p->antId].sorted == 0 &&
+                channel_Ants[ants[p->antId].canal].list_Ants_L != NULL) {
                 setMovingAnts();
                 printList_t(channel_Ants[ants[p->antId].canal].list_Ants_L);
                 schedulerSort(channel_Ants[ants[p->antId].canal].list_Ants_L);
@@ -230,15 +311,15 @@ _Noreturn void *startAntMotion(void *params) {
                 postionAllAnt(*channel_Ants[ants[p->antId].canal].list_Ants_L, p->filas);
 
                 ants[p->antId].sorted = 1;
-            } else if (ants[p->antId].fila_act % 2 != 0 &&  ants[p->antId].sorted == 0 && channel_Ants[ants[p->antId].canal].list_Ants_R != NULL) {
+            } else if (ants[p->antId].fila_act % 2 != 0 && ants[p->antId].sorted == 0 &&
+                       channel_Ants[ants[p->antId].canal].list_Ants_R != NULL) {
                 setMovingAnts();
                 printList_t(channel_Ants[ants[p->antId].canal].list_Ants_R);
                 schedulerSort(channel_Ants[ants[p->antId].canal].list_Ants_R);
                 printList_t(channel_Ants[ants[p->antId].canal].list_Ants_R);
                 postionAllAnt(*channel_Ants[ants[p->antId].canal].list_Ants_R, p->filas);
                 ants[p->antId].sorted = 1;
-            }
-            else{
+            } else {
                 moveAntInStack(p->antId, p->filas);
                 continue;
             }
@@ -402,8 +483,6 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
         ants[antCounter].notSorting = 1;
-
-
 
 
         ants[antCounter].type = type;

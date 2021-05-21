@@ -531,7 +531,7 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
     if (ants[counter].col_act == ants[counter].col_dest && ants[counter].size.x == finalX
         && ants[counter].size.y == finalY) {
 
-        channel_Ants[ants[counter].canal].list_Ants_L;
+
         ants[counter].waiting = 1;
         ants[counter].dataItem.state = 1;
         return;
@@ -580,7 +580,10 @@ bool detectIfAntCross(int counter, char side) {
         delCol = STACKMAX + COLAMAX;
         if (ants[counter].col_act > delCol) {
             ants[counter].sentHome = 1;
-            if (ants[counter].passedBridge == 0) ants[counter].passedBridge = 1;
+            if (ants[counter].passedBridge == 0){
+                channel_Ants[ants[counter].canal].passedAnts++;
+                ants[counter].passedBridge = 1;
+            }
             return true;
         } else {
             return false;
@@ -590,7 +593,10 @@ bool detectIfAntCross(int counter, char side) {
         delCol = STACKMAX - 1;
         if (ants[counter].col_act < delCol) {
             ants[counter].sentHome = 1;
-            if (ants[counter].passedBridge == 0) ants[counter].passedBridge = 1;
+            if (ants[counter].passedBridge == 0) {
+                channel_Ants[ants[counter].canal].passedAnts++;
+                ants[counter].passedBridge = 1;
+            }
             return true;
         } else {
             return false;

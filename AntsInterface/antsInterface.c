@@ -121,6 +121,14 @@ int countAntsWaiting(long canal, char side) {
     }
     return cuenta;
 }
+
+int ants_Waiting_2_Terminated(long canal, char side) {
+    for (int i = 0; i < antCounter; i++) {
+        if (ants[i].canal == canal && ants[i].dataItem.state == 1 && ants[i].side == side)
+            ants[i].dataItem.state = 99;
+    }
+    return 0;
+}
 int changeAntsWaiting(long canal, char side) {
     int cuenta = 0;
     for (int i = 0; i < antCounter; i++) {
@@ -157,8 +165,10 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         //continue;
     }
     int flag = 0;
-    if (channel_Ants[ants[antId_in].canal].countAntsWait + 1 ==
-        countAntsWaiting(ants[antId_in].canal, ants[antId_in].side)) {
+    int hormigasEspearando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
+    printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
+    printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait );
+    if (channel_Ants[ants[antId_in].canal].countAntsWait  == hormigasEspearando) {
 
         if (ants[antId_in].side == 'r') {
 
@@ -216,12 +226,18 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
 
 
     if (channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
+            //channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
         && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
         && channel_Ants[ants[antId_in].canal].list_Ants_L != NULL &&
         channel_Ants[ants[antId_in].canal].list_Ants_L->dataInfo != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
         channel_Ants[ants[antId_in].canal].count_W--;
         printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);
+
+        if(channel_Ants[ants[antId_in].canal].count_W == 0){
+            ants_Waiting_2_Terminated(ants[antId_in].canal, ants[antId_in].side);
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
+        }
         // pthread_mutex_lock(&mutex);
         //printList_t(list_Ant_L_Canal1);
 

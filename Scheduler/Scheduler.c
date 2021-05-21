@@ -156,19 +156,18 @@ listNode_t* tiempoReal_Init(listNode_t* listResult){
     }
     condicion = n * (pow(2, 1/(float)n) - 1);
 
-        while(timeInCPU_SUM> condicion){
-            deleteNodePosition(&listResult,n-1);
-            printList_t(listResult);
+    while(timeInCPU_SUM> condicion){
+        deleteNodePosition(&listResult,n-1);
+        printList_t(listResult);
 
-            n = getCount_t(listResult) + 1;
-            timeInCPU_SUM = 0;
-            for (i = 0; i < n; i++) {
-                node = getNode_t(listResult,i);
-                timeInCPU_SUM += (node->rms_C / node->rms_P); //Sumar los valores de cada nodo
-            }
-            condicion = n * (pow(2, 1/(float)n) - 1);
+        n = getCount_t(listResult) + 1;
+        timeInCPU_SUM = 0;
+        for (i = 0; i < n; i++) {
+            node = getNode_t(listResult,i);
+            timeInCPU_SUM += (node->rms_C / node->rms_P); //Sumar los valores de cada nodo
         }
+        condicion = n * (pow(2, 1/(float)n) - 1);
+    }
 
     return listResult;
 }
-

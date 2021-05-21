@@ -5,11 +5,8 @@
 #ifndef PROYECTO2OS_SYNCHRONIZER_H
 #define PROYECTO2OS_SYNCHRONIZER_H
 
-#include "../CEThread1.h"
 #include "confuse.h"
 #define channelCount 3
-
-CEThread_mutex_t mutexes[channelCount];
 
 typedef struct pConfig {
     long calendarizador;

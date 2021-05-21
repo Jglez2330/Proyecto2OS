@@ -12,21 +12,40 @@
 #include "../Scheduler/LinkedList.h"
 #include "functions.c"
 #include "antsInterface.c"
-
-
+#include "../Synchronizer/synchronizer.h"
 
 
 
 int main() {
 
 
-    list_Ant_L_Canal1 = NULL;
-    list_Ant_L_Canal2 = NULL;
-    list_Ant_L_Canal3 = NULL;
 
-    list_Ant_R_Canal1 = NULL;
-    list_Ant_R_Canal2 = NULL;
-    list_Ant_R_Canal3 = NULL;
+
+    //control de flujo para canales
+    channel_Ants = malloc(sizeof (channelAnts)*3);
+    synchronizerInit();
+
+
+    for(int i = 0;i<channelCount;i++){
+        channel_Ants[i].channelNumber = i;
+        channel_Ants[i].controlFLow = fileValues[i].metodoControlFlujo;
+        channel_Ants[i].scheduler_selected = fileValues[i].calendarizador;
+        channel_Ants[i].largoCanal = fileValues[i].largoCanal;
+        channel_Ants[i].countAntsWait = fileValues[i].cantidadHormigasOrdenadas;
+        channel_Ants[i].timer = fileValues[i].timeCambioLetrero;
+        channel_Ants[i].count_W = fileValues[i].parametroW;
+        channel_Ants[i].valueRMS = fileValues[i].tiempoMaximoRMS;
+        channel_Ants[i].list_Ants_L = NULL;
+        channel_Ants[i].list_Ants_R = NULL;
+        channel_Ants[i].spacesInBridge = fileValues[i].largoCanal;
+        channel_Ants[i].semaforoActive_L = 0;
+        channel_Ants[i].semaforoActive_R = 0;
+        channel_Ants[i].passedAnts = 0;
+        channel_Ants[i].sideFlag =0;
+        channel_Ants[i].parametroW_Fixed = fileValues[i].parametroW;
+    }
+
+
 
 
     // Se inicializa SDL
@@ -303,10 +322,10 @@ int main() {
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
-                        case SDL_SCANCODE_T:
 
-                            sendHomeRequested  = 1;
-                            break;
+
+
+
                     }
                     break;
             }

@@ -18,7 +18,7 @@ typedef struct pConfig {
     long tiempoMaximoRMS;
 }pConfig;
 
-pConfig * valuesChannel;
+pConfig * fileValues;
 
 
 int synchronizerInit();/*

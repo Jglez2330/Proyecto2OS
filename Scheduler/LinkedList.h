@@ -19,10 +19,11 @@ typedef struct dataItem{
     int channel;
     float rms_C;
     float rms_P;
-    int scheduler_Selected; // Indica el calendarizador a utilizar
+    long scheduler_Selected; // Indica el calendarizador a utilizar
     int column;
     int row;
     int antId;
+
 
 } dataItem;
 
@@ -40,7 +41,7 @@ enum State {SJF = 0, PRIORITY = 1, PERIOD = 2};
 void push_t(struct listNode_t **start_ref,  dataItem  * dataInfo);
 void append(struct listNode_t** head_ref, dataItem  * dataInfo);
 void deleteNodePosition(struct listNode_t **head_ref, int position);
-void deleteNodeTID_t(struct listNode_t** head_ref, pthread_t key);
+void deleteNodeAntId_t(struct listNode_t** head_ref,int antId);
 void bubbleSort_t(struct listNode_t *start,int typeSort);
 void deleteList(struct listNode_t** head_ref);
 void swap(struct listNode_t *a, struct listNode_t *b);

@@ -38,7 +38,7 @@ typedef struct flujoCana{
     int flagLado; // Si es 0 va de Izquierda a Derecha, Si es 1 va de Derecha a Izquierda
 
 }flujoCana;
-
+/*
 int flowControl(listNode_t * listIn){
 
         if (getCount_t(listIn)  == -1){
@@ -81,7 +81,7 @@ int flowControl(listNode_t * listIn){
 
     }
 
-
+*/
 /*
 
 int equidad_Init(scheduler_t * scheduler){

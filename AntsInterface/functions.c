@@ -496,15 +496,53 @@ drawHills(SDL_Renderer *rend, SDL_Texture *anthill_t, SDL_Rect antHill1_r, SDL_R
         temp_gap += gap_roads;
     }
 }
+void drawSignBoard(SDL_Renderer *rend,SDL_Texture *letreroR_t,SDL_Texture *letreroL_t,SDL_Rect letrero1,SDL_Rect letrero2,SDL_Rect letrero3){
+    letrero1.w *=0.14;
+    letrero1.h *=0.14;
+
+    letrero2.w *=0.14;
+    letrero2.h *=0.14;
+
+    letrero3.w *=0.14;
+    letrero3.h *=0.14;
+    if (channel_Ants[0].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero1);
+    }
+    else if (channel_Ants[0].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero1);
+    }
+    if (channel_Ants[1].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero2);
+    }
+    else if (channel_Ants[1].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero2);
+    }
+
+    if (channel_Ants[2].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero3);
+    }
+    else if (channel_Ants[2].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero3);
+    }
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero1);
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero2);
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero3);
+}
 
 void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *anthill_t, SDL_Rect antHill1_r,
                     SDL_Rect antHill2_r, SDL_Rect horizontal_roads, SDL_Rect vertical_roads, SDL_Rect mini_roads,
-                    SDL_Rect canal_roads) {
+                    SDL_Rect canal_roads,SDL_Texture *letreroR_t,SDL_Texture *letreroL_t, SDL_Rect letrero1,SDL_Rect letrero2,SDL_Rect letrero3) {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, background_t, NULL, NULL);
     drawHills(rend, anthill_t, antHill1_r, antHill2_r, mini_roads);
     drawRoads(rend, horizontal_roads, vertical_roads);
     drawCanal(rend, canal_roads);
+
+    drawSignBoard(rend,letreroR_t,letreroL_t,letrero1,letrero2,letrero3);
+
+//    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
+
 }
 
 void sendHome(int counter, char side) {

@@ -80,7 +80,8 @@ int main() {
     SDL_Surface *background_s = IMG_Load("../Resources/background.png");
     SDL_Surface *anthill_s = IMG_Load("../Resources/antHill.png");
     SDL_Surface *blackAnt_s = IMG_Load("../Resources/blackAntR.png");
-
+    SDL_Surface *letreroL_s = IMG_Load("../Resources/letreroL.png");
+    SDL_Surface *letreroR_s = IMG_Load("../Resources/letreroR.png");
 
     if (!anthill_s || !background_s) {
         printf("Error creating surface\n");
@@ -94,10 +95,15 @@ int main() {
     SDL_Texture *background_t = SDL_CreateTextureFromSurface(rend, background_s);
     SDL_Texture *anthill_t = SDL_CreateTextureFromSurface(rend, anthill_s);
     SDL_Texture *blackAnt_t = SDL_CreateTextureFromSurface(rend, blackAnt_s);
-
-
+    SDL_Texture *letreroR_t = SDL_CreateTextureFromSurface(rend, letreroR_s);
+    SDL_Texture *letreroL_t = SDL_CreateTextureFromSurface(rend, letreroL_s);
 
     //Creamos los contenedores de los objetos y les cargamos las imagenes
+    SDL_Rect letrero1;
+    SDL_Rect letrero2;
+    SDL_Rect letrero3;
+
+
 
     SDL_Rect antHill1_r;
     SDL_Rect antHill2_r;
@@ -202,11 +208,19 @@ int main() {
     //Inicializamos los calendarizadores
     //synchronizerInit();
 
+    letrero1.x = filas[0][STACKMAX ]->x;
+    letrero1.y = filas[0][STACKMAX ]->y - 120;
+
+    letrero2.x = filas[2][STACKMAX ]->x;
+    letrero2.y = filas[2][STACKMAX ]->y - 120;
+
+    letrero3.x = filas[4][STACKMAX ]->x;
+    letrero3.y = filas[4][STACKMAX ]->y - 120;
 
 
-
-
-
+    SDL_QueryTexture(letreroR_t, NULL, NULL, &letrero1.w, &letrero1.h);
+    SDL_QueryTexture(letreroR_t, NULL, NULL, &letrero2.w, &letrero2.h);
+    SDL_QueryTexture(letreroR_t, NULL, NULL, &letrero3.w, &letrero3.h);
 
     struct timespec {
         time_t tv_sec;
@@ -340,7 +354,7 @@ int main() {
         //drawAnts(rend, filas, blackAnt_r, blackAnt_t);
 
         drawBackground(rend, background_t, anthill_t, antHill1_r, antHill2_r, horizontal_roads, verticals_roads,
-                       mini_roads, canal_road);
+                       mini_roads, canal_road, letreroR_t,letreroL_t,letrero1,letrero2,letrero3);
         drawCells(rend);
         if (sendHomeRequested){
             printf("Send home\n");

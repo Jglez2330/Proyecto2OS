@@ -3,7 +3,7 @@
 #include <SDL2/SDL_render.h>
 #include "../Scheduler/LinkedList.h"
 
-# define COLAMAX 5
+//# define COLAMAX 5
 # define STACKMAX 5
 # define MAXANTS 1000
 #define WINDOW_WIDTH (1850)
@@ -28,13 +28,13 @@
 #define x_finalH_road (x_start_road + 2 * w_vertical_road + w_horizontal_road)
 #define w_canal_road ((horizontal_road3_x + 2 * w_vertical_road) - x_finalH_road)
 
-
+#define MAXMatrix (5)
 
 typedef struct {
     char antName[21];
     int x;
     int y;
-} Matrix[COLAMAX];
+} Matrix[MAXMatrix];
 
 
 

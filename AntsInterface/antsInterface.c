@@ -90,7 +90,7 @@ void postionAllAnt(listNode_t list, Matrix *filas[6]) {
 
 
                 } else if (ants[j].side == 'r') {
-                    ants[j].col_dest = (STACKMAX + COLAMAX) + i;
+                    ants[j].col_dest = (STACKMAX + channel_Ants[ants[j].canal].largoCanal) + i;
                     ants[antCounter].finalX = filas[ants[j].fila_dest][ants[j].col_dest]->x;
                     ants[antCounter].finalY = filas[ants[j].fila_dest][ants[j].col_dest]->y;
 
@@ -106,7 +106,7 @@ void crossAnt(int id) {
 
     if (ants[id].antId == id) {
         if (ants[id].side == 'l') {
-            ants[id].col_dest = STACKMAX + COLAMAX + 2;
+            ants[id].col_dest = STACKMAX + channel_Ants[ants[id].canal].largoCanal + 2;
             ants[id].dataItem.state = 99;
 
         } else if (ants[id].side == 'r') {
@@ -344,7 +344,7 @@ void postionInitialAnt(listNode_t list, int antCount) {
 //                    printf("Columna asignada %i \n", ants[antCount].col_dest);
                 return;
             } else if (ants[antCount].side == 'r') {
-                ants[antCount].col_dest = (STACKMAX + COLAMAX) + i;
+                ants[antCount].col_dest = (STACKMAX + channel_Ants[ants[antCount].canal].largoCanal) + i;
                 return;
             }
         }
@@ -506,18 +506,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].passedBridge = 0;
         ants[antCounter].sorted = 0;
 
-        int col;
-        if (side == 'l') {
-            ants[antCounter].col_act = 0;
-            col = ants[antCounter].col_act;
-        } else if (side == 'r') {
 
-            ants[antCounter].col_act = COLAMAX + STACKMAX * 2 - 1;
-            col = ants[antCounter].col_act;
-        }
-
-        ants[antCounter].finalX = filas[fila][col]->x;
-        ants[antCounter].finalY = filas[fila][col]->y;
 
 
         if (fila == 0) {
@@ -583,7 +572,18 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 //            postionAllAnt(*channel_Ants[ants[antCounter].canal].list_Ants_R, filas);
 //            ants[antCounter].sorted = 1;
 //        }
+        int col;
+        if (side == 'l') {
+            ants[antCounter].col_act = 0;
+            col = ants[antCounter].col_act;
+        } else if (side == 'r') {
 
+            ants[antCounter].col_act = channel_Ants[ants[antCounter].canal].largoCanal + STACKMAX * 2 - 1;
+            col = ants[antCounter].col_act;
+        }
+
+        ants[antCounter].finalX = filas[fila][col]->x;
+        ants[antCounter].finalY = filas[fila][col]->y;
 
         CEThread_t * thread1 = malloc (sizeof(CEThread_t));
         //pthread_t thread1;

@@ -157,15 +157,21 @@ int main() {
     const int y_startAntHill = antHill_y;
 
 
+    printf("C0: %i \n",channel_Ants[0].largoCanal);
+    printf("C1: %i \n",channel_Ants[1].largoCanal);
+    printf("C2: %i \n",channel_Ants[2].largoCanal);
 
 
-    int n = sizeOfStack * 2 + sizeOfCanal;
-    Matrix *f1 = malloc(n * sizeof(Matrix));
-    Matrix *f2 = malloc(n * sizeof(Matrix));
-    Matrix *f3 = malloc(n * sizeof(Matrix));
-    Matrix *f4 = malloc(n * sizeof(Matrix));
-    Matrix *f5 = malloc(n * sizeof(Matrix));
-    Matrix *f6 = malloc(n * sizeof(Matrix));
+    //Setteamos los del canal 0
+    Matrix *f1 = malloc((sizeOfStack * 2 + channel_Ants[0].largoCanal) * sizeof(Matrix));
+    Matrix *f2 = malloc((sizeOfStack * 2 + channel_Ants[0].largoCanal) * sizeof(Matrix));
+    //Setteamos los del canal 1
+
+    Matrix *f3 = malloc((sizeOfStack * 2 + channel_Ants[1].largoCanal) * sizeof(Matrix));
+    Matrix *f4 = malloc((sizeOfStack * 2 + channel_Ants[1].largoCanal) * sizeof(Matrix));
+    //Setteamos los del canal 2
+    Matrix *f5 = malloc((sizeOfStack * 2 + channel_Ants[2].largoCanal) * sizeof(Matrix));
+    Matrix *f6 = malloc((sizeOfStack * 2 + channel_Ants[2].largoCanal) * sizeof(Matrix));
 
 
     initialize_AntPos(x_start_road, y_start_road, &*f1,&*f2,&*f3,&*f4,&*f5,&*f6);

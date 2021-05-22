@@ -172,17 +172,17 @@ void moveInY(int counter, int finalY) {
 }
 
 
-void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t) {
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < sizeOfStack * 2 + sizeOfCanal; ++j) {
-            blackAnt_r.x = filas[i][j]->x;
-            blackAnt_r.y = filas[i][j]->y;
-
-            SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
-
-        }
-    }
-}
+//void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t) {
+//    for (int i = 0; i < 6; ++i) {
+//        for (int j = 0; j < sizeOfStack * 2 + sizeOfCanal; ++j) {
+//            blackAnt_r.x = filas[i][j]->x;
+//            blackAnt_r.y = filas[i][j]->y;
+//
+//            SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
+//
+//        }
+//    }
+//}
 
 void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
     SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
@@ -210,7 +210,12 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
     int x1 = x_start + 2 * w_vertical_road;
     int y1 = y_start;
     int sizeOfCell = w_horizontal_road / sizeOfStack;
-    int sizeOfCanalCell = w_canal_road / sizeOfCanal;
+    long sizeOfCanal0 = channel_Ants[0].largoCanal;
+    long sizeOfCanal1 = channel_Ants[1].largoCanal;
+    long sizeOfCanal2 = channel_Ants[2].largoCanal;
+    int sizeOfCanalCell0 = w_canal_road / sizeOfCanal0;
+    int sizeOfCanalCell1 = w_canal_road / sizeOfCanal1;
+    int sizeOfCanalCell2 = w_canal_road / sizeOfCanal2;
 
 
     Matrix *array[6] = {f1, f2, f3, f4, f5, f6};
@@ -230,14 +235,14 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 x1 += sizeOfCell;
             }
 
-            for (j; j < sizeOfStack + sizeOfCanal; j++) {
+            for (j; j < sizeOfStack + sizeOfCanal0; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c1_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell0;
             }
 
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal0; j < sizeOfStack * 2 + sizeOfCanal0; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -256,13 +261,13 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            for (j; j < sizeOfStack + sizeOfCanal; j++) {
+            for (j; j < sizeOfStack + sizeOfCanal1; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c2_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell1;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal1; j < sizeOfStack * 2 + sizeOfCanal1; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -280,13 +285,13 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            for (; j < sizeOfStack + sizeOfCanal; j++) {
+            for (; j < sizeOfStack + sizeOfCanal2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c3_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell2;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal2; j < sizeOfStack * 2 + sizeOfCanal2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -578,7 +583,7 @@ bool detectIfAntCross(int counter, char side) {
     int delCol;
 
     if (side == 'l') {
-        delCol = STACKMAX + COLAMAX;
+        delCol = STACKMAX + channel_Ants[ants[counter].canal].largoCanal;
         if (ants[counter].col_act > delCol) {
             ants[counter].sentHome = 1;
             if (ants[counter].passedBridge == 0){

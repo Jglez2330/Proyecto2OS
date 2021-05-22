@@ -4,7 +4,7 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 10000
+#define QUANTUM 100000
 #include "../Scheduler/LinkedList.h"
 
 #define Channels 4
@@ -193,6 +193,7 @@ void CEThread_end(void* return_value){
         prev->thread_context = NULL;
 
         free(prev);
+
         sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
         setcontext(current_running_thread->thread_context);
         return;
@@ -390,7 +391,7 @@ void unblock_threads_from_list_ants(int channel){
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
     scheduler_t * scheduler = channels_ants_t[channel];
-
+    if (scheduler != NULL) {
         dataItem *ant;
         CEThread_treadInfo *thread;
         int counter = 0;
@@ -405,6 +406,7 @@ void unblock_threads_from_list_ants(int channel){
             counter++;
 
         }
+    }
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
 
 }

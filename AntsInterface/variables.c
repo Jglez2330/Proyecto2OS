@@ -62,6 +62,7 @@ typedef struct Ant{
     int notSorting;
     int passedBridge;
     int passingBridge;
+    int fila;
     int finalX;
     int finalY;
     int sorted;

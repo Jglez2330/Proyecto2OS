@@ -3,7 +3,7 @@
 #include <SDL2/SDL_render.h>
 #include "../Scheduler/LinkedList.h"
 
-# define COLAMAX 5
+//# define COLAMAX 5
 # define STACKMAX 5
 # define MAXANTS 1000
 #define WINDOW_WIDTH (1850)
@@ -11,7 +11,7 @@
 #define x_start_road (400)
 #define y_start_road (100)
 #define gap_roads (55)
-#define w_horizontal_road (350)
+#define w_horizontal_road (300)
 
 #define w_vertical_road (50)
 #define h_horizontal_road (100)
@@ -19,7 +19,7 @@
 #define antHill_x (30)
 #define antHill_y (400)
 #define sizeOfStack (STACKMAX)
-#define sizeOfCanal (COLAMAX)
+
 #define regularSpeed (10)
 #define distanceBetweenHills (1550)
 #define distanceBetweenRoads ( distanceBetweenHills - 1000)
@@ -28,13 +28,13 @@
 #define x_finalH_road (x_start_road + 2 * w_vertical_road + w_horizontal_road)
 #define w_canal_road ((horizontal_road3_x + 2 * w_vertical_road) - x_finalH_road)
 
-
+#define MAXMatrix (5)
 
 typedef struct {
     char antName[21];
     int x;
     int y;
-} Matrix[COLAMAX];
+} Matrix[MAXMatrix];
 
 
 
@@ -70,6 +70,7 @@ typedef struct Ant{
     unsigned long int* tid;
     dataItem dataItem;
     int destroy;
+    int colitionFlag;
 
 
 }Ant;
@@ -89,7 +90,7 @@ int antCounter = 0;
 int w_ant;
 int h_ant;
 int cellSize;
-int colitionsFlag = 0;
+
 
 
 

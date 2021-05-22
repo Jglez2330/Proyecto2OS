@@ -66,7 +66,8 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
 
         }
 //        printf("Hormiga numero %i \n", counter);
-        if (verifyYColition(y1, y2) && verifyXColition(x1, x2)) {
+        if (verifyYColition(y1, y2) && verifyXColition(x1, x2) && !ants[i].destroy) {
+//           printf("Hormiga numero colisiona %i %c %i %i %i \n", counter,movDir, ants[counter].finalY,ants[counter].size.y, ants[counter].type);
             return 1;           //No se puede mover porque se translapa con hormiga de arriba
         }
     }
@@ -77,46 +78,72 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
 void moveInX(int counter, int finalX) {
 
     int distx = ants[counter].size.x - finalX;
-
+    printf("MoveInX %i \n", distx);
     if (distx > 0) {
         if (abs(distx) <= 5) {
-            if (colitionDetect(counter, 'l', 1) * !ants[counter].inStack) return;
+            if (colitionDetect(counter, 'l', 1) * ants[counter].colitionFlag) return;
             else {
                 ants[counter].size.x -= 1;
             }
         } else if (abs(distx) > 5 && abs(distx) <= 10) {
-            if (colitionDetect(counter, 'l', 5) * !ants[counter].inStack) return;
+            if (colitionDetect(counter, 'l', 5) * ants[counter].colitionFlag) return;
             else {
                 ants[counter].size.x -= 5;
             }
-        } else if (abs(distx) > 10) {
+        } else if (abs(distx) > 10 && abs(distx) <= 20) {
 //            printf("Se va a mover 10 en X a la izquierda\n");
-            if (colitionDetect(counter, 'l', regularSpeed * ants[counter].speed) * !ants[counter].inStack) return;
+            if (colitionDetect(counter, 'l', 10) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.x -= 10;
+            }
+        }
+        else if (abs(distx) > 20 && abs(distx) <= 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'l', 20) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.x -= 20;
+            }
+        }
+        else if ( abs(distx) > 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'l', regularSpeed * ants[counter].speed) * ants[counter].colitionFlag) return;
             else {
                 ants[counter].size.x -= regularSpeed * ants[counter].speed;
             }
         }
-
     }
-    if (distx < 0) {
+    else if (distx < 0) {
         if (abs(distx) <= 5) {
-            if (colitionDetect(counter, 'r', 1) * !ants[counter].inStack) return;
+            if (colitionDetect(counter, 'r', 1) * ants[counter].colitionFlag) return;
             else {
                 ants[counter].size.x += 1;
             }
         } else if (abs(distx) > 5 && abs(distx) <= 10) {
-            if (colitionDetect(counter, 'r', 5) * !ants[counter].inStack) return;
+            if (colitionDetect(counter, 'r', 5) * ants[counter].colitionFlag) return;
             else {
                 ants[counter].size.x += 5;
             }
 
-        } else if (abs(distx) > 10) {
-            if (colitionDetect(counter, 'r', regularSpeed * ants[counter].speed) * !ants[counter].inStack) {
-
+        } else if (abs(distx) > 10 && abs(distx) <= 20) {
+            if (colitionDetect(counter, 'r', 10) * ants[counter].colitionFlag) {
                 return;
             } else {
-                ants[counter].size.x += regularSpeed * ants[counter].speed;
+                ants[counter].size.x += 10;
 
+            }
+        }
+        else if (abs(distx) > 20 && abs(distx) <= 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'r', 20) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.x += 20;
+            }
+        }
+        else if ( abs(distx) > 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'r', regularSpeed * ants[counter].speed) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.x += regularSpeed * ants[counter].speed;
             }
         }
     } else {
@@ -129,41 +156,72 @@ void moveInY(int counter, int finalY) {
     int disty = ants[counter].size.y - finalY;
     if (disty > 0) {
 
-        if (abs(disty) <= 10) {
-            if (colitionDetect(counter, 'u', 1) * !ants[counter].inStack) {
-                return;
-            } else {
+        if (abs(disty) <= 5) {
+            if (colitionDetect(counter, 'u', 1) * ants[counter].colitionFlag) return;
+            else {
                 ants[counter].size.y -= 1;
             }
-
+        } else if (abs(disty) > 5 && abs(disty) <= 10) {
+            if (colitionDetect(counter, 'u', 5) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y -= 5;
+            }
+        } else if (abs(disty) > 10 && abs(disty) <= 20) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'u', 10) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y -= 10;
+            }
         }
-        if (abs(disty) > 10) {
-            if (colitionDetect(counter, 'u', regularSpeed * ants[counter].speed) * !ants[counter].inStack) {
-                return;
-            } else {
+        else if (abs(disty) > 20 && abs(disty) <= 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'u', 20) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y -= 20;
+            }
+        }
+        else if ( abs(disty) > 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'u', regularSpeed * ants[counter].speed) * ants[counter].colitionFlag) return;
+            else {
                 ants[counter].size.y -= regularSpeed * ants[counter].speed;
             }
-
         }
-        return;
 
     }
     if (disty < 0) {
 
-        if (abs(disty) <= 10) {
-            if (colitionDetect(counter, 'd', 1) * !ants[counter].inStack) {
-                return;
-            } else {
+        if (abs(disty) <= 5) {
+            if (colitionDetect(counter, 'd', 1) * ants[counter].colitionFlag) return;
+            else {
                 ants[counter].size.y += 1;
             }
-
+        } else if (abs(disty) > 5 && abs(disty) <= 10) {
+            if (colitionDetect(counter, 'd', 5) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y += 5;
+            }
+        } else if (abs(disty) > 10 && abs(disty) <= 20) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'd', 10) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y += 10;
+            }
         }
-        if (abs(disty) > 10) {
-            if (colitionDetect(counter, 'd', regularSpeed * ants[counter].speed) * !ants[counter].inStack) { return; }
-
-            else { ants[counter].size.y += regularSpeed * ants[counter].speed; }
+        else if (abs(disty) > 20 && abs(disty) <= 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'd', 20) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y += 20;
+            }
         }
-        return;
+        else if ( abs(disty) > 30) {
+//            printf("Se va a mover 10 en X a la izquierda\n");
+            if (colitionDetect(counter, 'd', regularSpeed * ants[counter].speed) * ants[counter].colitionFlag) return;
+            else {
+                ants[counter].size.y += regularSpeed * ants[counter].speed;
+            }
+        }
 
     } else {
         printf("No se logro mover en Y \n");
@@ -172,17 +230,17 @@ void moveInY(int counter, int finalY) {
 }
 
 
-void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t) {
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < sizeOfStack * 2 + sizeOfCanal; ++j) {
-            blackAnt_r.x = filas[i][j]->x;
-            blackAnt_r.y = filas[i][j]->y;
-
-            SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
-
-        }
-    }
-}
+//void drawAnts(SDL_Renderer *rend, Matrix *filas[6], SDL_Rect blackAnt_r, SDL_Texture *blackAnt_t) {
+//    for (int i = 0; i < 6; ++i) {
+//        for (int j = 0; j < sizeOfStack * 2 + sizeOfCanal; ++j) {
+//            blackAnt_r.x = filas[i][j]->x;
+//            blackAnt_r.y = filas[i][j]->y;
+//
+//            SDL_RenderCopy(rend, blackAnt_t, NULL, &blackAnt_r);
+//
+//        }
+//    }
+//}
 
 void drawLines(SDL_Renderer *rend, int largoCanal, int x_start, int y_start) {
     SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
@@ -210,7 +268,12 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
     int x1 = x_start + 2 * w_vertical_road;
     int y1 = y_start;
     int sizeOfCell = w_horizontal_road / sizeOfStack;
-    int sizeOfCanalCell = w_canal_road / sizeOfCanal;
+    long sizeOfCanal0 = channel_Ants[0].largoCanal;
+    long sizeOfCanal1 = channel_Ants[1].largoCanal;
+    long sizeOfCanal2 = channel_Ants[2].largoCanal;
+    int sizeOfCanalCell0 = w_canal_road / sizeOfCanal0;
+    int sizeOfCanalCell1 = w_canal_road / sizeOfCanal1;
+    int sizeOfCanalCell2 = w_canal_road / sizeOfCanal2;
 
 
     Matrix *array[6] = {f1, f2, f3, f4, f5, f6};
@@ -230,14 +293,14 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 x1 += sizeOfCell;
             }
 
-            for (j; j < sizeOfStack + sizeOfCanal; j++) {
+            for (j; j < sizeOfStack + sizeOfCanal0; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c1_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell0;
             }
 
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal0; j < sizeOfStack * 2 + sizeOfCanal0; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -256,13 +319,13 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            for (j; j < sizeOfStack + sizeOfCanal; j++) {
+            for (j; j < sizeOfStack + sizeOfCanal1; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c2_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell1;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal1; j < sizeOfStack * 2 + sizeOfCanal1; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -280,13 +343,13 @@ initialize_AntPos(int x_start, int y_start, Matrix *f1, Matrix *f2, Matrix *f3, 
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
             }
-            for (; j < sizeOfStack + sizeOfCanal; j++) {
+            for (; j < sizeOfStack + sizeOfCanal2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = c3_y;
-                x1 += sizeOfCanalCell;
+                x1 += sizeOfCanalCell2;
             }
             x1 = horizontal_road3_x + 2 * w_vertical_road;
-            for (int j = sizeOfStack + sizeOfCanal; j < sizeOfStack * 2 + sizeOfCanal; j++) {
+            for (int j = sizeOfStack + sizeOfCanal2; j < sizeOfStack * 2 + sizeOfCanal2; j++) {
                 array[i][j]->x = x1;
                 array[i][j]->y = y1;
                 x1 += sizeOfCell;
@@ -433,23 +496,62 @@ drawHills(SDL_Renderer *rend, SDL_Texture *anthill_t, SDL_Rect antHill1_r, SDL_R
         temp_gap += gap_roads;
     }
 }
+void drawSignBoard(SDL_Renderer *rend,SDL_Texture *letreroR_t,SDL_Texture *letreroL_t,SDL_Rect letrero1,SDL_Rect letrero2,SDL_Rect letrero3){
+    letrero1.w *=0.14;
+    letrero1.h *=0.14;
+
+    letrero2.w *=0.14;
+    letrero2.h *=0.14;
+
+    letrero3.w *=0.14;
+    letrero3.h *=0.14;
+    if (channel_Ants[0].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero1);
+    }
+    else if (channel_Ants[0].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero1);
+    }
+    if (channel_Ants[1].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero2);
+    }
+    else if (channel_Ants[1].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero2);
+    }
+
+    if (channel_Ants[2].sideFlag == 0){
+        SDL_RenderCopy(rend, letreroR_t, NULL, &letrero3);
+    }
+    else if (channel_Ants[2].sideFlag == 1){
+        SDL_RenderCopy(rend, letreroL_t, NULL, &letrero3);
+    }
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero1);
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero2);
+//    SDL_RenderCopy(rend, letreroR_t, NULL, &letrero3);
+}
 
 void drawBackground(SDL_Renderer *rend, SDL_Texture *background_t, SDL_Texture *anthill_t, SDL_Rect antHill1_r,
                     SDL_Rect antHill2_r, SDL_Rect horizontal_roads, SDL_Rect vertical_roads, SDL_Rect mini_roads,
-                    SDL_Rect canal_roads) {
+                    SDL_Rect canal_roads,SDL_Texture *letreroR_t,SDL_Texture *letreroL_t, SDL_Rect letrero1,SDL_Rect letrero2,SDL_Rect letrero3) {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, background_t, NULL, NULL);
     drawHills(rend, anthill_t, antHill1_r, antHill2_r, mini_roads);
     drawRoads(rend, horizontal_roads, vertical_roads);
     drawCanal(rend, canal_roads);
+
+    drawSignBoard(rend,letreroR_t,letreroL_t,letrero1,letrero2,letrero3);
+
+//    SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
+
+
 }
 
 void sendHome(int counter, char side) {
 
-    int entrance = antHill_y + 100;
+    int entrance = antHill_y + 50;
     int disty = ants[counter].size.y - entrance;  //Distancia en y que le falta a la hormiga para entrar
 
     if (disty == 0) {  //Si la distancia es igual a cero entonces metemos la hormiga al hormiguero
+        printf("Esta alineado con el hormiguero %i \n",counter);
         int antHillposX;
         if (ants[counter].side == 'r') antHillposX = antHill_x;
         if (ants[counter].side == 'l') antHillposX = vertical_road3_x + 300;
@@ -465,7 +567,7 @@ void sendHome(int counter, char side) {
     if (ants[counter].side == 'l') distx = vertical_road3_x - ants[counter].size.x;
 
     if (distx == 0) {
-        moveInY(counter, antHill_y + 100);
+        moveInY(counter, entrance);
         ants[counter].passingBridge = 0;
 
         return;
@@ -513,6 +615,7 @@ bool positionInInitialRow(int counter, char side) {
     if (disty ==
         0) { //Significa que está posicionado en las carreteras verticales laterales y listo para meterse en las filas
         ants[counter].inStack = 1;
+        ants[counter].colitionFlag = 0;
         return true;
     } else {
         moveInY(counter, ants[counter].y_dest);
@@ -541,10 +644,12 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
             || ants[counter].size.y != finalY) {
 
             if (ants[counter].size.x != finalX) {
+                printf("Se va a mover en X %i %i \n", ants[counter].size.x , ants[counter].finalX);
                 moveInX(counter, finalX);
                 return;
             }
             if (ants[counter].size.y != finalY) {
+                printf("Se va a mover en Y %i %i \n", ants[counter].size.y , ants[counter].finalY);
                 moveInY(counter, finalY);
                 return;
             }
@@ -578,7 +683,7 @@ bool detectIfAntCross(int counter, char side) {
     int delCol;
 
     if (side == 'l') {
-        delCol = STACKMAX + COLAMAX;
+        delCol = STACKMAX + channel_Ants[ants[counter].canal].largoCanal;
         if (ants[counter].col_act > delCol) {
             ants[counter].sentHome = 1;
             if (ants[counter].passedBridge == 0){
@@ -600,7 +705,8 @@ bool detectIfAntCross(int counter, char side) {
             if (ants[counter].passedBridge == 0) {
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
-                printf("\nEL MAE YA PASO!\n");
+
+
             }
 
             return true;

@@ -4,9 +4,9 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
+#define QUANTUM 2000
 #include "../Scheduler/LinkedList.h"
 
-#define QUANTUM 7500
 #define Channels 4
 long globalTID = 0;
 int current_channel;
@@ -179,6 +179,7 @@ void CEThread_end(void* return_value){
     current_running_thread->state = RUNNING_thread;
 
     if(prev->detach == 1 ){
+        printf("Se eliminó thread : %li \n", prev->tid);
         free(prev->thread_context->uc_stack.ss_sp);
         free(prev->thread_context);
         prev->thread_context = NULL;

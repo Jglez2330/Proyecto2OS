@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "SDL2/SDL_mixer.h"
 #include "SDL2/SDL_timer.h"
-#include <time.h>
+
 //#include "../Synchronizer/synchronizer.h"
 //
 

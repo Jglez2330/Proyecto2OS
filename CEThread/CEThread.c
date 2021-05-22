@@ -4,13 +4,13 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 2000
+#define QUANTUM 7500
 #include "../Scheduler/LinkedList.h"
 
 #define Channels 4
 long globalTID = 0;
 int current_channel;
-listNode_t* channels_ants_t[6];
+scheduler_t * channels_ants_t[6];
 CEThread_treadInfo* main_thread;
 listNode_t_thread* thread_list;
 listNode_t_thread* zombie_list;
@@ -365,35 +365,50 @@ void unblock_threads_from_list(listNode_t_thread* list) {
     }
 };
 
-void block_threads_from_list(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
+void block_threads_from_list(int channel){
     sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
-    channels_ants_t[channel] = listNode;
+    listNode_t* listNode = channels_ants_t[channel]->listNode;
     dataItem *ant;
     CEThread_treadInfo* thread;
-    int i = 0;
+    int i = 1;
     while (getNode_t(listNode, i)!= NULL) {
         ant = getNode_t(listNode, i++);
         thread = get_thread_by_tid(*ant->tid);
         thread->state = BLOCKED_thread;
     }
-    for (int i = 0; i < wfixed; i++){
-        ant = getNode_t(listNode, i);
-        thread = get_thread_by_tid(*ant->tid);
-        thread->state = READY_thread;
-    }
+    //ant = getNode_t(listNode, 0);
+    //thread = get_thread_by_tid(*ant->tid);
+    //thread->state = READY_thread;
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
 
 }
 
 void unblock_threads_from_list_ants(int channel){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
-    listNode_t* listNode = channels_ants_t[channel];
+    scheduler_t * scheduler = channels_ants_t[channel];
     dataItem *ant;
     CEThread_treadInfo* thread;
     int i = 0;
-    while (getNode_t(listNode, i)!= NULL) {
-        ant = getNode_t(listNode, i++);
+    int counter = 0;
+    while (getFront_t(scheduler->listNode) != NULL) {
+        ant = getFront_t(scheduler->listNode);
         thread = get_thread_by_tid(*ant->tid);
         thread->state = READY_thread;
+        deleteNodePosition(&scheduler->listNode,0);
+        if (counter + 1 == scheduler->wfixed){
+            break;
+        }
+        counter++;
+
     }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+
+}
+
+void init_scheduler(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
+    channels_ants_t[channel] = malloc(sizeof(scheduler_t));
+    channels_ants_t[channel]->wfixed = wfixed;
+    channels_ants_t[channel]->listNode = listNode;
+    channels_ants_t[channel]->scheduler_type = scheduler_type;
 }

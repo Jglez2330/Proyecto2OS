@@ -203,8 +203,10 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
             listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
-            block_threads_from_list(temp_ants_list,1, 0, ants[antId_in].canal);
-
+           // CEThread_mutex_lock(&mutex);
+            init_scheduler(temp_ants_list, 1,0,ants[antId_in].canal);
+            block_threads_from_list(ants[antId_in].canal);
+            unblock_threads_from_list_ants(ants[antId_in].canal);
         }
         channel_Ants[ants[antId_in].canal].count_W--;
         printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);

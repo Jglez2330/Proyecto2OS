@@ -28,8 +28,6 @@ typedef struct listNode_t_thread{
 }listNode_t_thread;
 
 
-void block_threads_from_list(listNode_t* listNode, long wfixed, long scheduler_type, int channel);
-void unblock_threads_from_list_ants(int channel);
 void push_t_thread(struct listNode_t_thread **start_ref, CEThread_treadInfo * threadInfo);
 void append_thread(struct listNode_t_thread** head_ref, CEThread_treadInfo * threadInfo);
 void deleteNodePosition_thread(struct listNode_t_thread **head_ref, int position);

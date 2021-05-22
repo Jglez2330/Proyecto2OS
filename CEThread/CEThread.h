@@ -9,6 +9,13 @@
 #include <ucontext.h>
 #include <signal.h>
 #include <sys/time.h>
+
+//TODO:
+typedef struct {
+    listNode_t* listNode;
+    long wfixed;
+    long scheduler_type;
+}scheduler_t;
 enum process_state {READY_thread = 0, RUNNING_thread = 1, BLOCKED_thread = 2, TERMINATED_thread = 3};
 
 typedef struct {
@@ -31,7 +38,10 @@ int CEThread_mutex_lock(CEThread_mutex_t* mutex);
 int CEThread_mutex_unlock(CEThread_mutex_t* mutex);
 void CEThread_start(void* (*start_routine)(void*), void* args);
 void context_switching(int sig);
+void init_scheduler(listNode_t* listNode, long wfixed, long scheduler_type, int channel);
 CEThread_treadInfo* get_thread_by_tid(CEThread_t tid);
+void unblock_threads_from_list_ants(int channel);
+void block_threads_from_list(int channel);
 void unblock_threads_from_list(listNode_t_thread* list);
 CEThread_treadInfo* get_thread_by_tid_zombie(CEThread_t thread);
 #endif //PROYECTO2OS_CETHREAD_H

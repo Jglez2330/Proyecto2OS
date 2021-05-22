@@ -582,16 +582,17 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 //            ants[antCounter].sorted = 1;
 //        }
 
-        CEThread_t thread1;
+        CEThread_t * thread1 = malloc (sizeof(CEThread_t));
         //pthread_t thread1;
         struct Params *param;
         param = malloc(sizeof(struct Params));
         param->antId = antCounter;
         param->filas = filas;
+        ants[antCounter].tid = thread1;
+        ants[antCounter].dataItem.tid = thread1 ;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
-//        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
-        CEThread_create(&thread1, NULL, startAntMotion, param);
-        CEThread_detach(thread1); //Auto frees
+        CEThread_create(thread1, NULL, startAntMotion, param);
+        CEThread_detach(*thread1); //Auto frees
 
         antCounter++;
     }

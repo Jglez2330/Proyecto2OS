@@ -7,14 +7,14 @@
 //#include "../Scheduler/LinkedList.h"
 
 
-
+int alpha = 0;
+int hay_threads;
 struct Params {
 
     int antId;
     Matrix **filas;
 };
-pthread_mutex_t mutex;
-
+CEThread_mutex_t mutex;
 int initializeNPC(SDL_Renderer *rend, SDL_Window *win) {
 
     //Cargar imagenes
@@ -194,6 +194,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     if (channel_Ants[ants[antId_in].canal].passedAnts == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
         channel_Ants[ants[antId_in].canal].passedAnts = 0;
         channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
+        unblock_all_threads_ants(ants[antId_in].canal);
 
     }
 
@@ -203,6 +204,13 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         && channel_Ants[ants[antId_in].canal].list_Ants_L != NULL &&
         channel_Ants[ants[antId_in].canal].list_Ants_L->dataInfo != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
+        if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
+            listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
+           // CEThread_mutex_lock(&mutex);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,0,ants[antId_in].canal);
+            block_threads_from_list(ants[antId_in].canal);
+            unblock_threads_from_list_ants(ants[antId_in].canal);
+        }
         channel_Ants[ants[antId_in].canal].count_W--;
         printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);
 
@@ -210,6 +218,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             //ants_Waiting_2_Terminated(ants[antId_in].canal, ants[antId_in].side);
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 1;
+
             //channel_Ants[ants[antId_in].canal].semaforoActive_R = 1;
         }
         // pthread_mutex_lock(&mutex);
@@ -220,6 +229,8 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         ants[id].passingBridge = 1;
 
         printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
+
+
 
         deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_L, 0);
         if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_L) == NULL
@@ -248,6 +259,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         if (channel_Ants[ants[antId_in].canal].count_W == 0) {
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 0;
+
         }
 
         printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
@@ -280,7 +292,9 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
 
 void *startAntMotion(void *params) {
     struct Params *p = params;
-
+    if (alpha++ == 0){
+        CEThread_mutex_init(&mutex);
+    }
 //    printf("La fila de la hormiga es: %i \n", ants[p->antId].fila_act);
     while (1) {
 //        printf("Ejecutando movimiento de hormiga %i \n", p->antId);
@@ -322,10 +336,8 @@ void *startAntMotion(void *params) {
             }
 
 
-            CEThread_yield();
             continue;
         } else {
-            CEThread_yield();
             continue;
         }
 
@@ -596,6 +608,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].dataItem.tid = thread1 ;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
         CEThread_create(thread1, NULL, startAntMotion, param);
+        hay_threads = 1;
         CEThread_detach(*thread1); //Auto frees
 
         antCounter++;

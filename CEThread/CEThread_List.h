@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ucontext.h>
+#include "../Scheduler/LinkedList.h"
+
 typedef unsigned long int CEThread_t;
 typedef struct Thread_t{
     CEThread_t tid;
@@ -24,7 +26,6 @@ typedef struct listNode_t_thread{
     struct listNode_t_thread *next;
     int  size;
 }listNode_t_thread;
-
 
 
 void push_t_thread(struct listNode_t_thread **start_ref, CEThread_treadInfo * threadInfo);

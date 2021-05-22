@@ -386,8 +386,10 @@ int main() {
         updateNPC(rend, filas);
 //        drawAnts(rend, filas, blackAnt_r, blackAnt_t);
         SDL_RenderPresent(rend);
-
-//        SDL_Delay(100);
+        if (hay_threads) {
+            CEThread_yield();
+        }
+       SDL_Delay(10);
     }
 
 }

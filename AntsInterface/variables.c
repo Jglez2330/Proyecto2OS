@@ -67,7 +67,7 @@ typedef struct Ant{
     int sorted;
     long canal;
     long scheduler_selected;
-    CEThread_t * tid;
+    unsigned long int* tid;
     dataItem dataItem;
     int destroy;
     int colitionFlag;

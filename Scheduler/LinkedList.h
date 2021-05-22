@@ -8,11 +8,10 @@
 #include <sys/ucontext.h>
 #include "LinkedList.h"
 #include <math.h>
-#include "../CEThread/CEThread.h"
-
+#include <malloc.h>
 
 typedef struct dataItem{
-    CEThread_t *tid;
+    unsigned long int *tid;
     int state;
     int priority;
     int var_SJF;
@@ -50,5 +49,5 @@ void printList_t(struct listNode_t *start);
 void listCycle_t(struct listNode_t** head);
 int getCount_t(struct listNode_t* head);
 dataItem* getFront_t(struct listNode_t* head);
-
+listNode_t* copyList(struct listNode_t* head);
 #endif //SCHEDULER_LINKEDLIST_H

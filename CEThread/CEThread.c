@@ -4,13 +4,13 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 2000
+#define QUANTUM 10000
 #include "../Scheduler/LinkedList.h"
 
 #define Channels 4
 long globalTID = 0;
 int current_channel;
-listNode_t* channels_ants_t[6];
+scheduler_t * channels_ants_t[6];
 CEThread_treadInfo* main_thread;
 listNode_t_thread* thread_list;
 listNode_t_thread* zombie_list;
@@ -64,6 +64,10 @@ void CEThread_get_main_thread_context() {
     {
         perror("Unable to set timer alarm");
         exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < 6; ++i) {
+        channels_ants_t[i] = NULL;
     }
 
     /* install signal handler for SIGVTALRM */
@@ -152,6 +156,7 @@ void context_switching(int sig){
     CEThread_treadInfo *next;
     do {
         next = get_next_thread();
+        printf("");
     } while (next->state != READY_thread);
 
     CEThread_treadInfo * prev = current_running_thread;
@@ -165,6 +170,7 @@ void context_switching(int sig){
     current_running_thread = next;
 
     /* unblock the signal */
+
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
     swapcontext(prev->thread_context, current_running_thread->thread_context);
 }
@@ -175,7 +181,9 @@ void CEThread_end(void* return_value){
     CEThread_treadInfo * prev = getFront_t_thread(thread_list);
     deleteNodePosition_thread(&thread_list, 0);
 
-    current_running_thread = get_next_thread();
+    do {
+        current_running_thread = get_next_thread();
+    }while(current_running_thread->state != READY_thread);
     current_running_thread->state = RUNNING_thread;
 
     if(prev->detach == 1 ){
@@ -363,32 +371,74 @@ void unblock_threads_from_list(listNode_t_thread* list) {
     }
 };
 
-void block_threads_from_list(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
-
-    channels_ants_t[channel] = listNode;
+void block_threads_from_list(int channel){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+    listNode_t* listNode = channels_ants_t[channel]->listNode;
     dataItem *ant;
     CEThread_treadInfo* thread;
-    while (getFront_t(listNode)!= NULL) {
-        ant = getFront_t(listNode);
+    int i = 1;
+    while (getNode_t(listNode, i)!= NULL) {
+        ant = getNode_t(listNode, i++);
         thread = get_thread_by_tid(*ant->tid);
         thread->state = BLOCKED_thread;
-        //append_thread(&thread_list, r);
     }
-    for (int i = 0; i < wfixed; ++i) {
-        ant = getFront_t(listNode);
-        thread = get_thread_by_tid(*ant->tid);
-        thread->state = READY_thread;
-    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+
 }
 
 void unblock_threads_from_list_ants(int channel){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
 
-    listNode_t* listNode = channels_ants_t[channel];
-    dataItem *ant;
-    CEThread_treadInfo* thread;
-    while (getFront_t(listNode)!= NULL) {
-        ant = getFront_t(listNode);
-        thread = get_thread_by_tid(*ant->tid);
-        thread->state = BLOCKED_thread;
+    scheduler_t * scheduler = channels_ants_t[channel];
+
+        dataItem *ant;
+        CEThread_treadInfo *thread;
+        int counter = 0;
+        while (getFront_t(scheduler->listNode) != NULL) {
+            ant = getFront_t(scheduler->listNode);
+            thread = get_thread_by_tid(*ant->tid);
+            thread->state = READY_thread;
+            deleteNodePosition(&scheduler->listNode, 0);
+            if (counter + 1 == scheduler->wfixed) {
+                break;
+            }
+            counter++;
+
+        }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+
+}
+
+void init_scheduler(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
+    if (channels_ants_t[channel] == NULL) {
+        channels_ants_t[channel] = malloc(sizeof(scheduler_t));
+        if (scheduler_type == 0) {
+            channels_ants_t[channel]->wfixed = wfixed;
+            channels_ants_t[channel]->listNode = listNode;
+            channels_ants_t[channel]->scheduler_type = scheduler_type;
+        } else{
+            channels_ants_t[channel]->wfixed = 1;
+            channels_ants_t[channel]->listNode = listNode;
+            channels_ants_t[channel]->scheduler_type = scheduler_type;
+        }
     }
+}
+
+void unblock_all_threads_ants(int channel){
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
+
+    scheduler_t * scheduler = channels_ants_t[channel];
+    if (scheduler != NULL) {
+        dataItem *ant;
+        CEThread_treadInfo *thread;
+        while (getFront_t(scheduler->listNode) != NULL) {
+            ant = getFront_t(scheduler->listNode);
+            thread = get_thread_by_tid(*ant->tid);
+            thread->state = READY_thread;
+            deleteNodePosition(&scheduler->listNode, 0);
+        }
+        free(channels_ants_t[channel]);
+        channels_ants_t[channel] = NULL;
+    }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
 }

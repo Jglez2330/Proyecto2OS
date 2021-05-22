@@ -201,3 +201,20 @@ dataItem * getFront_t(struct listNode_t* head){
     return getNode_t(head,0);
 
 }
+
+listNode_t* copyList(struct listNode_t* head)
+{
+    if (head == NULL) {
+        return NULL;
+    }
+    else {
+        struct listNode_t* newNode
+                = (struct listNode_t*)malloc(
+                        sizeof(struct listNode_t));
+        newNode->dataInfo = head->dataInfo;
+
+        newNode->next = copyList(head->next);
+
+        return newNode;
+    }
+}

@@ -407,7 +407,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = blackLeft1;
                     ants[antCounter].size.x = antHill_x + distanceBetweenHills - 20;
-                    ants[antCounter].size.y = antHill_y + 100;
+
 
                 }
                 if (side == 'l') {
@@ -416,7 +416,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = blackRight1;
                     ants[antCounter].size.x = x_start_road - 100;
-                    ants[antCounter].size.y = antHill_y + 50;
+                    
 
                 }
                 break;
@@ -442,7 +442,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = redLeft1;
                     ants[antCounter].size.x = antHill_x + distanceBetweenHills - 20;
-                    ants[antCounter].size.y = antHill_y + 100;
+
                 }
                 if (side == 'l') {
 
@@ -450,7 +450,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = redRight1;
                     ants[antCounter].size.x = x_start_road - 100;
-                    ants[antCounter].size.y = antHill_y + 50;
+
                 }
                 break;
             case queen:
@@ -475,7 +475,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = queenLeft1;
                     ants[antCounter].size.x = antHill_x + distanceBetweenHills - 20;
-                    ants[antCounter].size.y = antHill_y + 100;
+
                 }
                 if (side == 'l') {
 
@@ -483,12 +483,12 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                                      &(ants[antCounter].size.h));
                     ants[antCounter].currentSprite = queenRight1;
                     ants[antCounter].size.x = x_start_road - 100;
-                    ants[antCounter].size.y = antHill_y + 50;
+
                 }
                 break;
 
         }
-
+        ants[antCounter].size.y = antHill_y + 100;
         ants[antCounter].fila_act = fila;
         ants[antCounter].passingBridge = 0;
 

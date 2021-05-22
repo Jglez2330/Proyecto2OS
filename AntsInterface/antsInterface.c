@@ -108,10 +108,11 @@ void crossAnt(int id) {
         if (ants[id].side == 'l') {
             ants[id].col_dest = STACKMAX + channel_Ants[ants[id].canal].largoCanal + 2;
             ants[id].dataItem.state = 99;
+            ants[id].colitionFlag = 1;
 
         } else if (ants[id].side == 'r') {
             ants[id].col_dest = STACKMAX - 2;
-            ants[id].dataItem.state = 99;
+            ants[id].colitionFlag = 1;
         }
     }
 }
@@ -453,7 +454,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                 }
                 break;
             case queen:
-                ants[antCounter].speed = 2;
+                ants[antCounter].speed = 3;
 
                 hormiga0->state = 0;
                 hormiga0->priority = 10;
@@ -497,7 +498,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].size.w *= 0.03;
         ants[antCounter].side = side;
         ants[antCounter].notSorting = 1;
-
+        ants[antCounter].colitionFlag = 1;
 
         ants[antCounter].type = type;
         ants[antCounter].antId = antCounter;

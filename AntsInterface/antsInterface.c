@@ -102,6 +102,8 @@ void postionAllAnt(listNode_t list, Matrix *filas[6]) {
 
 void crossAnt(int id) {
 
+
+
     if (ants[id].antId == id) {
         if (ants[id].side == 'l') {
             ants[id].col_dest = STACKMAX + COLAMAX + 2;
@@ -581,6 +583,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 //            postionAllAnt(*channel_Ants[ants[antCounter].canal].list_Ants_R, filas);
 //            ants[antCounter].sorted = 1;
 //        }
+
 
         CEThread_t * thread1 = malloc (sizeof(CEThread_t));
         //pthread_t thread1;

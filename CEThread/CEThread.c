@@ -152,6 +152,7 @@ void context_switching(int sig){
     CEThread_treadInfo *next;
     do {
         next = get_next_thread();
+        printf("");
     } while (next->state != READY_thread);
 
     CEThread_treadInfo * prev = current_running_thread;
@@ -165,6 +166,7 @@ void context_switching(int sig){
     current_running_thread = next;
 
     /* unblock the signal */
+
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
     swapcontext(prev->thread_context, current_running_thread->thread_context);
 }
@@ -364,21 +366,23 @@ void unblock_threads_from_list(listNode_t_thread* list) {
 };
 
 void block_threads_from_list(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
-
+    sigprocmask(SIG_BLOCK, &context_switching_alarm, NULL);
     channels_ants_t[channel] = listNode;
     dataItem *ant;
     CEThread_treadInfo* thread;
-    while (getFront_t(listNode)!= NULL) {
-        ant = getFront_t(listNode);
+    int i = 0;
+    while (getNode_t(listNode, i)!= NULL) {
+        ant = getNode_t(listNode, i++);
         thread = get_thread_by_tid(*ant->tid);
         thread->state = BLOCKED_thread;
-        //append_thread(&thread_list, r);
     }
-    for (int i = 0; i < wfixed; ++i) {
-        ant = getFront_t(listNode);
+    for (int i = 0; i < wfixed; i++){
+        ant = getNode_t(listNode, i);
         thread = get_thread_by_tid(*ant->tid);
         thread->state = READY_thread;
     }
+    sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
+
 }
 
 void unblock_threads_from_list_ants(int channel){
@@ -386,9 +390,10 @@ void unblock_threads_from_list_ants(int channel){
     listNode_t* listNode = channels_ants_t[channel];
     dataItem *ant;
     CEThread_treadInfo* thread;
-    while (getFront_t(listNode)!= NULL) {
-        ant = getFront_t(listNode);
+    int i = 0;
+    while (getNode_t(listNode, i)!= NULL) {
+        ant = getNode_t(listNode, i++);
         thread = get_thread_by_tid(*ant->tid);
-        thread->state = BLOCKED_thread;
+        thread->state = READY_thread;
     }
 }

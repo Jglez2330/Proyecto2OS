@@ -4,22 +4,28 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
+#include "../Scheduler/LinkedList.h"
+
 #define QUANTUM 7500
 #define Channels 4
 long globalTID = 0;
 int current_channel;
+listNode_t* channels_ants_t[6];
 CEThread_treadInfo* main_thread;
 listNode_t_thread* thread_list;
 listNode_t_thread* zombie_list;
 
 CEThread_treadInfo* current_running_thread;
 sigset_t context_switching_alarm;
+
 static struct itimerval timer_context;
 
 CEThread_treadInfo *get_next_thread();
 
 
 bool is_thread_inside(listNode_t_thread *pNode, CEThread_treadInfo *pThread);
+
+void copy_list(listNode_t *pNode);
 
 void CEThread_get_main_thread_context() {
     struct sigaction act;
@@ -355,3 +361,33 @@ void unblock_threads_from_list(listNode_t_thread* list) {
         deleteNodePosition_thread(&list, 0);
     }
 };
+
+void block_threads_from_list(listNode_t* listNode, long wfixed, long scheduler_type, int channel){
+
+    channels_ants_t[channel] = listNode;
+    dataItem *ant;
+    CEThread_treadInfo* thread;
+    while (getFront_t(listNode)!= NULL) {
+        ant = getFront_t(listNode);
+        thread = get_thread_by_tid(*ant->tid);
+        thread->state = BLOCKED_thread;
+        //append_thread(&thread_list, r);
+    }
+    for (int i = 0; i < wfixed; ++i) {
+        ant = getFront_t(listNode);
+        thread = get_thread_by_tid(*ant->tid);
+        thread->state = READY_thread;
+    }
+}
+
+void unblock_threads_from_list_ants(int channel){
+
+    listNode_t* listNode = channels_ants_t[channel];
+    dataItem *ant;
+    CEThread_treadInfo* thread;
+    while (getFront_t(listNode)!= NULL) {
+        ant = getFront_t(listNode);
+        thread = get_thread_by_tid(*ant->tid);
+        thread->state = BLOCKED_thread;
+    }
+}

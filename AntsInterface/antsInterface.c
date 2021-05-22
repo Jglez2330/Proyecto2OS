@@ -107,6 +107,7 @@ void crossAnt(int id) {
                 ants[i].col_dest = STACKMAX + COLAMAX + 2;
                 ants[i].dataItem.state = 99;
 
+
             } else if (ants[i].side == 'r') {
                 ants[i].col_dest = STACKMAX - 2;
                 ants[i].dataItem.state = 99;
@@ -567,7 +568,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 //            ants[antCounter].sorted = 1;
 //        }
 
-        CEThread_t thread1;
+        CEThread_t* thread1 = malloc(sizeof(CEThread_t));
         //pthread_t thread1;
         struct Params *param;
         param = malloc(sizeof(struct Params));
@@ -575,8 +576,8 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         param->filas = filas;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
 //        CEThread_create( &thread1,startAntMotion, param, scheduler,scheduler->canalNumber);
-        CEThread_create(&thread1, NULL, startAntMotion, param);
-        CEThread_detach(thread1); //Auto frees
+        CEThread_create(thread1, NULL, startAntMotion, param);
+        CEThread_detach(*thread1); //Auto frees
 
         antCounter++;
     }

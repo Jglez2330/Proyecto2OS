@@ -101,18 +101,15 @@ void postionAllAnt(listNode_t list, Matrix *filas[6]) {
 }
 
 void crossAnt(int id) {
-    for (int i = 0; i < antCounter; i++) {
-        if (ants[i].antId == id) {
-            if (ants[i].side == 'l') {
-                ants[i].col_dest = STACKMAX + COLAMAX + 2;
-                ants[i].dataItem.state = 99;
 
-            } else if (ants[i].side == 'r') {
-                ants[i].col_dest = STACKMAX - 2;
-                ants[i].dataItem.state = 99;
-            }
+    if (ants[id].antId == id) {
+        if (ants[id].side == 'l') {
+            ants[id].col_dest = STACKMAX + COLAMAX + 2;
+            ants[id].dataItem.state = 99;
 
-
+        } else if (ants[id].side == 'r') {
+            ants[id].col_dest = STACKMAX - 2;
+            ants[id].dataItem.state = 99;
         }
     }
 }
@@ -175,8 +172,8 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     }
 
     int hormigasEspearando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
-     printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
-    printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
+    //printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
+    //printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
     if (channel_Ants[ants[antId_in].canal].countAntsWait == hormigasEspearando) {
 
         if (ants[antId_in].side == 'r' && channel_Ants[ants[antId_in].canal].sideFlag == 1) {
@@ -287,7 +284,7 @@ void *startAntMotion(void *params) {
         //nanosleep(&tiempo, &tiempo);
         CEThread_yield();
 
-        if (ants[p->antId].destroy){
+        if (ants[p->antId].destroy) {
             return NULL;
         }
 
@@ -322,9 +319,6 @@ void *startAntMotion(void *params) {
             }
 
 
-
-
-
             CEThread_yield();
             continue;
         } else {
@@ -356,20 +350,20 @@ void postionInitialAnt(listNode_t list, int antCount) {
 
     }
 }
-int verifySpaceInStack(int fila, char side){
+
+int verifySpaceInStack(int fila, char side) {
     int canal;
-    if (fila ==0  || fila == 1) {
+    if (fila == 0 || fila == 1) {
         canal = 0;
 
-    }  else if (fila == 2 || fila == 3) {
+    } else if (fila == 2 || fila == 3) {
         canal = 1;
-    } else if (fila == 4 ||  fila == 5) {
+    } else if (fila == 4 || fila == 5) {
         canal = 2;
     }
-    if(side == 'r'){
+    if (side == 'r') {
         return getCount_t(channel_Ants[canal].list_Ants_R) + 1 == channel_Ants[canal].countAntsWait;
-    }
-    else if(side == 'l'){
+    } else if (side == 'l') {
         return getCount_t(channel_Ants[canal].list_Ants_L) + 1 == channel_Ants[canal].countAntsWait;
     }
 
@@ -378,7 +372,7 @@ int verifySpaceInStack(int fila, char side){
 
 void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 
-    if (verifySpaceInStack(fila,side)) return;
+    if (verifySpaceInStack(fila, side)) return;
 
     if (antCounter < maxAnts) {
         dataItem *hormiga0 = malloc(sizeof(dataItem));
@@ -655,7 +649,7 @@ void updateNPC(SDL_Renderer *rend, Matrix *filas[6]) {
                 }
                 break;
         }
-        bool passedAntCross = detectIfAntCross(counter, ants[counter].side);
+        detectIfAntCross(counter, ants[counter].side);
 
         if (!ants[counter].destroy) SDL_RenderCopy(rend, sprite, NULL, &ants[counter].size);
 

@@ -451,7 +451,7 @@ void sendHome(int counter, char side) {
 
     if (disty == 0) {  //Si la distancia es igual a cero entonces metemos la hormiga al hormiguero
         int antHillposX;
-        if (ants[counter].side == 'r') antHillposX = antHill_x - 100;
+        if (ants[counter].side == 'r') antHillposX = antHill_x;
         if (ants[counter].side == 'l') antHillposX = vertical_road3_x + 300;
         if (ants[counter].size.x != antHillposX) {
             moveInX(counter, antHillposX);

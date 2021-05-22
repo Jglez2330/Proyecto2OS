@@ -456,7 +456,9 @@ void sendHome(int counter, char side) {
         if (ants[counter].size.x != antHillposX) {
             moveInX(counter, antHillposX);
             return;
-        } else return;
+        } else{
+            ants[counter].destroy = 1;
+        };
     }
     int distx;
     if (ants[counter].side == 'r') distx = ants[counter].size.x - x_start_road;
@@ -525,9 +527,7 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
     int finalX = ants[counter].finalX;
     int finalY = ants[counter].finalY;
 
-    if (ants[counter].antId == 0) {
-//        printf("La columna a la que va es: %i y esta en %i \n", ants[counter].col_dest, ants[counter].col_act);
-    }
+
     if (ants[counter].col_act == ants[counter].col_dest && ants[counter].size.x == finalX
         && ants[counter].size.y == finalY) {
 

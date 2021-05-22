@@ -68,6 +68,7 @@ typedef struct Ant{
     long canal;
     long scheduler_selected;
     dataItem dataItem;
+    int destroy;
 
 
 }Ant;

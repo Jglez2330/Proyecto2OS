@@ -8,6 +8,7 @@
 
 
 int alpha = 0;
+int hay_threads;
 struct Params {
 
     int antId;
@@ -192,6 +193,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     if (channel_Ants[ants[antId_in].canal].passedAnts == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
         channel_Ants[ants[antId_in].canal].passedAnts = 0;
         channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
+        unblock_all_threads_ants(ants[antId_in].canal);
 
     }
 
@@ -204,7 +206,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
             listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
            // CEThread_mutex_lock(&mutex);
-            init_scheduler(temp_ants_list, 1,0,ants[antId_in].canal);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,0,ants[antId_in].canal);
             block_threads_from_list(ants[antId_in].canal);
             unblock_threads_from_list_ants(ants[antId_in].canal);
         }
@@ -215,6 +217,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             //ants_Waiting_2_Terminated(ants[antId_in].canal, ants[antId_in].side);
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 1;
+
             //channel_Ants[ants[antId_in].canal].semaforoActive_R = 1;
         }
         // pthread_mutex_lock(&mutex);
@@ -255,6 +258,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         if (channel_Ants[ants[antId_in].canal].count_W == 0) {
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 0;
+
         }
 
         printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
@@ -603,7 +607,8 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].dataItem.tid = thread1 ;
 //        printf("Canal Scheduler:%i \n",scheduler->canalNumber);
         CEThread_create(thread1, NULL, startAntMotion, param);
-        //CEThread_detach(*thread1); //Auto frees
+        hay_threads = 1;
+        CEThread_detach(*thread1); //Auto frees
 
         antCounter++;
     }

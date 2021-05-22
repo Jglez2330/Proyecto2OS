@@ -44,4 +44,5 @@ void unblock_threads_from_list_ants(int channel);
 void block_threads_from_list(int channel);
 void unblock_threads_from_list(listNode_t_thread* list);
 CEThread_treadInfo* get_thread_by_tid_zombie(CEThread_t thread);
+void unblock_all_threads_ants(int channel);
 #endif //PROYECTO2OS_CETHREAD_H

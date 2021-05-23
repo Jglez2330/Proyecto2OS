@@ -12,7 +12,6 @@
 #include "../Scheduler/LinkedList.h"
 #include "functions.c"
 #include "antsInterface.c"
-#include "../Synchronizer/synchronizer.h"
 
 
 
@@ -24,6 +23,7 @@ int main() {
     //control de flujo para canales
     channel_Ants = malloc(sizeof (channelAnts)*3);
     synchronizerInit();
+    synchronizer_Ants_Init();
 
 
     for(int i = 0;i<channelCount;i++){

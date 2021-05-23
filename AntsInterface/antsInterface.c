@@ -3,6 +3,7 @@
 #include "SDL2/SDL_image.h"
 #include "../Scheduler/Scheduler.h"
 #include "../CEThread/CEThread.h"
+#include "../Synchronizer/synchronizer.h"
 #include <unistd.h>
 #include <time.h>
 //#include "../Scheduler/LinkedList.h"
@@ -111,18 +112,12 @@ void setMovingAnts() {
 }
 
 void postionAllAnt(listNode_t list, Matrix *filas[6]) {
-//        printf("\nREORDENANDO \n");
     int listSize = getCount_t(&list) + 1;
-//    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
     for (int i = 0; i < listSize; i++) {
-//        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
         for (int j = 0; j < antCounter; j++) {
             if (getNode_t(&list, i)->antId == ants[j].antId) {
-//                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
                 if (ants[j].side == 'l') {
                     ants[j].col_dest = (STACKMAX - 1) - i;
-//                    ants[antCounter].finalX = filas[ants[j].fila_dest][ants[j].col_dest]->x;
-//                    ants[antCounter].finalY = filas[ants[j].fila_dest][ants[j].col_dest]->y;
 
 
                 } else if (ants[j].side == 'r') {
@@ -203,16 +198,16 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         //printf("Se va a desbloquear la hormiga que viene detras de la fila: %i \n",ants[antId_in].fila);
         //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
         unblock_threads_from_list_ants(ants[antId_in].fila);
-        if (ants[antId_in].fila % 2 == 0){
+       /* if (ants[antId_in].fila % 2 == 0){
 //            printf("Lista izquierda ordenada es:\n");
-            write(1,"Lista izquierda derecha es:\n",strlen("Lista izquierda derecha es:\n"));
+            //write(1,"Lista izquierda derecha es:\n",strlen("Lista izquierda derecha es:\n"));
             //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
         }
         else{
 //            printf("Lista ordenada derecha es:\n");
-            write(1,"Lista ordenada derecha es:\n", strlen("Lista ordenada derecha es:\n"));
+            //write(1,"Lista ordenada derecha es:\n", strlen("Lista ordenada derecha es:\n"));
             //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
-        }
+        }*/
 
     }
     if (ants[antId_in].sentHome) {
@@ -490,15 +485,14 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                 ants[antCounter].speed = 1;
 
                 hormiga0->state = 0;
-                hormiga0->priority = 30;
-                hormiga0->var_SJF = 7;
-//                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
-                hormiga0->rms_C = 6;
-                hormiga0->rms_P = 18;
-                //hormiga0->tid = toledoAnt_1;
                 hormiga0->column = 0;
                 hormiga0->row = 0;
-                //dataItem  * dataInfo ;
+                hormiga0->priority = (int)antsValues->blackAnt_priority;
+                hormiga0->var_SJF = (int)antsValues->blackAnt_var_SJF;
+                hormiga0->rms_C = (float)antsValues->blackAnt_rms_C;
+                hormiga0->rms_P = (float)antsValues->blackAnt_rms_P;
+
+
                 hormiga0->antId = antCounter;
                 ants[antCounter].dataItem = *hormiga0;
 
@@ -528,12 +522,10 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                 ants[antCounter].speed = 2;
 
                 hormiga0->state = 0;
-                hormiga0->priority = 20;
-                hormiga0->var_SJF = 6;
-//                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
-                hormiga0->rms_C = 2;
-                hormiga0->rms_P = 9;
-                //hormiga0->tid = toledoAnt_1;
+                hormiga0->priority = (int)antsValues->redAnt_priority;
+                hormiga0->var_SJF = (int)antsValues->redAnt_var_SJF;
+                hormiga0->rms_C = (float)antsValues->redAnt_rms_C;
+                hormiga0->rms_P = (float)antsValues->redAnt_rms_P;
                 hormiga0->column = 0;
                 hormiga0->row = 0;
                 //dataItem  * dataInfo ;
@@ -560,16 +552,13 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
             case queen:
                 ants[antCounter].speed = 3;
 
+                hormiga0->priority = (int)antsValues->queenAnt_priority;
+                hormiga0->var_SJF = (int)antsValues->queenAnt_var_SJF;
+                hormiga0->rms_C = (float)antsValues->queenAnt_rms_C;
+                hormiga0->rms_P = (float)antsValues->queenAnt_rms_P;
                 hormiga0->state = 0;
-                hormiga0->priority = 10;
-                hormiga0->var_SJF = 4;
-//                hormiga0->scheduler_Selected = 0; // TODO meter el archivo de configuracion segun el canal
-                hormiga0->rms_C = 1;
-                hormiga0->rms_P = 6;
-                //hormiga0->tid = toledoAnt_1;
                 hormiga0->column = 0;
                 hormiga0->row = 0;
-                //dataItem  * dataInfo ;
                 hormiga0->antId = antCounter;
                 ants[antCounter].dataItem = *hormiga0;
 

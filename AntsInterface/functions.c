@@ -563,7 +563,7 @@ void sendHome(int counter, char side) {
         };
     }
     int distx;
-    if (ants[counter].side == 'r') distx = ants[counter].size.x - x_start_road;
+    if (ants[counter].side == 'r') distx = ants[counter].size.x - x_start_road - 55;
     if (ants[counter].side == 'l') distx = vertical_road3_x - ants[counter].size.x;
 
     if (distx == 0) {
@@ -574,7 +574,7 @@ void sendHome(int counter, char side) {
     } else {       //Movemos las hormigas hasta el camino vertical de la izquierda
 
         int destRoadX;
-        if (ants[counter].side == 'r') destRoadX = x_start_road;
+        if (ants[counter].side == 'r') destRoadX = x_start_road + 55;
         if (ants[counter].side == 'l') destRoadX = vertical_road3_x;
         moveInX(counter, destRoadX);
         return;

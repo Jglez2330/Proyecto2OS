@@ -26,7 +26,7 @@ struct Params {
     Matrix **filas;
 };
 CEThread_mutex_t mutex;
-void init_alarm(long time_var, int channel, int type){
+void init_alarm(long time_var, int channel, long type){
     if (type == 1){
         default_time[channel] = time_var;
         timer[channel] = time(NULL);

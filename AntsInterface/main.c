@@ -43,6 +43,9 @@ int main() {
         channel_Ants[i].passedAnts = 0;
         channel_Ants[i].sideFlag =1;
         channel_Ants[i].parametroW_Fixed = fileValues[i].parametroW;
+        if (channel_Ants[i].controlFLow > 0){
+            init_alarm(channel_Ants[i].timer = fileValues[i].timeCambioLetrero , i, channel_Ants[i].controlFLow);
+        }
     }
 
 
@@ -236,9 +239,7 @@ int main() {
     initializeNPC(rend,win);
     int fila = 0;
     char side = 'l';
-    init_alarm(1000, 0, 0);
-    init_alarm(1000, 1, 1);
-    init_alarm(1000, 2, 0);
+
     while (!close_requested) {
 
         SDL_Event event;

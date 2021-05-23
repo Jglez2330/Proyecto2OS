@@ -26,14 +26,14 @@ void init_alarm(long time){
 
 
     memset(&letrero_alarm, '\0', sizeof(struct itimerval));
-    timer_letrero.it_interval.tv_usec = time;
-    timer_letrero.it_value.tv_usec = time;
+//    timer_letrero.it_interval.tv_usec = time;
+//    timer_letrero.it_value.tv_usec = time;
 
-    if (setitimer(ITIMER_VIRTUAL, &timer_letrero, NULL) < 0)
-    {
-        perror("Unable to set timer");
-        exit(EXIT_FAILURE);
-    }
+//    if (setitimer(ITIMER_VIRTUAL, &timer_letrero, NULL) < 0)
+//    {
+//        perror("Unable to set timer");
+//        exit(EXIT_FAILURE);
+//    }
 
     memset(&action, '\0', sizeof(action));
     action.sa_handler = &alarm_handler;

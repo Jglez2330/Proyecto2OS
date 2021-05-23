@@ -173,9 +173,9 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     }
 
     int hormigasEspearando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
-    //printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
-    //printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
-    if (channel_Ants[ants[antId_in].canal].countAntsWait == hormigasEspearando) {
+    printf("\nHormigas %i y side %c\n", hormigasEspearando, ants[antId_in].side);
+    printf("canal esperando %li", channel_Ants[ants[antId_in].canal].countAntsWait);
+    if (channel_Ants[ants[antId_in].canal].countAntsWait <= hormigasEspearando) {
 
         if (ants[antId_in].side == 'r' && channel_Ants[ants[antId_in].canal].sideFlag == 1) {
 
@@ -194,7 +194,16 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
     if (channel_Ants[ants[antId_in].canal].passedAnts == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
         channel_Ants[ants[antId_in].canal].passedAnts = 0;
         channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
-        unblock_all_threads_ants(ants[antId_in].fila);
+        if (channel_Ants[ants[antId_in].canal].sideFlag == 1){
+//            unblock_all_threads_ants(ants[antId_in].fila);
+            unblock_all_threads_ants(ants[getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_L,0)->antId].fila);
+        }
+        if (channel_Ants[ants[antId_in].canal].sideFlag == 0){
+//            unblock_all_threads_ants(ants[antId_in].fila);
+            unblock_all_threads_ants(ants[getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_R,0)->antId].fila);
+        }
+        //unblock_all_threads_ants(ants[antId_in].fila);
+
     }
 
     if (channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
@@ -206,7 +215,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
             listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
            // CEThread_mutex_lock(&mutex);
-            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,0,ants[antId_in].fila);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,1,ants[antId_in].fila);
             block_threads_from_list(ants[antId_in].fila);
             unblock_threads_from_list_ants(ants[antId_in].fila);
         }
@@ -218,6 +227,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 1;
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
+//            unblock_all_threads_ants(ants[antId_in].fila);
         }
         // pthread_mutex_lock(&mutex);
         //printList_t(list_Ant_L_Canal1);
@@ -267,7 +277,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             //ants_Waiting_2_Terminated(ants[antId_in].canal, ants[antId_in].side);
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
             channel_Ants[ants[antId_in].canal].sideFlag = 0;
-
+//            unblock_all_threads_ants(ants[antId_in].fila);
             channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
         }
         // pthread_mutex_lock(&mutex);

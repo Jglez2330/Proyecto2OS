@@ -4,7 +4,8 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 100000
+#define QUANTUM 200000
+
 #include "../Scheduler/LinkedList.h"
 
 #define Channels 4

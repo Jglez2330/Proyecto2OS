@@ -78,7 +78,7 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
 void moveInX(int counter, int finalX) {
 
     int distx = ants[counter].size.x - finalX;
-    printf("MoveInX %i \n", distx);
+//    printf("MoveInX %i \n", distx);
     if (distx > 0) {
         if (abs(distx) <= 5) {
             if (colitionDetect(counter, 'l', 1) * ants[counter].colitionFlag) return;
@@ -644,12 +644,12 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
             || ants[counter].size.y != finalY) {
 
             if (ants[counter].size.x != finalX) {
-                printf("Se va a mover en X %i %i \n", ants[counter].size.x , ants[counter].finalX);
+                //printf("Se va a mover en X %i %i \n", ants[counter].size.x , ants[counter].finalX);
                 moveInX(counter, finalX);
                 return;
             }
             if (ants[counter].size.y != finalY) {
-                printf("Se va a mover en Y %i %i \n", ants[counter].size.y , ants[counter].finalY);
+                //printf("Se va a mover en Y %i %i \n", ants[counter].size.y , ants[counter].finalY);
                 moveInY(counter, finalY);
                 return;
             }

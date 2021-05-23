@@ -5,7 +5,8 @@
 #include <slcurses.h>
 #include <unistd.h>
 #include "CEThread.h"
-#define QUANTUM 2000
+#define QUANTUM 1500
+
 
 #include "../Scheduler/LinkedList.h"
 

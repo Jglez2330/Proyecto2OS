@@ -9,6 +9,9 @@
 
 int alpha = 0;
 int hay_threads;
+
+static sigset_t letrero_alarm;
+
 struct Params {
 
     int antId;
@@ -164,6 +167,8 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
 
         channel_Ants[ants[antId_in].canal].spacesInBridge += 1;
         ants[antId_in].passedBridge = 2;
+        printf("Se va a desbloquear la hormiga que viene detras de la fila: %i \n",ants[antId_in].fila);
+        unblock_threads_from_list_ants(ants[antId_in].fila);
 
     }
     if (ants[antId_in].sentHome) {
@@ -196,11 +201,15 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
         if (channel_Ants[ants[antId_in].canal].sideFlag == 1){
 //            unblock_all_threads_ants(ants[antId_in].fila);
-            unblock_all_threads_ants(ants[getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_L,0)->antId].fila);
+            int id = getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_L,0)->antId;
+            printf("Se va a desbloquear el lado izquierdo de la fila: %i \n",ants[id].fila);
+            unblock_all_threads_ants(ants[id].fila);
         }
         if (channel_Ants[ants[antId_in].canal].sideFlag == 0){
 //            unblock_all_threads_ants(ants[antId_in].fila);
-            unblock_all_threads_ants(ants[getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_R,0)->antId].fila);
+            int id  =getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_R,0)->antId;
+            printf("Se va a desbloquear el lado derecho de la fila: %i \n",ants[id].fila);
+            unblock_all_threads_ants(ants[id].fila);
         }
         //unblock_all_threads_ants(ants[antId_in].fila);
 
@@ -391,6 +400,7 @@ void postionInitialAnt(listNode_t list, int antCount) {
 
 int verifySpaceInStack(int fila, char side) {
     int canal;
+
     if (fila == 0 || fila == 1) {
         canal = 0;
 

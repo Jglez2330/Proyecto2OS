@@ -18,6 +18,36 @@ struct Params {
     Matrix **filas;
 };
 CEThread_mutex_t mutex;
+void alarm_handler(int sig);
+void init_alarm(long time){
+    struct sigaction action;
+    sigemptyset(&letrero_alarm);
+    sigaddset(&letrero_alarm, SIGVTALRM);
+
+
+    memset(&letrero_alarm, '\0', sizeof(struct itimerval));
+    timer_letrero.it_interval.tv_usec = time;
+    timer_letrero.it_value.tv_usec = time;
+
+    if (setitimer(ITIMER_VIRTUAL, &timer_letrero, NULL) < 0)
+    {
+        perror("Unable to set timer");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&action, '\0', sizeof(action));
+    action.sa_handler = &alarm_handler;
+    if (sigaction(SIGVTALRM, &action, NULL) < 0)
+    {
+        perror ("Unable to install handler");
+        exit(EXIT_FAILURE);
+    }
+}
+void alarm_handler(int sig){
+    char* r = "Hola Mundo!\n";
+    write(1, r, strlen(r));
+
+}
 int initializeNPC(SDL_Renderer *rend, SDL_Window *win) {
 
     //Cargar imagenes

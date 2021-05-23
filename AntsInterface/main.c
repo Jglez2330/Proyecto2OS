@@ -24,6 +24,7 @@ int main() {
     //control de flujo para canales
     channel_Ants = malloc(sizeof (channelAnts)*3);
     synchronizerInit();
+    synchronizer_Ants_Init();
 
 
     for(int i = 0;i<channelCount;i++){

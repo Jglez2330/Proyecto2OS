@@ -198,7 +198,18 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         channel_Ants[ants[antId_in].canal].spacesInBridge += 1;
         ants[antId_in].passedBridge = 2;
         printf("Se va a desbloquear la hormiga que viene detras de la fila: %i \n",ants[antId_in].fila);
+        printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
         unblock_threads_from_list_ants(ants[antId_in].fila);
+        if (ants[antId_in].fila % 2 == 0){
+//            printf("Lista izquierda ordenada es:\n");
+            write(1,"Lista izquierda derecha es:\n",strlen("Lista izquierda derecha es:\n"));
+            printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
+        }
+        else{
+//            printf("Lista ordenada derecha es:\n");
+            write(1,"Lista ordenada derecha es:\n", strlen("Lista ordenada derecha es:\n"));
+            printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
+        }
 
     }
     if (ants[antId_in].sentHome) {
@@ -249,6 +260,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         //channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
         && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
         && channel_Ants[ants[antId_in].canal].list_Ants_L != NULL &&
+            ants[antId_in].fila % 2 == 0 &&
         channel_Ants[ants[antId_in].canal].list_Ants_L->dataInfo != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
@@ -300,14 +312,21 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         //channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
         && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
         && channel_Ants[ants[antId_in].canal].list_Ants_R != NULL &&
+            ants[antId_in].fila % 2 == 1 &&
         channel_Ants[ants[antId_in].canal].list_Ants_R->dataInfo != NULL
         && channel_Ants[ants[antId_in].canal].count_W != 0) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
             listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_R);
             // CEThread_mutex_lock(&mutex);
+            printf("\n LA FILA ES %i \n", ants[antId_in].fila);
+
             init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,1,ants[antId_in].fila);
             block_threads_from_list(ants[antId_in].fila);
             unblock_threads_from_list_ants(ants[antId_in].fila);
+
+
+
+
         }
         channel_Ants[ants[antId_in].canal].count_W--;
 //        printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);

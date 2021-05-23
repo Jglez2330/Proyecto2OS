@@ -3,6 +3,7 @@
 //
 
 #include <slcurses.h>
+#include <unistd.h>
 #include "CEThread.h"
 #define QUANTUM 1000
 
@@ -158,7 +159,11 @@ void context_switching(int sig){
     do {
         next = get_next_thread();
         //printf("");
+//        if (next->state == BLOCKED_thread){
+//
+//        }
     } while (next->state != READY_thread);
+
 
     CEThread_treadInfo * prev = current_running_thread;
     if (prev->state == RUNNING_thread){

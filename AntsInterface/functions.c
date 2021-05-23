@@ -690,7 +690,7 @@ bool detectIfAntCross(int counter, char side) {
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
 //                printf("\nEL MAE YA PASO!\n");
-
+                //unblock_threads_from_list_ants(ants[antId_in].fila)
 
             }
             return true;

@@ -2,6 +2,8 @@
 // Created by leahycarlos21 on 6/5/21.
 //
 
+#include <unistd.h>
+#include <string.h>
 #include "LinkedList.h"
 
 
@@ -102,14 +104,16 @@ dataItem * getNode_t(struct listNode_t* head, int index){
 void printList_t(struct listNode_t *start)
 {
     struct listNode_t *temp = start;
-    printf("\n");
+//    printf("\n");
 
     while (temp!=NULL)
     {
-        //printf("||| Prioridad %d - ANT ID %i  - Time SJF %i - PERIOD %f||| ", temp->dataInfo->priority, temp->dataInfo->antId, temp->dataInfo->var_SJF, temp->dataInfo->rms_P);
+
+//        write(1,(char)temp->dataInfo->antId,1 );
+        printf("||| Prioridad %d - ANT ID %i  - Time SJF %i - PERIOD %f||| ", temp->dataInfo->priority, temp->dataInfo->antId, temp->dataInfo->var_SJF, temp->dataInfo->rms_P);
         temp = temp->next;
     }
-    printf("\n");
+//    printf("\n");
 
 }
 
@@ -143,7 +147,7 @@ void bubbleSort_t(struct listNode_t *start, int typeSort)
 
 void swap(struct listNode_t *a, struct listNode_t *b){
 
-    struct Ant *temp   = a->dataInfo;
+    dataItem *temp   = a->dataInfo;
     a->dataInfo = b->dataInfo;
     b->dataInfo = temp;
 }

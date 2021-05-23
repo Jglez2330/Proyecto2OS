@@ -34,7 +34,7 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
             continue;
         }
         if (movDir == 'u') {  //Verificamos si hay alguien arriba
-            int safeDistance = h_ant + 10;
+            int safeDistance = h_ant;
             y1 = ants[counter].size.y - distanceMoving - safeDistance;
             y2 = ants[i].size.y;
             x1 = ants[counter].size.x;
@@ -42,7 +42,7 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
 
         }
         if (movDir == 'd') {  //Verificamos si hay alguien abajo
-            int safeDistance = h_ant + 10;
+            int safeDistance = h_ant;
             y1 = ants[counter].size.y + distanceMoving + safeDistance;
             y2 = ants[i].size.y;
             x1 = ants[counter].size.x;
@@ -50,7 +50,7 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
 
         }
         if (movDir == 'r') {  //Verificamos si hay alguien a la derecha
-            int safeDistance = w_ant + 10;
+            int safeDistance = w_ant;
             int nextX = ants[counter].size.x + distanceMoving + safeDistance;
             x1 = nextX;
             x2 = ants[i].size.x;
@@ -58,7 +58,7 @@ bool colitionDetect(int counter, char movDir, int distanceMoving) {
             y2 = ants[i].size.y;
         }
         if (movDir == 'l') {  //Verificamos si hay alguien a la izquierda
-            int safeDistance = w_ant + 10;
+            int safeDistance = w_ant ;
             x1 = ants[counter].size.x - distanceMoving - safeDistance;
             x2 = ants[i].size.x;
             y1 = ants[counter].size.y;
@@ -553,7 +553,7 @@ void sendHome(int counter, char side) {
     if (disty == 0) {  //Si la distancia es igual a cero entonces metemos la hormiga al hormiguero
 //        printf("Esta alineado con el hormiguero %i \n",counter);
         int antHillposX;
-        if (ants[counter].side == 'r') antHillposX = antHill_x;
+        if (ants[counter].side == 'r') antHillposX = antHill_x + 100;
         if (ants[counter].side == 'l') antHillposX = vertical_road3_x + 300;
         if (ants[counter].size.x != antHillposX) {
             moveInX(counter, antHillposX);

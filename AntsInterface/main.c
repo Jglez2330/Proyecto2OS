@@ -236,7 +236,9 @@ int main() {
     initializeNPC(rend,win);
     int fila = 0;
     char side = 'l';
-    init_alarm(1);
+    init_alarm(1000, 0, 0);
+    init_alarm(1000, 1, 1);
+    init_alarm(1000, 2, 0);
     while (!close_requested) {
 
         SDL_Event event;

@@ -4,35 +4,52 @@
 #include "../Scheduler/Scheduler.h"
 #include "../CEThread/CEThread.h"
 #include <unistd.h>
+#include <time.h>
 //#include "../Scheduler/LinkedList.h"
 
 
 int alpha = 0;
 int hay_threads;
+#define UP 2
+#define LOW 1
+static struct sigaction letrero_alarm[3];
+static sigset_t timer_signal[3];
 
-static struct sigaction letrero_alarm;
-struct itimerval timer_letrero;
+int type_channel[3] = {0,0,0};
+long default_time[3] = {0,0,0};
+int ready_to_change_channel[3] = {0,0,0};
+time_t timer[3];
 struct Params {
 
     int antId;
     Matrix **filas;
 };
 CEThread_mutex_t mutex;
-void alarm_handler(int sig);
-void init_alarm(long time){
+void init_alarm(long time_var, int channel, int type){
+    if (type == 1){
+        default_time[channel] = time_var;
+        timer[channel] = time(NULL);
+        type_channel[channel] = channel;
+    }else if(type == 2){
+        default_time[channel] = (rand() % (UP - LOW + 1)) + LOW;
+        timer[channel] = time(NULL);
+        type_channel[channel] = channel;
+    }
 
-    sigemptyset( &letrero_alarm.sa_mask );
-    letrero_alarm.sa_flags = 0;
-    letrero_alarm.sa_handler = alarm_handler;
-    sigaction( SIGALRM, &letrero_alarm, NULL );
-
-    alarm(5);  /* timer will pop in five seconds */
 }
-void alarm_handler(int sig){
-    char* r = "Hola Mundo!\n";
-    write(1, r, strlen(r));
-    alarm(5);
 
+int check_timer(int channel){
+    time_t now = time(NULL);
+    time_t seconds = now - timer[channel];
+
+    if (seconds > default_time[channel]){
+        timer[channel] = time(NULL);
+        ready_to_change_channel[channel] = 1;
+    }
+    if (type_channel[channel] == 2){
+        default_time[channel] = (rand() % (UP - LOW + 1)) + LOW;
+    }
+    return ready_to_change_channel[channel];
 }
 int initializeNPC(SDL_Renderer *rend, SDL_Window *win) {
 

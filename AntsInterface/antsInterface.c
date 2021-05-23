@@ -95,18 +95,12 @@ void setMovingAnts() {
 }
 
 void postionAllAnt(listNode_t list, Matrix *filas[6]) {
-//        printf("\nREORDENANDO \n");
     int listSize = getCount_t(&list) + 1;
-//    printf("\nCANTIDAD DE HORMIGAS %i\n", listSize);
     for (int i = 0; i < listSize; i++) {
-//        printf("El elemento de la lista es : %i \n", getNode_t(list_Ant_A_Canal1, i)->antId);
         for (int j = 0; j < antCounter; j++) {
             if (getNode_t(&list, i)->antId == ants[j].antId) {
-//                printf("Se le va a asignar una columna a la hormiga %i  a la hormiga numero %i \n", (STACKMAX - 1) - i, j);
                 if (ants[j].side == 'l') {
                     ants[j].col_dest = (STACKMAX - 1) - i;
-//                    ants[antCounter].finalX = filas[ants[j].fila_dest][ants[j].col_dest]->x;
-//                    ants[antCounter].finalY = filas[ants[j].fila_dest][ants[j].col_dest]->y;
 
 
                 } else if (ants[j].side == 'r') {
@@ -187,16 +181,16 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         //printf("Se va a desbloquear la hormiga que viene detras de la fila: %i \n",ants[antId_in].fila);
         //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
         unblock_threads_from_list_ants(ants[antId_in].fila);
-        if (ants[antId_in].fila % 2 == 0){
+       /* if (ants[antId_in].fila % 2 == 0){
 //            printf("Lista izquierda ordenada es:\n");
-            write(1,"Lista izquierda derecha es:\n",strlen("Lista izquierda derecha es:\n"));
+            //write(1,"Lista izquierda derecha es:\n",strlen("Lista izquierda derecha es:\n"));
             //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_L);
         }
         else{
 //            printf("Lista ordenada derecha es:\n");
-            write(1,"Lista ordenada derecha es:\n", strlen("Lista ordenada derecha es:\n"));
+            //write(1,"Lista ordenada derecha es:\n", strlen("Lista ordenada derecha es:\n"));
             //printList_t(channel_Ants[ants[antId_in].canal].list_Ants_R);
-        }
+        }*/
 
     }
     if (ants[antId_in].sentHome) {

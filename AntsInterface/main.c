@@ -12,7 +12,6 @@
 #include "../Scheduler/LinkedList.h"
 #include "functions.c"
 #include "antsInterface.c"
-#include "../Synchronizer/synchronizer.h"
 
 
 

@@ -4,7 +4,7 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 200000
+#define QUANTUM 7500
 
 #include "../Scheduler/LinkedList.h"
 
@@ -108,8 +108,8 @@ int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_r
         exit(EXIT_FAILURE);
     }
 
-    new_thread->thread_context->uc_stack.ss_sp = malloc(SIGSTKSZ);
-    new_thread->thread_context->uc_stack.ss_size = SIGSTKSZ;
+    new_thread->thread_context->uc_stack.ss_sp = malloc(SIGSTKSZ * SIGSTKSZ);
+    new_thread->thread_context->uc_stack.ss_size = SIGSTKSZ * SIGSTKSZ;
     new_thread->thread_context->uc_stack.ss_flags = 0;
     new_thread->thread_context->uc_link = NULL;
 
@@ -157,7 +157,7 @@ void context_switching(int sig){
     CEThread_treadInfo *next;
     do {
         next = get_next_thread();
-        printf("");
+        //printf("");
     } while (next->state != READY_thread);
 
     CEThread_treadInfo * prev = current_running_thread;
@@ -188,7 +188,7 @@ void CEThread_end(void* return_value){
     current_running_thread->state = RUNNING_thread;
 
     if(prev->detach == 1 ){
-        printf("Se eliminó thread : %li \n", prev->tid);
+        //printf("Se eliminó thread : %li \n", prev->tid);
         free(prev->thread_context->uc_stack.ss_sp);
         free(prev->thread_context);
         prev->thread_context = NULL;

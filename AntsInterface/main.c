@@ -50,7 +50,7 @@ int main() {
 
     // Se inicializa SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) != 0) {
-        printf("error initializing SDL:%s\n", SDL_GetError());
+//        printf("error initializing SDL:%s\n", SDL_GetError());
         return 1;
     }
 
@@ -60,7 +60,7 @@ int main() {
                                        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
 
     if (!win) {
-        printf("Error creating window: %s\n", SDL_GetError());
+//        printf("Error creating window: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
@@ -70,7 +70,7 @@ int main() {
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
     if (!rend) {
-        printf("Error creating render: %s\n", SDL_GetError());
+//        printf("Error creating render: %s\n", SDL_GetError());
         SDL_DestroyWindow(win);
         SDL_Quit();
         return 1;
@@ -84,7 +84,7 @@ int main() {
     SDL_Surface *letreroR_s = IMG_Load("../Resources/letreroR.png");
 
     if (!anthill_s || !background_s) {
-        printf("Error creating surface\n");
+//        printf("Error creating surface\n");
         SDL_DestroyRenderer(rend);
         SDL_DestroyWindow(win);
         SDL_Quit();
@@ -163,9 +163,9 @@ int main() {
     const int y_startAntHill = antHill_y;
 
 
-    printf("C0: %i \n",channel_Ants[0].largoCanal);
-    printf("C1: %i \n",channel_Ants[1].largoCanal);
-    printf("C2: %i \n",channel_Ants[2].largoCanal);
+//    printf("C0: %i \n",channel_Ants[0].largoCanal);
+//    printf("C1: %i \n",channel_Ants[1].largoCanal);
+//    printf("C2: %i \n",channel_Ants[2].largoCanal);
 
 
     //Setteamos los del canal 0
@@ -187,7 +187,7 @@ int main() {
 
 
     if (!background_t) {
-        printf("Error creating text: %s\n", SDL_GetError());
+//        printf("Error creating text: %s\n", SDL_GetError());
         SDL_DestroyRenderer(rend);
         SDL_DestroyWindow(win);
         SDL_Quit();
@@ -196,7 +196,7 @@ int main() {
 
 
     SDL_RenderPresent(rend);
-    printf("Initialization succesful!\n");
+//    printf("Initialization succesful!\n");
 
     blackAnt_r.x = x_startAntHill + 200;
     blackAnt_r.y = y_startAntHill + 50;

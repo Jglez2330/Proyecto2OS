@@ -16,31 +16,31 @@ listNode_t* schedulerSort(listNode_t* listResult){
     switch (listResult->dataInfo->scheduler_Selected)
     {
         case 0:
-            printf("\nRR");
+            //printf("\nRR");
 
             break;
 
         case 1:
-            printf("Prioridad");
+            //printf("Prioridad");
             bubbleSort_t(listResult,PRIORITY);
 
             break;
         case 2:
-            printf("SJF");
+            //printf("SJF");
             bubbleSort_t(listResult,SJF);
 
             break;
         case 3:
-            printf("FCFS");
+            //printf("FCFS");
             //listResult = FCFS(listResult);
             break;
         case 4:
-            printf("\nTiempo Real");
+            //printf("\nTiempo Real");
             tiempoReal_Init(listResult);
             break;
 
-        default:
-            printf("Doesnt found");
+//        default:
+//            //printf("Doesnt found");
 
     }
 

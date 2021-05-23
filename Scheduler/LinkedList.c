@@ -106,7 +106,7 @@ void printList_t(struct listNode_t *start)
 
     while (temp!=NULL)
     {
-        printf("||| Prioridad %d - ANT ID %i  - Time SJF %i - PERIOD %f||| ", temp->dataInfo->priority, temp->dataInfo->antId, temp->dataInfo->var_SJF, temp->dataInfo->rms_P);
+        //printf("||| Prioridad %d - ANT ID %i  - Time SJF %i - PERIOD %f||| ", temp->dataInfo->priority, temp->dataInfo->antId, temp->dataInfo->var_SJF, temp->dataInfo->rms_P);
         temp = temp->next;
     }
     printf("\n");

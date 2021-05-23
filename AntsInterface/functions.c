@@ -224,7 +224,7 @@ void moveInY(int counter, int finalY) {
         }
 
     } else {
-        printf("No se logro mover en Y \n");
+//        printf("No se logro mover en Y \n");
         return;
     }
 }
@@ -551,7 +551,7 @@ void sendHome(int counter, char side) {
     int disty = ants[counter].size.y - entrance;  //Distancia en y que le falta a la hormiga para entrar
 
     if (disty == 0) {  //Si la distancia es igual a cero entonces metemos la hormiga al hormiguero
-        printf("Esta alineado con el hormiguero %i \n",counter);
+//        printf("Esta alineado con el hormiguero %i \n",counter);
         int antHillposX;
         if (ants[counter].side == 'r') antHillposX = antHill_x;
         if (ants[counter].side == 'l') antHillposX = vertical_road3_x + 300;
@@ -674,7 +674,7 @@ void moveAntInStack(int counter, Matrix *filas[6]) {
             return;
 
         } else {
-            printf("Algo inesperado ocurrio");
+//            printf("Algo inesperado ocurrio");
         }
     }
 }
@@ -689,7 +689,7 @@ bool detectIfAntCross(int counter, char side) {
             if (ants[counter].passedBridge == 0){
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
-                printf("\nEL MAE YA PASO!\n");
+//                printf("\nEL MAE YA PASO!\n");
                 unblock_threads_from_list_ants(ants[counter].fila);
 
             }

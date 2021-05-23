@@ -4,20 +4,20 @@
 
 #include <slcurses.h>
 #include "CEThread.h"
-#define QUANTUM 7500
+#define QUANTUM 100
 
 #include "../Scheduler/LinkedList.h"
 
 #define Channels 4
-long globalTID = 0;
+static long globalTID = 0;
 int current_channel;
-scheduler_t * channels_ants_t[6];
-CEThread_treadInfo* main_thread;
-listNode_t_thread* thread_list;
-listNode_t_thread* zombie_list;
+static scheduler_t * channels_ants_t[6];
+static CEThread_treadInfo* main_thread;
+static listNode_t_thread* thread_list;
+static listNode_t_thread* zombie_list;
 
-CEThread_treadInfo* current_running_thread;
-sigset_t context_switching_alarm;
+static CEThread_treadInfo* current_running_thread;
+static sigset_t context_switching_alarm;
 
 static struct itimerval timer_context;
 
@@ -57,7 +57,7 @@ void CEThread_get_main_thread_context() {
     sigaddset(&context_switching_alarm, SIGVTALRM);
     sigprocmask(SIG_UNBLOCK, &context_switching_alarm, NULL);
 
-    memset(&timer_context, 0, sizeof(struct itimerval));
+    memset(&timer_context, '\0', sizeof(struct itimerval));
     timer_context.it_interval.tv_usec = QUANTUM;
     timer_context.it_value.tv_usec = QUANTUM;
 
@@ -72,7 +72,7 @@ void CEThread_get_main_thread_context() {
     }
 
     /* install signal handler for SIGVTALRM */
-    memset(&act, 0, sizeof(act));
+    memset(&act, '\0', sizeof(act));
     act.sa_handler = &context_switching;
     if (sigaction(SIGVTALRM, &act, NULL) < 0)
     {
@@ -101,15 +101,15 @@ int CEThread_create(CEThread_t* thread_id,CEThread_attr_t* attr ,void *(*start_r
     new_thread->detach = 0;
 
     new_thread->thread_context = (ucontext_t*) malloc(sizeof(ucontext_t));
-    memset(new_thread->thread_context, 0, sizeof(ucontext_t));
+    memset(new_thread->thread_context, '\0', sizeof(ucontext_t));
 
     if (getcontext(new_thread->thread_context) == -1){
         perror("Unable to get context for thread");
         exit(EXIT_FAILURE);
     }
 
-    new_thread->thread_context->uc_stack.ss_sp = malloc(SIGSTKSZ * SIGSTKSZ);
-    new_thread->thread_context->uc_stack.ss_size = SIGSTKSZ * SIGSTKSZ;
+    new_thread->thread_context->uc_stack.ss_sp = malloc(SIGSTKSZ);
+    new_thread->thread_context->uc_stack.ss_size = SIGSTKSZ;
     new_thread->thread_context->uc_stack.ss_flags = 0;
     new_thread->thread_context->uc_link = NULL;
 

@@ -10,8 +10,8 @@
 int alpha = 0;
 int hay_threads;
 
-static sigset_t letrero_alarm;
-
+static struct sigaction letrero_alarm;
+struct itimerval timer_letrero;
 struct Params {
 
     int antId;
@@ -20,32 +20,18 @@ struct Params {
 CEThread_mutex_t mutex;
 void alarm_handler(int sig);
 void init_alarm(long time){
-    struct sigaction action;
-    sigemptyset(&letrero_alarm);
-    sigaddset(&letrero_alarm, SIGVTALRM);
 
+    sigemptyset( &letrero_alarm.sa_mask );
+    letrero_alarm.sa_flags = 0;
+    letrero_alarm.sa_handler = alarm_handler;
+    sigaction( SIGALRM, &letrero_alarm, NULL );
 
-    memset(&letrero_alarm, '\0', sizeof(struct itimerval));
-//    timer_letrero.it_interval.tv_usec = time;
-//    timer_letrero.it_value.tv_usec = time;
-
-//    if (setitimer(ITIMER_VIRTUAL, &timer_letrero, NULL) < 0)
-//    {
-//        perror("Unable to set timer");
-//        exit(EXIT_FAILURE);
-//    }
-
-    memset(&action, '\0', sizeof(action));
-    action.sa_handler = &alarm_handler;
-    if (sigaction(SIGVTALRM, &action, NULL) < 0)
-    {
-        perror ("Unable to install handler");
-        exit(EXIT_FAILURE);
-    }
+    alarm(5);  /* timer will pop in five seconds */
 }
 void alarm_handler(int sig){
     char* r = "Hola Mundo!\n";
     write(1, r, strlen(r));
+    alarm(5);
 
 }
 int initializeNPC(SDL_Renderer *rend, SDL_Window *win) {
@@ -266,7 +252,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
         if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
             listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
            // CEThread_mutex_lock(&mutex);
-            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,1,ants[antId_in].fila);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed, channel_Ants[ants[antId_in].canal].scheduler_selected,ants[antId_in].fila);
             block_threads_from_list(ants[antId_in].fila);
             unblock_threads_from_list_ants(ants[antId_in].fila);
         }
@@ -320,7 +306,7 @@ bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
             // CEThread_mutex_lock(&mutex);
             printf("\n LA FILA ES %i \n", ants[antId_in].fila);
 
-            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,1,ants[antId_in].fila);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,channel_Ants[ants[antId_in].canal].scheduler_selected,ants[antId_in].fila);
             block_threads_from_list(ants[antId_in].fila);
             unblock_threads_from_list_ants(ants[antId_in].fila);
 

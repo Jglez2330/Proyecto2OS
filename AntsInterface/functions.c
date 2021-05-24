@@ -1,5 +1,6 @@
 #include "../Scheduler/LinkedList.h"
 #include "../CEThread/CEThread.h"
+int ant_on_canal = 0;
 bool verifyXColition(int x1, int x2) {
     int distance = abs(x1 - x2);
     if (distance < w_ant) {
@@ -689,6 +690,7 @@ bool detectIfAntCross(int counter, char side) {
             if (ants[counter].passedBridge == 0){
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
+                ant_on_canal = 0;
 //                printf("\nEL MAE YA PASO!\n");
                 //unblock_threads_from_list_ants(ants[antId_in].fila)
 
@@ -703,6 +705,7 @@ bool detectIfAntCross(int counter, char side) {
         if (ants[counter].col_act < delCol) {
             ants[counter].sentHome = 1;
             if (ants[counter].passedBridge == 0) {
+                ant_on_canal = 0;
                 channel_Ants[ants[counter].canal].passedAnts++;
                 ants[counter].passedBridge = 1;
 

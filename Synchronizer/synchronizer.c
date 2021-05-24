@@ -37,20 +37,20 @@ int synchronizer_Ants_Init() {
     antsValues = malloc(sizeof(ants_Config));
     char pathName[30];
     cfg_opt_t opts[] = {
-            CFG_SIMPLE_INT("BlackAnt_priority", &antsValues->blackAnt_priority),
-            CFG_SIMPLE_INT("BlackAnt_var_SJF", &antsValues->blackAnt_var_SJF),
-            CFG_SIMPLE_INT("BlackAnt_rms_C", &antsValues->blackAnt_rms_C),
-            CFG_SIMPLE_INT("BlackAnt_rms_P", &antsValues->blackAnt_rms_P),
+            CFG_SIMPLE_INT("blackAnt_priority", &antsValues->blackAnt_priority),
+            CFG_SIMPLE_INT("blackAnt_var_SJF", &antsValues->blackAnt_var_SJF),
+            CFG_SIMPLE_INT("blackAnt_rms_C", &antsValues->blackAnt_rms_C),
+            CFG_SIMPLE_INT("blackAnt_rms_P", &antsValues->blackAnt_rms_P),
 
-            CFG_SIMPLE_INT("RedAnt_priority", &antsValues->redAnt_priority),
-            CFG_SIMPLE_INT("RedAnt_var_SJF", &antsValues->redAnt_var_SJF),
-            CFG_SIMPLE_INT("RedAnt_rms_C", &antsValues->redAnt_rms_C),
-            CFG_SIMPLE_INT("RedAnt_rms_P", &antsValues->redAnt_rms_P),
+            CFG_SIMPLE_INT("redAnt_priority", &antsValues->redAnt_priority),
+            CFG_SIMPLE_INT("redAnt_var_SJF", &antsValues->redAnt_var_SJF),
+            CFG_SIMPLE_INT("redAnt_rms_C", &antsValues->redAnt_rms_C),
+            CFG_SIMPLE_INT("redAnt_rms_P", &antsValues->redAnt_rms_P),
 
-            CFG_SIMPLE_INT("QueenAnt_priority", &antsValues->queenAnt_priority),
-            CFG_SIMPLE_INT("QueenAnt_var_SJF", &antsValues->queenAnt_var_SJF),
-            CFG_SIMPLE_INT("QueenAnt_rms_C", &antsValues->queenAnt_rms_C),
-            CFG_SIMPLE_INT("QueenAnt_rms_P", &antsValues->queenAnt_rms_P),
+            CFG_SIMPLE_INT("queenAnt_priority", &antsValues->queenAnt_priority),
+            CFG_SIMPLE_INT("queenAnt_var_SJF", &antsValues->queenAnt_var_SJF),
+            CFG_SIMPLE_INT("queenAnt_rms_C", &antsValues->queenAnt_rms_C),
+            CFG_SIMPLE_INT("queenAnt_rms_P", &antsValues->queenAnt_rms_P),
 
             CFG_END()
     };

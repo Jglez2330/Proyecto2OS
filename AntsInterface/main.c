@@ -44,7 +44,8 @@ int main() {
         channel_Ants[i].sideFlag =1;
         channel_Ants[i].parametroW_Fixed = fileValues[i].parametroW;
         if (channel_Ants[i].controlFLow > 0){
-            init_alarm(channel_Ants[i].timer = fileValues[i].timeCambioLetrero , i, channel_Ants[i].controlFLow);
+            init_alarm(fileValues[i].timeCambioLetrero , i, channel_Ants[i].controlFLow);
+            channel_Ants[i].count_W = w_timer;
         }
     }
 

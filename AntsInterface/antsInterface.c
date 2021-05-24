@@ -517,6 +517,13 @@ void *startAntMotion(void *params) {
             }
         }
 
+        if(channel_Ants[ants[p->antId].canal].controlFLow == 2) {
+            continueFlag = letrero_ant_flow(p->antId, p->filas);
+            if (continueFlag) {
+                continue;
+            }
+        }
+
 
         if (positionInInitialRow(p->antId, ants[p->antId].side)) {
 

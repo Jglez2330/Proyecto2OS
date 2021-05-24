@@ -18,7 +18,7 @@
 int main() {
 
 
-
+    flag_RMS_MAX = 0;
 
     //control de flujo para canales
     channel_Ants = malloc(sizeof (channelAnts)*3);

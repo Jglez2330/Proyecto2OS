@@ -10,7 +10,7 @@
 
 
 
-
+int flag_RMS_MAX;
 
 
 enum TYPESORT {READY = 0, RUNNING = 1, BLOCKED = 2, TERMINATED = 3};

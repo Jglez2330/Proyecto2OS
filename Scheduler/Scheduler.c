@@ -6,7 +6,7 @@
 #include "Scheduler.h"
 
 
-
+int flag_RMS_MAX = 0;
 listNode_t* schedulerSort(listNode_t* listResult){
 
     if (getCount_t(listResult)  == -1){
@@ -87,9 +87,10 @@ int tiempoReal_Check(listNode_t* listResult, dataItem * dataItem1){
     float timeInCPU_SUM = 0;
     int n = 0;
 
-    if(listResult == NULL){
+    if(listResult == NULL) {
         return 1;
     }
+
     if (listResult != NULL){
         int i;
         n = getCount_t(listResult) +1; // 1 por el offset de la funcion
@@ -111,7 +112,11 @@ int tiempoReal_Check(listNode_t* listResult, dataItem * dataItem1){
     printf("\nCondicion RMS %f \n", condicion);
     printf("\ntime in CPUE %f \n", timeInCPU_SUM);
 
-    if(timeInCPU_SUM<= condicion){
+    if(timeInCPU_SUM >= 0.65 && getCount_t(listResult) +1 == 1 ){
+        return 0;
+    }
+
+    else if(timeInCPU_SUM<= condicion){
         return 1; // Si se puede ingresar
     }
     return 0; // No se puede ingresar

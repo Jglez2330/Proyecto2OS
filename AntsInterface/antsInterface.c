@@ -201,6 +201,9 @@ bool letrero_ant_flow(int antId_in, Matrix **filas) {
     int filaLlena = channel_Ants[ants[antId_in].canal].countAntsWait <= hormigasEsperando;
 
     if (filaLlena) { //Si se alcanzo la cantidad de hormigas esperando necesarias
+
+
+
         int filaVaciaL = getCount_t(channel_Ants[ants[antId_in].canal].list_Ants_L) == -1;
         if(filaVaciaL){
             channel_Ants[ants[antId_in].canal].sideFlag = 1;
@@ -221,6 +224,7 @@ bool letrero_ant_flow(int antId_in, Matrix **filas) {
             channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
 
         }
+
     }
     int hormigasEnPipe = channel_Ants[ants[antId_in].canal].largoCanal - channel_Ants[ants[antId_in].canal].spacesInBridge;
     bool noHayHormigas =  hormigasEnPipe == 0;
@@ -284,6 +288,8 @@ bool letrero_ant_flow(int antId_in, Matrix **filas) {
 
         }
 //        printf("CrossAnt hormiga: %i\n", id);
+
+
         crossAnt(id);
     }
     if (channel_Ants[ants[antId_in].canal].semaforoActive_R == 1

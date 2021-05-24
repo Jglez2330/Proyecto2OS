@@ -184,7 +184,162 @@ int countAntsPassed(long canal, char side) {
     return cuenta;
 }
 
-bool antsFlowBridge(int antId_in, Matrix *filas[6]) {
+bool letrero_ant_flow(int antId_in, Matrix **filas) {
+
+    if (ants[antId_in].passedBridge == 1) {
+        channel_Ants[ants[antId_in].canal].spacesInBridge += 1;
+        ants[antId_in].passedBridge = 2;
+        unblock_threads_from_list_ants(ants[antId_in].fila);    //Desbloquea los de atras
+    }
+    if (ants[antId_in].sentHome) {
+        sendHome(antId_in, ants[antId_in].side);
+        return 1;
+    }
+
+    int hormigasEsperando = countAntsWaiting(ants[antId_in].canal, ants[antId_in].side);
+
+    int filaLlena = channel_Ants[ants[antId_in].canal].countAntsWait <= hormigasEsperando;
+
+    if (filaLlena) { //Si se alcanzo la cantidad de hormigas esperando necesarias
+        int filaVaciaL = getCount_t(channel_Ants[ants[antId_in].canal].list_Ants_L) == -1;
+        if(filaVaciaL){
+            channel_Ants[ants[antId_in].canal].sideFlag = 1;
+        }
+        int filaVaciaR = getCount_t(channel_Ants[ants[antId_in].canal].list_Ants_R) == -1;
+        if(filaVaciaR){
+            channel_Ants[ants[antId_in].canal].sideFlag = 0;
+        }
+
+        if (ants[antId_in].side == 'r' && channel_Ants[ants[antId_in].canal].sideFlag == 1) {
+
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
+
+        }
+        if (ants[antId_in].side == 'l' && channel_Ants[ants[antId_in].canal].sideFlag == 0) {
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
+
+        }
+    }
+    int hormigasEnPipe = channel_Ants[ants[antId_in].canal].largoCanal - channel_Ants[ants[antId_in].canal].spacesInBridge;
+    bool noHayHormigas =  hormigasEnPipe == 0;
+    //No haya horgimas en el pipe && el tiempo expiro
+    if (check_timer(ants[antId_in].canal)&&noHayHormigas) {
+        channel_Ants[ants[antId_in].canal].passedAnts = 0;
+        ready_to_change_channel[ants[antId_in].canal] = 0;
+        channel_Ants[ants[antId_in].canal].count_W = channel_Ants[ants[antId_in].canal].parametroW_Fixed;
+        if (channel_Ants[ants[antId_in].canal].sideFlag == 1){
+            unblock_all_threads_ants(ants[antId_in].canal * 2 + 1);
+            channel_Ants[ants[antId_in].canal].sideFlag = 0;
+            //Colocar el cambio de bandera
+        }
+        else if (channel_Ants[ants[antId_in].canal].sideFlag == 0){
+            unblock_all_threads_ants(ants[antId_in].canal * 2);
+            channel_Ants[ants[antId_in].canal].sideFlag = 1;
+        }
+
+    }
+
+    if (channel_Ants[ants[antId_in].canal].semaforoActive_L == 1
+        && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
+        && channel_Ants[ants[antId_in].canal].list_Ants_L != NULL &&
+        ants[antId_in].fila % 2 == 0 &&
+        channel_Ants[ants[antId_in].canal].list_Ants_L->dataInfo != NULL
+        && channel_Ants[ants[antId_in].canal].count_W != 0) {
+        if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
+            listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_L);
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed, channel_Ants[ants[antId_in].canal].scheduler_selected,ants[antId_in].fila);
+            block_threads_from_list(ants[antId_in].fila);
+            unblock_threads_from_list_ants(ants[antId_in].fila);
+        }
+        channel_Ants[ants[antId_in].canal].count_W--;
+//        printf("\nspacesInBrigde %li\n", channel_Ants[ants[antId_in].canal].spacesInBridge);
+
+        if (channel_Ants[ants[antId_in].canal].count_W == 0) {
+            //ants_Waiting_2_Terminated(ants[antId_in].canal, ants[antId_in].side);
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
+            channel_Ants[ants[antId_in].canal].sideFlag = 1;
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
+        }
+
+        int id = getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_L, 0)->antId;
+        ants[id].passingBridge = 1;
+
+
+
+
+        deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_L, 0);
+        if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_L) == NULL
+                ) {
+            channel_Ants[ants[antId_in].canal].list_Ants_L = NULL;
+        }
+
+
+        if (channel_Ants[ants[antId_in].canal].list_Ants_L != NULL) {
+            channel_Ants[ants[antId_in].canal].spacesInBridge -= 1;
+            setMovingAnts();
+            schedulerSort(channel_Ants[ants[antId_in].canal].list_Ants_L);
+            postionAllAnt(*channel_Ants[ants[antId_in].canal].list_Ants_L, filas);
+
+        }
+//        printf("CrossAnt hormiga: %i\n", id);
+        crossAnt(id);
+    }
+    if (channel_Ants[ants[antId_in].canal].semaforoActive_R == 1
+        && channel_Ants[ants[antId_in].canal].spacesInBridge != 0
+        && channel_Ants[ants[antId_in].canal].list_Ants_R != NULL &&
+        ants[antId_in].fila % 2 == 1 &&
+        channel_Ants[ants[antId_in].canal].list_Ants_R->dataInfo != NULL
+        && channel_Ants[ants[antId_in].canal].count_W != 0) {
+        if (channel_Ants[ants[antId_in].canal].count_W == channel_Ants[ants[antId_in].canal].parametroW_Fixed) {
+            listNode_t* temp_ants_list = copyList(channel_Ants[ants[antId_in].canal].list_Ants_R);
+
+
+            init_scheduler(temp_ants_list, channel_Ants[ants[antId_in].canal].parametroW_Fixed,channel_Ants[ants[antId_in].canal].scheduler_selected,ants[antId_in].fila);
+            block_threads_from_list(ants[antId_in].fila);
+            unblock_threads_from_list_ants(ants[antId_in].fila);
+
+
+
+
+        }
+        channel_Ants[ants[antId_in].canal].count_W--;
+
+        if (channel_Ants[ants[antId_in].canal].count_W == 0) {
+            channel_Ants[ants[antId_in].canal].semaforoActive_R = 0;
+
+            channel_Ants[ants[antId_in].canal].sideFlag = 0;
+            channel_Ants[ants[antId_in].canal].semaforoActive_L = 0;
+        }
+        int id;
+        if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_R) != NULL) {
+            id = getNode_t(channel_Ants[ants[antId_in].canal].list_Ants_R, 0)->antId;
+            ants[id].passingBridge = 1;
+
+        }
+
+
+        deleteNodePosition(&channel_Ants[ants[antId_in].canal].list_Ants_R, 0);
+        if (getFront_t(channel_Ants[ants[antId_in].canal].list_Ants_R) == NULL) {
+            channel_Ants[ants[antId_in].canal].list_Ants_R = NULL;
+        }
+
+
+        if (channel_Ants[ants[antId_in].canal].list_Ants_R != NULL) {
+            channel_Ants[ants[antId_in].canal].spacesInBridge -= 1;
+            setMovingAnts();
+            schedulerSort(channel_Ants[ants[antId_in].canal].list_Ants_R);
+            postionAllAnt(*channel_Ants[ants[antId_in].canal].list_Ants_R, filas);
+
+        }
+        crossAnt(id);
+    }
+
+
+}
+
+bool equidad_ant_flow(int antId_in, Matrix **filas) {
 
     if (ants[antId_in].passedBridge == 1) {
 
@@ -350,12 +505,17 @@ void *startAntMotion(void *params) {
             return NULL;
         }
         if(channel_Ants[ants[p->antId].canal].controlFLow == 0) {
-            continueFlag = antsFlowBridge(p->antId, p->filas);
+            continueFlag = equidad_ant_flow(p->antId, p->filas);
             if (continueFlag) {
                 continue;
             }
         }
-
+        if(channel_Ants[ants[p->antId].canal].controlFLow == 1) {
+            continueFlag = letrero_ant_flow(p->antId, p->filas);
+            if (continueFlag) {
+                continue;
+            }
+        }
 
 
         if (positionInInitialRow(p->antId, ants[p->antId].side)) {

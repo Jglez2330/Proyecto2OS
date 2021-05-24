@@ -583,18 +583,41 @@ int verifySpaceInStack(int fila, char side) {
     } else if (fila == 4 || fila == 5) {
         canal = 2;
     }
+
     if (side == 'r') {
         return getCount_t(channel_Ants[canal].list_Ants_R) + 1 == channel_Ants[canal].countAntsWait;
     } else if (side == 'l') {
         return getCount_t(channel_Ants[canal].list_Ants_L) + 1 == channel_Ants[canal].countAntsWait;
     }
+}
+bool verifyRealTime(char side,int fila, dataItem *hormiga0){
+    int canal;
 
+    if (fila == 0 || fila == 1) {
+        canal = 0;
 
+    } else if (fila == 2 || fila == 3) {
+        canal = 1;
+    } else if (fila == 4 || fila == 5) {
+        canal = 2;
+    }
+    if(side == 'r'){
+        if ( !tiempoReal_Check(channel_Ants[canal].list_Ants_R,hormiga0)) return 1;
+        else return 0;
+    }
+    else if(side == 'l'){
+        if ( !tiempoReal_Check(channel_Ants[canal].list_Ants_L,hormiga0)) return 1;
+        else return 0;
+    }
 }
 
 void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 
-    if (verifySpaceInStack(fila, side)) return;
+    if (verifySpaceInStack(fila, side)){
+        printf("No hay espacio para ingresar la hormiga\n");
+        return;
+    }
+
 
     if (antCounter < maxAnts) {
         dataItem *hormiga0 = malloc(sizeof(dataItem));
@@ -698,6 +721,8 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
                 break;
 
         }
+
+
         ants[antCounter].size.y = antHill_y + 100;
         ants[antCounter].fila_act = fila;
         ants[antCounter].passingBridge = 0;
@@ -718,7 +743,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].sorted = 0;
 
 
-
+        if(verifyRealTime(side,fila,hormiga0)) return;
 
         if (fila == 0) {
             ants[antCounter].canal = 0;
@@ -778,6 +803,10 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 
         ants[antCounter].finalX = filas[fila][col]->x;
         ants[antCounter].finalY = filas[fila][col]->y;
+        ants[antCounter].fila = fila;
+
+
+
 
         CEThread_t * thread1 = malloc (sizeof(CEThread_t));
         //pthread_t thread1;
@@ -787,7 +816,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         param->filas = filas;
         ants[antCounter].tid = thread1;
         ants[antCounter].dataItem.tid = thread1 ;
-        ants[antCounter].fila = fila;
+
 
         CEThread_create(thread1, NULL, startAntMotion, param);
         hay_threads = 1;

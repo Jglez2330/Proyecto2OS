@@ -39,103 +39,14 @@ listNode_t* schedulerSort(listNode_t* listResult){
             tiempoReal_Init(listResult);
             break;
 
-//        default:
-//            //printf("Doesnt found");
-
     }
 
-//    printf("\nSALIO de schedulerINIT");
 
 
     return listResult;
 
 }
 
-/*
-
-listNode_t* receiveThreads(listNode_t* listResult){
-
-    listNode_t* listResult;
-
-    switch (scheduler->scheduler_Selected)
-    {
-        case 0:
-            printf("\nRR");
-            listResult = roundRobin(scheduler);
-
-
-            // statements
-            break;
-
-        case 1:
-            printf("Prioridad");
-            listResult = priority(scheduler);
-
-            // statements
-            break;
-        case 2:
-            printf("SJF");
-            listResult = shortJobFirst(scheduler);
-            break;
-        case 3:
-            printf("FCFS");
-            listResult = FCFS(scheduler);
-            break;
-        case 4:
-            printf("\nTiempo Real");
-            listResult = tiempoReal(scheduler);
-            break;
-
-        default:
-            printf("Doesnt found");
-
-        // default statements
-    }
-
-    if(this->back == NULL)
-        return;
-
-    this->back->next = this->front;
-    this->back = this->front;
-    this->front = this->front->next;
-    this->back->next = NULL;
-    printf("\nSALIO");
-    return listResult;
-}*/
-/*
-listNode_t* roundRobin (listNode_t* listResult){
-
-    if (listResult == NULL){
-        return NULL;
-    }
-
-    return listResult;
-}*/
-/*
-listNode_t* priority (listNode_t* listResult){
-
-    bubbleSort_t(listResult,PRIORITY);
-
-    return listResult;
-
-}*/
-/*
-listNode_t* shortJobFirst (listNode_t* listResult){
-    if(listResult == NULL){
-        return NULL;
-    }
-    bubbleSort_t(listResult,SJF);
-
-    return listResult;
-}*/
-/*
-listNode_t* FCFS(listNode_t* listResult){
-    if (listResult == NULL){
-        return NULL;
-    }
-
-    return listResult;
-}*/
 
 listNode_t* tiempoReal_Init(listNode_t* listResult){
     if (listResult == NULL){
@@ -170,4 +81,38 @@ listNode_t* tiempoReal_Init(listNode_t* listResult){
     }
 
     return listResult;
+}
+
+int tiempoReal_Check(listNode_t* listResult, dataItem * dataItem1){
+    float timeInCPU_SUM = 0;
+    int n = 0;
+
+    if(listResult == NULL){
+        return 1;
+    }
+    if (listResult != NULL){
+        int i;
+        n = getCount_t(listResult) +1; // 1 por el offset de la funcion
+
+        dataItem * node;
+        for (i = 0; i < n; i++) {
+            node = getNode_t(listResult,i);
+            timeInCPU_SUM += (node->rms_C / node->rms_P); //Sumar los valores de cada nodo
+        }
+
+    }
+    double condicion;
+
+    timeInCPU_SUM +=(dataItem1->rms_C / dataItem1->rms_P); //Sumar el valor del nuevo
+
+    n++;
+
+    condicion = (n) * (pow(2, 1/(float)(n)) - 1);
+    printf("\nCondicion RMS %f \n", condicion);
+    printf("\ntime in CPUE %f \n", timeInCPU_SUM);
+
+    if(timeInCPU_SUM<= condicion){
+        return 1; // Si se puede ingresar
+    }
+    return 0; // No se puede ingresar
 }

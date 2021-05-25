@@ -160,14 +160,7 @@ int countAntsWaiting(long canal, char side) {
     return cuenta;
 }
 
-/*
-int ants_Waiting_2_Terminated(long canal, char side) {
-    for (int i = 0; i < antCounter; i++) {
-        if (ants[i].canal == canal && ants[i].dataItem.state == 1 && ants[i].side == side)
-            ants[i].dataItem.state = 99;
-    }
-    return 0;
-}*/
+
 int changeAntsWaiting(long canal, char side) {
     int cuenta = 0;
     for (int i = 0; i < antCounter; i++) {
@@ -616,7 +609,19 @@ bool verifyRealTime(char side,int fila, dataItem *hormiga0){
         else return 0;
     }
 }
+int getCanalWithRow(int fila){
+    int canal;
 
+    if (fila == 0 || fila == 1) {
+        canal = 0;
+
+    } else if (fila == 2 || fila == 3) {
+        canal = 1;
+    } else if (fila == 4 || fila == 5) {
+        canal = 2;
+    }
+    return canal;
+}
 void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
 
     if (verifySpaceInStack(fila, side)){
@@ -749,7 +754,7 @@ void spawnAnt(int fila, enum antType type, char side, Matrix *filas[6]) {
         ants[antCounter].sorted = 0;
 
 
-        if(verifyRealTime(side,fila,hormiga0)) return;
+        if(verifyRealTime(side,fila,hormiga0) && channel_Ants[getCanalWithRow(fila)].scheduler_selected == 4) return;
 
         if (fila == 0) {
             ants[antCounter].canal = 0;

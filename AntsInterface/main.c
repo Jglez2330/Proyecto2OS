@@ -346,6 +346,9 @@ int main() {
                             blackAntRequested  = 1;
                             side = 'r';
                             break;
+                        case SDL_SCANCODE_Y:
+                            close_requested = 1;
+                            break;
 
 
 
